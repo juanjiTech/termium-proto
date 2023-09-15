@@ -24,7 +24,7 @@ jobs:
           github_token: ${{ github.token }}
       - uses: bufbuild/buf-breaking-action@v1.1.3
         with:
-          against: buf.build/bufbuild/buf
+          against: 'https://github.com/juanjiTech/jTerm-proto.git#branch=main'
           buf_token: ${{ secrets.BUF_TOKEN }}
   generate:
     runs-on: ubuntu-latest
@@ -35,10 +35,12 @@ jobs:
       - breaking
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+        with:
+          go-version: 'stable'
+      - run: go install github.com/grpc-ecosystem/protoc-gen-grpc-gateway-ts
       - uses: bufbuild/buf-setup-action@v1.26.1
         with:
           github_token: ${{ github.token }}
-      - run: rm -rf ./gen && buf generate
+      - run: rm -rf ./gen && buf generate && go mod tidy
       - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "update: generate new sdk"
