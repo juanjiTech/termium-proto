@@ -1,0 +1,18 @@
+syntax = "proto3";
+package user.v1;
+option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/user/v1;userV1";
+
+enum UserStatus {
+  USER_STATUS_UNSPECIFIED = 0;
+  USER_STATUS_DISABLED = 1; // 封禁
+  USER_STATUS_NORMAL = 2; // 正常
+  USER_STATUS_WAIT_EMAIL_CHECK = 3; // 等待验证邮箱
+}
+
+message User {
+  string id = 1;
+  string nick_name = 2; // 用户名
+  UserStatus status = 3; // 用户状态
+  string avatar = 4; // 头像链接
+  string email = 5; // 邮箱
+}

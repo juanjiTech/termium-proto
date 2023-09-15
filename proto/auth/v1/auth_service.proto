@@ -1,0 +1,62 @@
+syntax = "proto3";
+package auth.v1;
+option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/auth/v1;authV1";
+
+import "google/api/annotations.proto";
+
+service AuthService {
+  // 用户注册
+  rpc Register(RegisterRequest) returns(RegisterResponse) {
+    option(google.api.http) = {
+      post: "/gapi/auth/v1/register",
+      body: "*"
+    };
+  }
+
+  // 用户登录
+  rpc Login(LoginRequest) returns(LoginResponse) {
+    option(google.api.http) = {
+      post: "/gapi/auth/v1/login",
+      body: "*"
+    };
+  }
+
+  // Token刷新
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/refreshToken"
+      body: "*"
+    };
+  }
+}
+
+message RegisterRequest {
+  string email = 1;
+  string verify_code = 2;
+  string password = 3;
+}
+
+message LoginResponse {
+  string access_token = 1;
+  string refresh_token = 3;
+}
+
+message RegisterResponse {
+  string access_token = 1;
+  string refresh_token = 3;
+}
+
+message LoginRequest {
+  string username = 1; // 账户 可为手机号或邮箱
+  string password = 2;
+  string two_factor_auth = 3;
+}
+
+message RefreshTokenRequest {
+  string refresh_token = 1;
+}
+
+message RefreshTokenResponse {
+  string access_token = 1;
+  string refresh_token = 3;
+}
