@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/gapi/user/info": {
+    "/gapi/user/v1/info": {
       "get": {
         "operationId": "UserService_GetInfo",
         "responses": {

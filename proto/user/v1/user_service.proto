@@ -1,34 +1,31 @@
 syntax = "proto3";
 package user.v1;
-option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/user/v1;userV1";
 
 import "google/api/annotations.proto";
 import "user/v1/user.proto";
 
+option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/user/v1;userV1";
+
 service UserService {
-  rpc GetInfo(GetInfoRequest) returns(GetInfoResponse){
-    option(google.api.http) = {
-      get: "/gapi/user/info"
-    };
+  rpc GetInfo(GetInfoRequest) returns (GetInfoResponse) {
+    option (google.api.http) = {get: "/gapi/user/v1/info"};
   }
 
-  rpc SendEmailVerifyCode(SendEmailVerifyCodeRequest) returns(SendEmailVerifyCodeResponse) {
-    option(google.api.http) = {
+  rpc SendEmailVerifyCode(SendEmailVerifyCodeRequest) returns (SendEmailVerifyCodeResponse) {
+    option (google.api.http) = {
       post: "/gapi/user/v1/verify/email/send",
       body: "*"
     };
   }
-  rpc CheckEmailVerifyCode(CheckEmailVerifyCodeRequest) returns(CheckEmailVerifyCodeResponse) {
-    option(google.api.http) = {
+  rpc CheckEmailVerifyCode(CheckEmailVerifyCodeRequest) returns (CheckEmailVerifyCodeResponse) {
+    option (google.api.http) = {
       post: "/gapi/user/v1/verify/email/check",
       body: "*"
     };
   }
 }
 
-message GetInfoRequest {
-
-}
+message GetInfoRequest {}
 
 message GetInfoResponse {
   User info = 1;

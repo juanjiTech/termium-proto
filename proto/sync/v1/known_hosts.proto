@@ -1,0 +1,10 @@
+syntax = "proto3";
+package sync.v1;
+
+option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/sync/v1;syncV1";
+
+message KnownHost {
+  string id = 1;
+  string host = 11;
+  string public_key = 12; // 公钥
+}

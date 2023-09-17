@@ -1,0 +1,28 @@
+syntax = "proto3";
+package sync.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "sync/v1/host.proto";
+import "sync/v1/keychain.proto";
+import "sync/v1/known_hosts.proto";
+
+option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/sync/v1;syncV1";
+
+service SyncService {
+  rpc Sync(SyncRequest) returns (SyncResponse) {
+    option (google.api.http) = {get: "/gapi/sync/v1/sync"};
+  }
+}
+
+message SyncRequest {
+  google.protobuf.Timestamp after = 1; // 获取该时间之后的设置变化
+}
+
+message SyncResponse {
+  google.protobuf.Timestamp server_time = 1; // 当前服务器时间
+  repeated Host host_set = 11;
+  repeated KnownHost known_host_set = 12;
+  repeated SshKey ssh_key_set = 13;
+  repeated Identity identity_set = 14;
+}
