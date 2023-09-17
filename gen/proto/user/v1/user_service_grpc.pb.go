@@ -22,6 +22,8 @@ const (
 	UserService_GetInfo_FullMethodName              = "/user.v1.UserService/GetInfo"
 	UserService_SendEmailVerifyCode_FullMethodName  = "/user.v1.UserService/SendEmailVerifyCode"
 	UserService_CheckEmailVerifyCode_FullMethodName = "/user.v1.UserService/CheckEmailVerifyCode"
+	UserService_SetNewHost_FullMethodName           = "/user.v1.UserService/SetNewHost"
+	UserService_GetHost_FullMethodName              = "/user.v1.UserService/GetHost"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -31,6 +33,8 @@ type UserServiceClient interface {
 	GetInfo(ctx context.Context, in *GetInfoRequest, opts ...grpc.CallOption) (*GetInfoResponse, error)
 	SendEmailVerifyCode(ctx context.Context, in *SendEmailVerifyCodeRequest, opts ...grpc.CallOption) (*SendEmailVerifyCodeResponse, error)
 	CheckEmailVerifyCode(ctx context.Context, in *CheckEmailVerifyCodeRequest, opts ...grpc.CallOption) (*CheckEmailVerifyCodeResponse, error)
+	SetNewHost(ctx context.Context, in *SetNewHostRequest, opts ...grpc.CallOption) (*SetNewHostResponse, error)
+	GetHost(ctx context.Context, in *GetHostRequest, opts ...grpc.CallOption) (*GetHostResponse, error)
 }
 
 type userServiceClient struct {
@@ -68,6 +72,24 @@ func (c *userServiceClient) CheckEmailVerifyCode(ctx context.Context, in *CheckE
 	return out, nil
 }
 
+func (c *userServiceClient) SetNewHost(ctx context.Context, in *SetNewHostRequest, opts ...grpc.CallOption) (*SetNewHostResponse, error) {
+	out := new(SetNewHostResponse)
+	err := c.cc.Invoke(ctx, UserService_SetNewHost_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GetHost(ctx context.Context, in *GetHostRequest, opts ...grpc.CallOption) (*GetHostResponse, error) {
+	out := new(GetHostResponse)
+	err := c.cc.Invoke(ctx, UserService_GetHost_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
@@ -75,6 +97,8 @@ type UserServiceServer interface {
 	GetInfo(context.Context, *GetInfoRequest) (*GetInfoResponse, error)
 	SendEmailVerifyCode(context.Context, *SendEmailVerifyCodeRequest) (*SendEmailVerifyCodeResponse, error)
 	CheckEmailVerifyCode(context.Context, *CheckEmailVerifyCodeRequest) (*CheckEmailVerifyCodeResponse, error)
+	SetNewHost(context.Context, *SetNewHostRequest) (*SetNewHostResponse, error)
+	GetHost(context.Context, *GetHostRequest) (*GetHostResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -90,6 +114,12 @@ func (UnimplementedUserServiceServer) SendEmailVerifyCode(context.Context, *Send
 }
 func (UnimplementedUserServiceServer) CheckEmailVerifyCode(context.Context, *CheckEmailVerifyCodeRequest) (*CheckEmailVerifyCodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckEmailVerifyCode not implemented")
+}
+func (UnimplementedUserServiceServer) SetNewHost(context.Context, *SetNewHostRequest) (*SetNewHostResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetNewHost not implemented")
+}
+func (UnimplementedUserServiceServer) GetHost(context.Context, *GetHostRequest) (*GetHostResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetHost not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -158,6 +188,42 @@ func _UserService_CheckEmailVerifyCode_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_SetNewHost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetNewHostRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).SetNewHost(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_SetNewHost_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).SetNewHost(ctx, req.(*SetNewHostRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_GetHost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetHostRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetHost(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_GetHost_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetHost(ctx, req.(*GetHostRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -176,6 +242,14 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CheckEmailVerifyCode",
 			Handler:    _UserService_CheckEmailVerifyCode_Handler,
+		},
+		{
+			MethodName: "SetNewHost",
+			Handler:    _UserService_SetNewHost_Handler,
+		},
+		{
+			MethodName: "GetHost",
+			Handler:    _UserService_GetHost_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

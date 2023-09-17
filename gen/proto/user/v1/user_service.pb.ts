@@ -28,6 +28,25 @@ export type CheckEmailVerifyCodeRequest = {
 export type CheckEmailVerifyCodeResponse = {
 }
 
+export type SetNewHostRequest = {
+  name?: string
+  host?: string
+  port?: string
+  password?: string
+  syncMode?: UserV1User.HostSyncMode
+}
+
+export type SetNewHostResponse = {
+}
+
+export type GetHostRequest = {
+  id?: string
+}
+
+export type GetHostResponse = {
+  hosts?: UserV1User.Host[]
+}
+
 export class UserService {
   static GetInfo(req: GetInfoRequest, initReq?: fm.InitReq): Promise<GetInfoResponse> {
     return fm.fetchReq<GetInfoRequest, GetInfoResponse>(`/gapi/user/info?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
@@ -37,5 +56,11 @@ export class UserService {
   }
   static CheckEmailVerifyCode(req: CheckEmailVerifyCodeRequest, initReq?: fm.InitReq): Promise<CheckEmailVerifyCodeResponse> {
     return fm.fetchReq<CheckEmailVerifyCodeRequest, CheckEmailVerifyCodeResponse>(`/gapi/user/v1/verify/email/check`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  }
+  static SetNewHost(req: SetNewHostRequest, initReq?: fm.InitReq): Promise<SetNewHostResponse> {
+    return fm.fetchReq<SetNewHostRequest, SetNewHostResponse>(`/gapi/user/v1/host/set`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  }
+  static GetHost(req: GetHostRequest, initReq?: fm.InitReq): Promise<GetHostResponse> {
+    return fm.fetchReq<GetHostRequest, GetHostResponse>(`/gapi/user/v1/host/get`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
 }

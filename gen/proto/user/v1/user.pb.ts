@@ -11,10 +11,27 @@ export enum UserStatus {
   USER_STATUS_WAIT_EMAIL_CHECK = "USER_STATUS_WAIT_EMAIL_CHECK",
 }
 
+export enum HostSyncMode {
+  HOST_SYNC_MODE_UNSPECIFIED = "HOST_SYNC_MODE_UNSPECIFIED",
+  HOST_SYNC_MODE_ENABLE = "HOST_SYNC_MODE_ENABLE",
+  HOST_SYNC_MODE_DISABLE = "HOST_SYNC_MODE_DISABLE",
+  HOST_SYNC_MODE_ONCE = "HOST_SYNC_MODE_ONCE",
+}
+
 export type User = {
   id?: string
   nickName?: string
   status?: UserStatus
   avatar?: string
   email?: string
+}
+
+export type Host = {
+  id?: string
+  owner?: string
+  name?: string
+  host?: string
+  port?: number
+  password?: string
+  syncMode?: HostSyncMode
 }

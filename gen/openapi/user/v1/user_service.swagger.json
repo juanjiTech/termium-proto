@@ -38,6 +38,70 @@
         ]
       }
     },
+    "/gapi/user/v1/host/get": {
+      "post": {
+        "operationId": "UserService_GetHost",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetHostResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetHostRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/gapi/user/v1/host/set": {
+      "post": {
+        "operationId": "UserService_SetNewHost",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SetNewHostResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SetNewHostRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
     "/gapi/user/v1/verify/email/check": {
       "post": {
         "operationId": "UserService_CheckEmailVerifyCode",
@@ -141,10 +205,33 @@
         "code": {
           "type": "string"
         }
-      }
+      },
+      "title": "CheckEmailVerifyCode"
     },
     "v1CheckEmailVerifyCodeResponse": {
       "type": "object"
+    },
+    "v1GetHostRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "所有者id"
+        }
+      },
+      "title": "GetHost"
+    },
+    "v1GetHostResponse": {
+      "type": "object",
+      "properties": {
+        "hosts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Host"
+          }
+        }
+      }
     },
     "v1GetInfoResponse": {
       "type": "object",
@@ -154,15 +241,79 @@
         }
       }
     },
+    "v1Host": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string",
+          "title": "所有者id"
+        },
+        "name": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "password": {
+          "type": "string"
+        },
+        "syncMode": {
+          "$ref": "#/definitions/v1HostSyncMode"
+        }
+      }
+    },
+    "v1HostSyncMode": {
+      "type": "string",
+      "enum": [
+        "HOST_SYNC_MODE_UNSPECIFIED",
+        "HOST_SYNC_MODE_ENABLE",
+        "HOST_SYNC_MODE_DISABLE",
+        "HOST_SYNC_MODE_ONCE"
+      ],
+      "default": "HOST_SYNC_MODE_UNSPECIFIED",
+      "title": "- HOST_SYNC_MODE_ENABLE: 同步到云端\n - HOST_SYNC_MODE_DISABLE: 不同步到云端\n - HOST_SYNC_MODE_ONCE: 一次销毁"
+    },
     "v1SendEmailVerifyCodeRequest": {
       "type": "object",
       "properties": {
         "email": {
           "type": "string"
         }
-      }
+      },
+      "title": "SendEmailVerifyCode"
     },
     "v1SendEmailVerifyCodeResponse": {
+      "type": "object"
+    },
+    "v1SetNewHostRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "syncMode": {
+          "$ref": "#/definitions/v1HostSyncMode"
+        }
+      },
+      "title": "SetNewHost"
+    },
+    "v1SetNewHostResponse": {
       "type": "object"
     },
     "v1User": {
