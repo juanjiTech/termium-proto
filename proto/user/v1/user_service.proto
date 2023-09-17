@@ -18,31 +18,67 @@ service UserService {
       body: "*"
     };
   }
+
   rpc CheckEmailVerifyCode(CheckEmailVerifyCodeRequest) returns(CheckEmailVerifyCodeResponse) {
     option(google.api.http) = {
       post: "/gapi/user/v1/verify/email/check",
       body: "*"
     };
   }
+
+  rpc SetNewHost(SetNewHostRequest) returns(SetNewHostResponse) {
+    option(google.api.http) = {
+      post: "/gapi/user/v1/host/set",
+      body: "*"
+    };
+  }
+
+  rpc GetHost(GetHostRequest) returns(GetHostResponse) {
+    option(google.api.http) = {
+      post: "/gapi/user/v1/host/get",
+      body: "*"
+    };
+  }
 }
 
-message GetInfoRequest {
-
-}
+// GetInfo
+message GetInfoRequest {}
 
 message GetInfoResponse {
   User info = 1;
 }
 
+// SendEmailVerifyCode
 message SendEmailVerifyCodeRequest {
   string email = 1;
 }
 
 message SendEmailVerifyCodeResponse {}
 
+// CheckEmailVerifyCode
 message CheckEmailVerifyCodeRequest {
   string email = 1;
   string code = 2;
 }
 
 message CheckEmailVerifyCodeResponse {}
+
+// SetNewHost
+message SetNewHostRequest {
+  string name = 1;
+  string host = 2;
+  string port = 3;
+  string password = 4;
+  HostSyncMode sync_mode = 5;
+}
+
+message SetNewHostResponse {}
+
+// GetHost
+message GetHostRequest {
+  string id = 1; // 所有者id
+}
+
+message GetHostResponse {
+  repeated Host hosts = 1;
+}

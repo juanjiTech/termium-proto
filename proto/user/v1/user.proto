@@ -9,10 +9,27 @@ enum UserStatus {
   USER_STATUS_WAIT_EMAIL_CHECK = 3; // 等待验证邮箱
 }
 
+enum HostSyncMode {
+    HOST_SYNC_MODE_UNSPECIFIED = 0;
+    HOST_SYNC_MODE_ENABLE = 1;// 同步到云端
+    HOST_SYNC_MODE_DISABLE = 2; // 不同步到云端
+    HOST_SYNC_MODE_ONCE = 3; // 一次销毁
+}
+
 message User {
   string id = 1;
   string nick_name = 2; // 用户名
   UserStatus status = 3; // 用户状态
   string avatar = 4; // 头像链接
   string email = 5; // 邮箱
+}
+
+message Host {
+  string id = 1;
+  string owner = 2; // 所有者id
+  string name = 3;
+  string host = 4;
+  int32  port = 5;
+  string password = 6;
+  HostSyncMode  sync_mode = 7;
 }
