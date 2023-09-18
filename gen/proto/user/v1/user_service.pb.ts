@@ -30,7 +30,7 @@ export type CheckEmailVerifyCodeResponse = {
 
 export class UserService {
   static GetInfo(req: GetInfoRequest, initReq?: fm.InitReq): Promise<GetInfoResponse> {
-    return fm.fetchReq<GetInfoRequest, GetInfoResponse>(`/gapi/user/info?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
+    return fm.fetchReq<GetInfoRequest, GetInfoResponse>(`/gapi/user/v1/info?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
   }
   static SendEmailVerifyCode(req: SendEmailVerifyCodeRequest, initReq?: fm.InitReq): Promise<SendEmailVerifyCodeResponse> {
     return fm.fetchReq<SendEmailVerifyCodeRequest, SendEmailVerifyCodeResponse>(`/gapi/user/v1/verify/email/send`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})

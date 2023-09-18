@@ -44,3 +44,5 @@ jobs:
           github_token: ${{ github.token }}
       - run: rm -rf ./gen && buf generate && go mod tidy
       - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: 'update: automatic generate new proto'

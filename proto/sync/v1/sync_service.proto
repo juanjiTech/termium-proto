@@ -1,0 +1,51 @@
+syntax = "proto3";
+package sync.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "sync/v1/host.proto";
+import "sync/v1/keychain.proto";
+import "sync/v1/known_hosts.proto";
+
+option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/sync/v1;syncV1";
+
+service SyncService {
+  // 拉取指定时间点之后的配置变动信息
+  rpc Sync(SyncRequest) returns (SyncResponse) {
+    option (google.api.http) = {get: "/gapi/sync/v1/sync"};
+  }
+  // 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。
+  rpc Update(UpdateRequest) returns (UpdateResponse) {
+    option (google.api.http) = {post:"/gapi/sync/v1/update"};
+  }
+}
+
+message SyncRequest {
+  google.protobuf.Timestamp after = 1; // 获取该时间之后的设置变化，若不设置该字段，则拉取全量配置信息
+}
+
+message SyncResponse {
+  google.protobuf.Timestamp server_time = 1; // 当前服务器时间，用于给客户端下一次拉取变动时做一个参照，避免因客户端时间偏差导致同步混乱
+  repeated Host host_set = 11;
+  repeated KnownHost known_host_set = 12;
+  repeated SshKey ssh_key_set = 13;
+  repeated Identity identity_set = 14;
+}
+
+message UpdateRequest {
+  oneof data {
+    Host host = 11;
+    KnownHost known_host = 12;
+    SshKey ssh_key = 13;
+    Identity identity = 14;
+  }
+}
+
+message UpdateResponse {
+  oneof data { // 返回更新数据的服务端版本，因为新建的数据会加上ID和时间
+    Host host = 11;
+    KnownHost known_host = 12;
+    SshKey ssh_key = 13;
+    Identity identity = 14;
+  }
+}

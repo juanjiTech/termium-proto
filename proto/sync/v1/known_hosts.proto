@@ -1,0 +1,16 @@
+syntax = "proto3";
+package sync.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/sync/v1;syncV1";
+
+message KnownHost {
+  string id = 1; // 内部唯一ID ulid
+  google.protobuf.Timestamp created_at = 2; // 创建时间
+  google.protobuf.Timestamp updated_at = 3; // 更新时间
+  google.protobuf.Timestamp deleted_at = 4; // 删除时间
+
+  string address = 11; // ip或host
+  string public_key = 12; // 公钥
+}
