@@ -10,6 +10,6 @@ export type KnownHost = {
   createdAt?: GoogleProtobufTimestamp.Timestamp
   updatedAt?: GoogleProtobufTimestamp.Timestamp
   deletedAt?: GoogleProtobufTimestamp.Timestamp
-  host?: string
+  address?: string
   publicKey?: string
 }

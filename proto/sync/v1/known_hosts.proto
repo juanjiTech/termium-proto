@@ -11,6 +11,6 @@ message KnownHost {
   google.protobuf.Timestamp updated_at = 3; // 更新时间
   google.protobuf.Timestamp deleted_at = 4; // 删除时间
 
-  string host = 11;
+  string address = 11; // ip或host
   string public_key = 12; // 公钥
 }

@@ -197,7 +197,8 @@
             "format": "date-time"
           },
           {
-            "name": "knownHost.host",
+            "name": "knownHost.address",
+            "description": "ip或host",
             "in": "query",
             "required": false,
             "type": "string"
@@ -484,8 +485,9 @@
           "format": "date-time",
           "title": "删除时间"
         },
-        "host": {
-          "type": "string"
+        "address": {
+          "type": "string",
+          "title": "ip或host"
         },
         "publicKey": {
           "type": "string",
