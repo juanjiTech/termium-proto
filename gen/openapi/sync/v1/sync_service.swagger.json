@@ -18,6 +18,7 @@
   "paths": {
     "/gapi/sync/v1/sync": {
       "get": {
+        "summary": "拉取指定时间点之后的配置变动信息",
         "operationId": "SyncService_Sync",
         "responses": {
           "200": {
@@ -36,11 +37,293 @@
         "parameters": [
           {
             "name": "after",
-            "description": "获取该时间之后的设置变化",
+            "description": "获取该时间之后的设置变化，若不设置该字段，则拉取全量配置信息",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "date-time"
+          }
+        ],
+        "tags": [
+          "SyncService"
+        ]
+      }
+    },
+    "/gapi/sync/v1/update": {
+      "post": {
+        "summary": "提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。",
+        "operationId": "SyncService_Update",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "host.id",
+            "description": "内部唯一ID ulid",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "host.createdAt",
+            "description": "创建时间",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "host.updatedAt",
+            "description": "更新时间",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "host.deletedAt",
+            "description": "删除时间",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "host.label",
+            "description": "标签",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "host.tags",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "host.address",
+            "description": "ip或host",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "host.port",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "host.charset",
+            "description": "字符集",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "host.username",
+            "description": "用户名",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "host.password",
+            "description": "密码",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "host.keyId",
+            "description": "密钥ID",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "host.identityId",
+            "description": "身份ID 若身份ID不为空，则覆盖手动配置",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "knownHost.id",
+            "description": "内部唯一ID ulid",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "knownHost.createdAt",
+            "description": "创建时间",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "knownHost.updatedAt",
+            "description": "更新时间",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "knownHost.deletedAt",
+            "description": "删除时间",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "knownHost.host",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "knownHost.publicKey",
+            "description": "公钥",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sshKey.id",
+            "description": "内部唯一ID ulid",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sshKey.createdAt",
+            "description": "创建时间",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "sshKey.updatedAt",
+            "description": "更新时间",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "sshKey.deletedAt",
+            "description": "删除时间",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "sshKey.label",
+            "description": "标签",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sshKey.privateKey",
+            "description": "私钥",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sshKey.publicKey",
+            "description": "公钥",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sshKey.certificate",
+            "description": "证书",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "identity.id",
+            "description": "内部唯一ID ulid",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "identity.createdAt",
+            "description": "创建时间",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "identity.updatedAt",
+            "description": "更新时间",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "identity.deletedAt",
+            "description": "删除时间",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "identity.label",
+            "description": "标签",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "identity.username",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "identity.password",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "identity.keyId",
+            "description": "密钥ID",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -82,7 +365,23 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string"
+          "type": "string",
+          "title": "内部唯一ID ulid"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "title": "创建时间"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "title": "更新时间"
+        },
+        "deletedAt": {
+          "type": "string",
+          "format": "date-time",
+          "title": "删除时间"
         },
         "label": {
           "type": "string",
@@ -128,7 +427,23 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string"
+          "type": "string",
+          "title": "内部唯一ID ulid"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "title": "创建时间"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "title": "更新时间"
+        },
+        "deletedAt": {
+          "type": "string",
+          "format": "date-time",
+          "title": "删除时间"
         },
         "label": {
           "type": "string",
@@ -151,7 +466,23 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string"
+          "type": "string",
+          "title": "内部唯一ID ulid"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "title": "创建时间"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "title": "更新时间"
+        },
+        "deletedAt": {
+          "type": "string",
+          "format": "date-time",
+          "title": "删除时间"
         },
         "host": {
           "type": "string"
@@ -166,7 +497,23 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string"
+          "type": "string",
+          "title": "内部唯一ID ulid"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "title": "创建时间"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "title": "更新时间"
+        },
+        "deletedAt": {
+          "type": "string",
+          "format": "date-time",
+          "title": "删除时间"
         },
         "label": {
           "type": "string",
@@ -193,7 +540,7 @@
         "serverTime": {
           "type": "string",
           "format": "date-time",
-          "title": "当前服务器时间"
+          "title": "当前服务器时间，用于给客户端下一次拉取变动时做一个参照，避免因客户端时间偏差导致同步混乱"
         },
         "hostSet": {
           "type": "array",
@@ -222,6 +569,23 @@
             "type": "object",
             "$ref": "#/definitions/v1Identity"
           }
+        }
+      }
+    },
+    "v1UpdateResponse": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "$ref": "#/definitions/v1Host"
+        },
+        "knownHost": {
+          "$ref": "#/definitions/v1KnownHost"
+        },
+        "sshKey": {
+          "$ref": "#/definitions/v1SshKey"
+        },
+        "identity": {
+          "$ref": "#/definitions/v1Identity"
         }
       }
     }
