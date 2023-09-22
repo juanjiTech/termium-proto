@@ -125,6 +125,7 @@
           },
           {
             "name": "host.port",
+            "description": "port is from 1-65535 int 64 is too large. Need check",
             "in": "query",
             "required": false,
             "type": "string",
@@ -133,6 +134,20 @@
           {
             "name": "host.charset",
             "description": "字符集",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "host.knownHostPublicKeyType",
+            "description": "known host public key type like ssh-ed25519",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "host.knownHostPublicKey",
+            "description": "known host host publickey AAAAC3NzaC1lZDI1NTE5AAAAIIDI5EzaZ1AGKVwHLa3e/PpkAkJIUDLrDc/Q9lSxfEla",
             "in": "query",
             "required": false,
             "type": "string"
@@ -400,11 +415,20 @@
         },
         "port": {
           "type": "string",
-          "format": "int64"
+          "format": "int64",
+          "title": "port is from 1-65535 int 64 is too large. Need check"
         },
         "charset": {
           "type": "string",
           "title": "字符集"
+        },
+        "knownHostPublicKeyType": {
+          "type": "string",
+          "title": "known host public key type like ssh-ed25519"
+        },
+        "knownHostPublicKey": {
+          "type": "string",
+          "title": "known host host publickey AAAAC3NzaC1lZDI1NTE5AAAAIIDI5EzaZ1AGKVwHLa3e/PpkAkJIUDLrDc/Q9lSxfEla"
         },
         "username": {
           "type": "string",

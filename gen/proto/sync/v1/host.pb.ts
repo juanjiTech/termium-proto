@@ -15,6 +15,8 @@ export type Host = {
   address?: string
   port?: string
   charset?: string
+  knownHostPublicKeyType?: string
+  knownHostPublicKey?: string
   username?: string
   password?: string
   keyId?: string
