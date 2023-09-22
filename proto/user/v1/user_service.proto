@@ -23,6 +23,22 @@ service UserService {
       body: "*"
     };
   }
+
+  // 会向用户邮箱发送激活链接 包含一个与账户相关的token token时限为24小时
+  rpc SendActiveLink(SendActiveLinkRequest) returns (SendActiveLinkResponse) {
+    option (google.api.http) = {
+      post: "/gapi/user/v1/verify/account/sendLink",
+      body: "*"
+    };
+  }
+
+  // 用户邮箱得到的链接 检测token是否有效 有效则激活账户
+  rpc ActiveAccount(ActiveAccountRequest) returns (ActiveAccountResponse) {
+    option (google.api.http) = {
+      get: "/gapi/user/v1/verify/account/activate",
+      body: "*"
+    };
+  }
 }
 
 message GetInfoRequest {}
@@ -43,3 +59,15 @@ message CheckEmailVerifyCodeRequest {
 }
 
 message CheckEmailVerifyCodeResponse {}
+
+message SendActiveLinkRequest {
+  string email = 1;
+}
+
+message SendActiveLinkResponse {}
+
+message ActiveAccountRequest {
+  string activation_token = 1;
+}
+
+message ActiveAccountResponse {}
