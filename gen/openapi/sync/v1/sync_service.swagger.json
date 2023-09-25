@@ -42,6 +42,12 @@
             "required": false,
             "type": "string",
             "format": "date-time"
+          },
+          {
+            "name": "groupId",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [

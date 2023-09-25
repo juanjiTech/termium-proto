@@ -20,6 +20,7 @@ type OneOf<T> =
     : never);
 export type SyncRequest = {
   after?: GoogleProtobufTimestamp.Timestamp
+  groupId?: string
 }
 
 export type SyncResponse = {
