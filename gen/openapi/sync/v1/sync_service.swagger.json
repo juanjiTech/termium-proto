@@ -42,6 +42,12 @@
             "required": false,
             "type": "string",
             "format": "date-time"
+          },
+          {
+            "name": "groupId",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -461,7 +467,7 @@
           "title": "密钥ID"
         }
       },
-      "title": "Identity（身份） 包含身份验证详细信息，如果某些服务器需要提供同一组凭据，则可以节省配置的时间。\n这些凭据可以快速添加为身份并与主机条目链接。当凭据发生更改时，不必更新每台主机而只需更新身份即可。"
+      "title": "Identity（身份） 包含身份验证详细信息，如果某些服务器需要提供同一组凭据，则可以节省配置的时间。\r\n这些凭据可以快速添加为身份并与主机条目链接。当凭据发生更改时，不必更新每台主机而只需更新身份即可。"
     },
     "v1KnownHost": {
       "type": "object",

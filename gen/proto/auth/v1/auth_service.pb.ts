@@ -4,7 +4,7 @@
 * This file is a generated Typescript file for GRPC Gateway, DO NOT MODIFY
 */
 
-import * as fm from "../../fetch.pb"
+import * as fm from "..\..\fetch.pb"
 export type RegisterRequest = {
   email?: string
   verifyCode?: string
