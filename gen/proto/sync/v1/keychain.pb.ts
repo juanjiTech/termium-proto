@@ -4,7 +4,7 @@
 * This file is a generated Typescript file for GRPC Gateway, DO NOT MODIFY
 */
 
-import * as GoogleProtobufTimestamp from "..\..\google\protobuf\timestamp.pb"
+import * as GoogleProtobufTimestamp from "../../google/protobuf/timestamp.pb"
 export type SshKey = {
   id?: string
   createdAt?: GoogleProtobufTimestamp.Timestamp
