@@ -49,6 +49,7 @@ message SyncResponse {
 }
 
 message UpdateRequest {
+  string group_id = 2;
   oneof data {
     Host host = 11;
     KnownHost known_host = 12;
