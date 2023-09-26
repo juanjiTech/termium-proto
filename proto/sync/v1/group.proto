@@ -7,20 +7,16 @@ option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/sync/v1;syncV1"
 
 message Group {
     GroupBasic group_basic = 1;
-    repeated Member members = 19;
+    repeated  string  member_id = 2;
 }
 
 message GroupBasic {
     string id = 1;
-    string name = 2;
-    string description = 3;
-    string avatar = 4;
-    google.protobuf.Timestamp created_at = 14;
-    google.protobuf.Timestamp updated_at = 15;
-    google.protobuf.Timestamp deleted_at = 16;
-    string uid = 17;         // 创建者
-}
-
-message Member {
-  string uid = 1;
+    google.protobuf.Timestamp created_at = 2;
+    google.protobuf.Timestamp updated_at = 3;
+    google.protobuf.Timestamp deleted_at = 4;
+    string name = 5;
+    string description = 6;
+    string avatar = 7;
+    string uid = 8;         // 创建者
 }
