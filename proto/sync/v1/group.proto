@@ -1,0 +1,23 @@
+syntax = "proto3";
+package sync.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/sync/v1;syncV1";
+
+message Group {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    string avatar = 4;
+    google.protobuf.Timestamp created_at = 14;
+    google.protobuf.Timestamp updated_at = 15;
+    google.protobuf.Timestamp deleted_at = 16;
+    string uid = 17;         // 创建者
+    bool   is_personal = 18; // 是否是个人组
+    repeated Member members = 19;
+}
+
+message Member {
+  string uid = 1;
+}

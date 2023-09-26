@@ -6,6 +6,7 @@ import "google/protobuf/timestamp.proto";
 import "sync/v1/host.proto";
 import "sync/v1/keychain.proto";
 import "sync/v1/known_hosts.proto";
+import "sync/v1/group.proto";
 
 option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/sync/v1;syncV1";
 
@@ -17,6 +18,14 @@ service SyncService {
   // 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。
   rpc Update(UpdateRequest) returns (UpdateResponse) {
     option (google.api.http) = {post:"/gapi/sync/v1/update"};
+  }
+  // 更新组信息
+  rpc UpdateGroup(UpdateGroupRequest) returns (UpdateGroupResponse) {
+    option (google.api.http) = {post:"/gapi/sync/v1/update_group"};
+  }
+  // 通过UID获取所有组信息
+  rpc SyncGroup(SyncGroupRequest) returns (SyncGroupResponse) {
+    option (google.api.http) = {get:"/gapi/sync/v1/sync_group"};
   }
 }
 
@@ -49,4 +58,19 @@ message UpdateResponse {
     SshKey ssh_key = 13;
     Identity identity = 14;
   }
+}
+
+message UpdateGroupRequest {
+  Group group = 1;
+}
+
+message UpdateGroupResponse {}
+
+message SyncGroupRequest {
+  google.protobuf.Timestamp after = 1;
+}
+
+message SyncGroupResponse {
+  google.protobuf.Timestamp server_time = 1;
+  repeated Group groups = 11;
 }

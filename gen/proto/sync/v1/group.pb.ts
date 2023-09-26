@@ -5,11 +5,19 @@
 */
 
 import * as GoogleProtobufTimestamp from "..\..\google\protobuf\timestamp.pb"
-export type KnownHost = {
+export type Group = {
   id?: string
+  name?: string
+  description?: string
+  avatar?: string
   createdAt?: GoogleProtobufTimestamp.Timestamp
   updatedAt?: GoogleProtobufTimestamp.Timestamp
   deletedAt?: GoogleProtobufTimestamp.Timestamp
-  address?: string
-  publicKey?: string
+  uid?: string
+  isPersonal?: boolean
+  members?: Member[]
+}
+
+export type Member = {
+  uid?: string
 }
