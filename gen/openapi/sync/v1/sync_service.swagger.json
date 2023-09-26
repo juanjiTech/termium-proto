@@ -472,6 +472,9 @@
     "v1UpdateRequest": {
       "type": "object",
       "properties": {
+        "groupId": {
+          "type": "string"
+        },
         "host": {
           "$ref": "#/definitions/v1Host"
         },
