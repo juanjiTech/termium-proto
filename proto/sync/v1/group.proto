@@ -6,6 +6,11 @@ import "google/protobuf/timestamp.proto";
 option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/sync/v1;syncV1";
 
 message Group {
+    GroupBasic group_basic = 1;
+    repeated Member members = 19;
+}
+
+message GroupBasic {
     string id = 1;
     string name = 2;
     string description = 3;
@@ -14,8 +19,6 @@ message Group {
     google.protobuf.Timestamp updated_at = 15;
     google.protobuf.Timestamp deleted_at = 16;
     string uid = 17;         // 创建者
-    bool   is_personal = 18; // 是否是个人组
-    repeated Member members = 19;
 }
 
 message Member {
