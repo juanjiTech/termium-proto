@@ -17,11 +17,17 @@ service SyncService {
   }
   // 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。
   rpc Update(UpdateRequest) returns (UpdateResponse) {
-    option (google.api.http) = {post:"/gapi/sync/v1/update"};
+    option (google.api.http) = {
+      post:"/gapi/sync/v1/update"
+      body: "*"
+    };
   }
   // 更新组信息
   rpc UpdateGroup(UpdateGroupRequest) returns (UpdateGroupResponse) {
-    option (google.api.http) = {post:"/gapi/sync/v1/update_group"};
+    option (google.api.http) = {
+      post:"/gapi/sync/v1/update_group"
+      body: "*"
+    };
   }
   // 通过UID获取所有组信息
   rpc SyncGroup(SyncGroupRequest) returns (SyncGroupResponse) {
