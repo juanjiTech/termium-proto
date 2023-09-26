@@ -6,6 +6,11 @@
 
 import * as GoogleProtobufTimestamp from "../../google/protobuf/timestamp.pb"
 export type Group = {
+  groupBasic?: GroupBasic
+  members?: Member[]
+}
+
+export type GroupBasic = {
   id?: string
   name?: string
   description?: string
@@ -14,8 +19,6 @@ export type Group = {
   updatedAt?: GoogleProtobufTimestamp.Timestamp
   deletedAt?: GoogleProtobufTimestamp.Timestamp
   uid?: string
-  isPersonal?: boolean
-  members?: Member[]
 }
 
 export type Member = {

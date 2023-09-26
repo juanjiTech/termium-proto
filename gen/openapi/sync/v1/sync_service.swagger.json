@@ -390,63 +390,56 @@
         },
         "parameters": [
           {
-            "name": "group.id",
+            "name": "group.groupBasic.id",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "group.name",
+            "name": "group.groupBasic.name",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "group.description",
+            "name": "group.groupBasic.description",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "group.avatar",
+            "name": "group.groupBasic.avatar",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "group.createdAt",
+            "name": "group.groupBasic.createdAt",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "date-time"
           },
           {
-            "name": "group.updatedAt",
+            "name": "group.groupBasic.updatedAt",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "date-time"
           },
           {
-            "name": "group.deletedAt",
+            "name": "group.groupBasic.deletedAt",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "date-time"
           },
           {
-            "name": "group.uid",
+            "name": "group.groupBasic.uid",
             "description": "创建者",
             "in": "query",
             "required": false,
             "type": "string"
-          },
-          {
-            "name": "group.isPersonal",
-            "description": "是否是个人组",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
           }
         ],
         "tags": [
@@ -487,6 +480,21 @@
     "v1Group": {
       "type": "object",
       "properties": {
+        "groupBasic": {
+          "$ref": "#/definitions/v1GroupBasic"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Member"
+          }
+        }
+      }
+    },
+    "v1GroupBasic": {
+      "type": "object",
+      "properties": {
         "id": {
           "type": "string"
         },
@@ -514,17 +522,6 @@
         "uid": {
           "type": "string",
           "title": "创建者"
-        },
-        "isPersonal": {
-          "type": "boolean",
-          "title": "是否是个人组"
-        },
-        "members": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Member"
-          }
         }
       }
     },
