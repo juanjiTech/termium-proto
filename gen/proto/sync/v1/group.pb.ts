@@ -7,20 +7,16 @@
 import * as GoogleProtobufTimestamp from "../../google/protobuf/timestamp.pb"
 export type Group = {
   groupBasic?: GroupBasic
-  members?: Member[]
+  memberId?: string[]
 }
 
 export type GroupBasic = {
   id?: string
-  name?: string
-  description?: string
-  avatar?: string
   createdAt?: GoogleProtobufTimestamp.Timestamp
   updatedAt?: GoogleProtobufTimestamp.Timestamp
   deletedAt?: GoogleProtobufTimestamp.Timestamp
-  uid?: string
-}
-
-export type Member = {
+  name?: string
+  description?: string
+  avatar?: string
   uid?: string
 }

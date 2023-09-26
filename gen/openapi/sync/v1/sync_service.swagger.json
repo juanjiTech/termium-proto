@@ -189,11 +189,10 @@
         "groupBasic": {
           "$ref": "#/definitions/v1GroupBasic"
         },
-        "members": {
+        "memberId": {
           "type": "array",
           "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Member"
+            "type": "string"
           }
         }
       }
@@ -202,15 +201,6 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "avatar": {
           "type": "string"
         },
         "createdAt": {
@@ -224,6 +214,15 @@
         "deletedAt": {
           "type": "string",
           "format": "date-time"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
         },
         "uid": {
           "type": "string",
@@ -361,14 +360,6 @@
         "publicKey": {
           "type": "string",
           "title": "公钥"
-        }
-      }
-    },
-    "v1Member": {
-      "type": "object",
-      "properties": {
-        "uid": {
-          "type": "string"
         }
       }
     },
