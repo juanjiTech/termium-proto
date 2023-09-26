@@ -19,8 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	SyncService_Sync_FullMethodName   = "/sync.v1.SyncService/Sync"
-	SyncService_Update_FullMethodName = "/sync.v1.SyncService/Update"
+	SyncService_Sync_FullMethodName        = "/sync.v1.SyncService/Sync"
+	SyncService_Update_FullMethodName      = "/sync.v1.SyncService/Update"
+	SyncService_UpdateGroup_FullMethodName = "/sync.v1.SyncService/UpdateGroup"
+	SyncService_SyncGroup_FullMethodName   = "/sync.v1.SyncService/SyncGroup"
 )
 
 // SyncServiceClient is the client API for SyncService service.
@@ -31,6 +33,10 @@ type SyncServiceClient interface {
 	Sync(ctx context.Context, in *SyncRequest, opts ...grpc.CallOption) (*SyncResponse, error)
 	// 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。
 	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
+	// 更新组信息
+	UpdateGroup(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*UpdateGroupResponse, error)
+	// 通过UID获取所有组信息
+	SyncGroup(ctx context.Context, in *SyncGroupRequest, opts ...grpc.CallOption) (*SyncGroupResponse, error)
 }
 
 type syncServiceClient struct {
@@ -59,6 +65,24 @@ func (c *syncServiceClient) Update(ctx context.Context, in *UpdateRequest, opts 
 	return out, nil
 }
 
+func (c *syncServiceClient) UpdateGroup(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*UpdateGroupResponse, error) {
+	out := new(UpdateGroupResponse)
+	err := c.cc.Invoke(ctx, SyncService_UpdateGroup_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *syncServiceClient) SyncGroup(ctx context.Context, in *SyncGroupRequest, opts ...grpc.CallOption) (*SyncGroupResponse, error) {
+	out := new(SyncGroupResponse)
+	err := c.cc.Invoke(ctx, SyncService_SyncGroup_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SyncServiceServer is the server API for SyncService service.
 // All implementations must embed UnimplementedSyncServiceServer
 // for forward compatibility
@@ -67,6 +91,10 @@ type SyncServiceServer interface {
 	Sync(context.Context, *SyncRequest) (*SyncResponse, error)
 	// 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。
 	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
+	// 更新组信息
+	UpdateGroup(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error)
+	// 通过UID获取所有组信息
+	SyncGroup(context.Context, *SyncGroupRequest) (*SyncGroupResponse, error)
 	mustEmbedUnimplementedSyncServiceServer()
 }
 
@@ -79,6 +107,12 @@ func (UnimplementedSyncServiceServer) Sync(context.Context, *SyncRequest) (*Sync
 }
 func (UnimplementedSyncServiceServer) Update(context.Context, *UpdateRequest) (*UpdateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
+func (UnimplementedSyncServiceServer) UpdateGroup(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateGroup not implemented")
+}
+func (UnimplementedSyncServiceServer) SyncGroup(context.Context, *SyncGroupRequest) (*SyncGroupResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SyncGroup not implemented")
 }
 func (UnimplementedSyncServiceServer) mustEmbedUnimplementedSyncServiceServer() {}
 
@@ -129,6 +163,42 @@ func _SyncService_Update_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SyncService_UpdateGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateGroupRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SyncServiceServer).UpdateGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SyncService_UpdateGroup_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SyncServiceServer).UpdateGroup(ctx, req.(*UpdateGroupRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SyncService_SyncGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SyncGroupRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SyncServiceServer).SyncGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SyncService_SyncGroup_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SyncServiceServer).SyncGroup(ctx, req.(*SyncGroupRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SyncService_ServiceDesc is the grpc.ServiceDesc for SyncService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -143,6 +213,14 @@ var SyncService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Update",
 			Handler:    _SyncService_Update_Handler,
+		},
+		{
+			MethodName: "UpdateGroup",
+			Handler:    _SyncService_UpdateGroup_Handler,
+		},
+		{
+			MethodName: "SyncGroup",
+			Handler:    _SyncService_SyncGroup_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

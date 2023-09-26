@@ -6,6 +6,7 @@
 
 import * as fm from "../../fetch.pb"
 import * as GoogleProtobufTimestamp from "../../google/protobuf/timestamp.pb"
+import * as SyncV1Group from "./group.pb"
 import * as SyncV1Host from "./host.pb"
 import * as SyncV1Keychain from "./keychain.pb"
 import * as SyncV1Known_hosts from "./known_hosts.pb"
@@ -45,11 +46,33 @@ type BaseUpdateResponse = {
 export type UpdateResponse = BaseUpdateResponse
   & OneOf<{ host: SyncV1Host.Host; knownHost: SyncV1Known_hosts.KnownHost; sshKey: SyncV1Keychain.SshKey; identity: SyncV1Keychain.Identity }>
 
+export type UpdateGroupRequest = {
+  group?: SyncV1Group.Group
+}
+
+export type UpdateGroupResponse = {
+}
+
+export type SyncGroupRequest = {
+  after?: GoogleProtobufTimestamp.Timestamp
+}
+
+export type SyncGroupResponse = {
+  serverTime?: GoogleProtobufTimestamp.Timestamp
+  groups?: SyncV1Group.Group[]
+}
+
 export class SyncService {
   static Sync(req: SyncRequest, initReq?: fm.InitReq): Promise<SyncResponse> {
     return fm.fetchReq<SyncRequest, SyncResponse>(`/gapi/sync/v1/sync?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
   }
   static Update(req: UpdateRequest, initReq?: fm.InitReq): Promise<UpdateResponse> {
-    return fm.fetchReq<UpdateRequest, UpdateResponse>(`/gapi/sync/v1/update`, {...initReq, method: "POST"})
+    return fm.fetchReq<UpdateRequest, UpdateResponse>(`/gapi/sync/v1/update`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  }
+  static UpdateGroup(req: UpdateGroupRequest, initReq?: fm.InitReq): Promise<UpdateGroupResponse> {
+    return fm.fetchReq<UpdateGroupRequest, UpdateGroupResponse>(`/gapi/sync/v1/update_group`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  }
+  static SyncGroup(req: SyncGroupRequest, initReq?: fm.InitReq): Promise<SyncGroupResponse> {
+    return fm.fetchReq<SyncGroupRequest, SyncGroupResponse>(`/gapi/sync/v1/sync_group?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
   }
 }
