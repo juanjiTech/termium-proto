@@ -4,8 +4,8 @@
 * This file is a generated Typescript file for GRPC Gateway, DO NOT MODIFY
 */
 
-import * as fm from "..\..\fetch.pb"
-import * as UserV1User from ".\user.pb"
+import * as fm from "../../fetch.pb"
+import * as UserV1User from "./user.pb"
 export type GetInfoRequest = {
 }
 

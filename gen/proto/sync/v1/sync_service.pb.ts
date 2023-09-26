@@ -4,12 +4,12 @@
 * This file is a generated Typescript file for GRPC Gateway, DO NOT MODIFY
 */
 
-import * as fm from "..\..\fetch.pb"
-import * as GoogleProtobufTimestamp from "..\..\google\protobuf\timestamp.pb"
-import * as SyncV1Group from ".\group.pb"
-import * as SyncV1Host from ".\host.pb"
-import * as SyncV1Keychain from ".\keychain.pb"
-import * as SyncV1Known_hosts from ".\known_hosts.pb"
+import * as fm from "../../fetch.pb"
+import * as GoogleProtobufTimestamp from "../../google/protobuf/timestamp.pb"
+import * as SyncV1Group from "./group.pb"
+import * as SyncV1Host from "./host.pb"
+import * as SyncV1Keychain from "./keychain.pb"
+import * as SyncV1Known_hosts from "./known_hosts.pb"
 
 type Absent<T, K extends keyof T> = { [k in Exclude<keyof T, K>]?: undefined };
 type OneOf<T> =
