@@ -67,10 +67,10 @@ export class SyncService {
     return fm.fetchReq<SyncRequest, SyncResponse>(`/gapi/sync/v1/sync?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
   }
   static Update(req: UpdateRequest, initReq?: fm.InitReq): Promise<UpdateResponse> {
-    return fm.fetchReq<UpdateRequest, UpdateResponse>(`/gapi/sync/v1/update`, {...initReq, method: "POST"})
+    return fm.fetchReq<UpdateRequest, UpdateResponse>(`/gapi/sync/v1/update`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
   static UpdateGroup(req: UpdateGroupRequest, initReq?: fm.InitReq): Promise<UpdateGroupResponse> {
-    return fm.fetchReq<UpdateGroupRequest, UpdateGroupResponse>(`/gapi/sync/v1/update_group`, {...initReq, method: "POST"})
+    return fm.fetchReq<UpdateGroupRequest, UpdateGroupResponse>(`/gapi/sync/v1/update_group`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
   static SyncGroup(req: SyncGroupRequest, initReq?: fm.InitReq): Promise<SyncGroupResponse> {
     return fm.fetchReq<SyncGroupRequest, SyncGroupResponse>(`/gapi/sync/v1/sync_group?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
