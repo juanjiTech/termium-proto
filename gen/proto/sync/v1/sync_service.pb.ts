@@ -34,6 +34,7 @@ export type SyncResponse = {
 
 
 type BaseUpdateRequest = {
+  groupId?: string
 }
 
 export type UpdateRequest = BaseUpdateRequest
