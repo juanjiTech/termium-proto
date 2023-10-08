@@ -29,6 +29,62 @@ service AuthService {
       body: "*"
     };
   }
+
+  // 检查MFA状态，并返回MFA状态
+  rpc GetMFAStatus(GetMFAStatusRequest) returns (GetMFAStatusResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/status",
+      body: "*"
+    };
+  }
+
+  // TOTP
+  rpc EnableTOTP(EnableTOTPRequest) returns (EnableTOTPResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/totp/enable
+      body: "*"
+    };
+  }
+  rpc DisableTOTP(DisableTOTPRequest) returns (DisableTOTPResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/totp/disable",
+      body: "*"
+    };
+  }
+  rpc CheckTOTP(CheckTOTPRequest) returns (CheckTOTPResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/totp/check",
+      body: "*"
+    };
+  }
+
+  // SMS
+  // 启用SMS
+  rpc EnableSMS(EnableSMSRequest) returns (EnableSMSResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/sms/enable
+      body: "*"
+    };
+  }
+  // 激活SMS
+  rpc ActivateSMS(ActivateSMSRequest) returns (ActivateSMSResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/sms/activate",
+      body: "*"
+    };
+  }
+  rpc DisableSMS(DisableSMSRequest) returns (DisableSMSResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/sms/disable",
+      body: "*"
+    };
+  }
+  rpc CheckSMS(CheckSMSRequest) returns (CheckSMSResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/sms/check",
+      body: "*"
+    };
+  }
 }
 
 message RegisterRequest {
@@ -61,3 +117,65 @@ message RefreshTokenResponse {
   string access_token = 1;
   string refresh_token = 3;
 }
+
+message GetMFAStatusRequest {}
+
+message GetMFAStatusResponse {
+  TOTPStatus totp_status = 1;
+  SMSStatus sms_status = 2;
+}
+
+message TOTPStatus {
+  bool is_active = 1;
+}
+
+message SMSStatus {   // SMS状态
+  bool is_active = 1;
+  string phone_number = 2;
+}
+
+// TOTP
+message EnableTOTPRequest {
+  string email = 1;
+  string verify_code = 2;
+}
+message EnableTOTPResponse {
+  string qr_code_url = 1;
+  string manual_entry_key = 2;
+  repeated string recovery_code = 3;
+}
+
+message DisableTOTPRequest {
+  string totp_code = 1;
+}
+message DisableTOTPResponse {}
+
+message CheckTOTPRequest {
+  string totp_code = 1;
+}
+message CheckTOTPResponse {}
+
+// SMS
+message EnableSMSRequest {
+  string email = 1;
+  string verify_code = 2;
+  string phone = 3;
+}
+message EnableSMSResponse {}
+
+message ActivateSMSRequest {
+  string phone = 1;
+  string sms_code = 2;
+}
+message ActivateSMSResponse {}
+
+message DisableSMSRequest {
+  string phone = 1;
+  string sms_code = 2;
+}
+message DisableSMSResponse {}
+
+message CheckSMSRequest {
+  string sms_code = 1;
+}
+message CheckSMSResponse {}
