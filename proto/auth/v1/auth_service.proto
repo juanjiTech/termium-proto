@@ -57,6 +57,13 @@ service AuthService {
       body: "*"
     };
   }
+  rpc RecoverTOTP(RecoverTOTPRequest) returns (RecoverTOTPResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/totp/recover",
+      body: "*"
+    };
+  }
+
 }
 
 message RegisterRequest {
@@ -126,3 +133,12 @@ message CheckTOTPRequest {
   string totp_code = 1;
 }
 message CheckTOTPResponse {}
+
+message RecoverTOTPRequest {
+  repeated string recovery_code= 1;
+}
+
+message RecoverTOTPResponse {
+  string new_secret_key = 1;
+  repeated string new_recovery_code = 2;
+}
