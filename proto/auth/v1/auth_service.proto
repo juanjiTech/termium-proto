@@ -41,7 +41,7 @@ service AuthService {
   // TOTP
   rpc EnableTOTP(EnableTOTPRequest) returns (EnableTOTPResponse) {
     option (google.api.http) = {
-      post: "/gapi/auth/v1/mfa/totp/enable
+      post: "/gapi/auth/v1/mfa/totp/enable",
       body: "*"
     };
   }
@@ -113,9 +113,8 @@ message EnableTOTPRequest {
   string verify_code = 2;
 }
 message EnableTOTPResponse {
-  string qr_code_url = 1;
-  string secret_key = 2;
-  repeated string recovery_code = 3;
+  string secret_key = 1;
+  repeated string recovery_code = 2;
 }
 
 message DisableTOTPRequest {
