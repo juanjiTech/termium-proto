@@ -22,6 +22,11 @@ const (
 	AuthService_Register_FullMethodName     = "/auth.v1.AuthService/Register"
 	AuthService_Login_FullMethodName        = "/auth.v1.AuthService/Login"
 	AuthService_RefreshToken_FullMethodName = "/auth.v1.AuthService/RefreshToken"
+	AuthService_GetMFAStatus_FullMethodName = "/auth.v1.AuthService/GetMFAStatus"
+	AuthService_EnableTOTP_FullMethodName   = "/auth.v1.AuthService/EnableTOTP"
+	AuthService_DisableTOTP_FullMethodName  = "/auth.v1.AuthService/DisableTOTP"
+	AuthService_CheckTOTP_FullMethodName    = "/auth.v1.AuthService/CheckTOTP"
+	AuthService_RecoverTOTP_FullMethodName  = "/auth.v1.AuthService/RecoverTOTP"
 )
 
 // AuthServiceClient is the client API for AuthService service.
@@ -34,6 +39,13 @@ type AuthServiceClient interface {
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	// Token刷新
 	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*RefreshTokenResponse, error)
+	// 检查MFA状态，并返回MFA状态
+	GetMFAStatus(ctx context.Context, in *GetMFAStatusRequest, opts ...grpc.CallOption) (*GetMFAStatusResponse, error)
+	// TOTP
+	EnableTOTP(ctx context.Context, in *EnableTOTPRequest, opts ...grpc.CallOption) (*EnableTOTPResponse, error)
+	DisableTOTP(ctx context.Context, in *DisableTOTPRequest, opts ...grpc.CallOption) (*DisableTOTPResponse, error)
+	CheckTOTP(ctx context.Context, in *CheckTOTPRequest, opts ...grpc.CallOption) (*CheckTOTPResponse, error)
+	RecoverTOTP(ctx context.Context, in *RecoverTOTPRequest, opts ...grpc.CallOption) (*RecoverTOTPResponse, error)
 }
 
 type authServiceClient struct {
@@ -71,6 +83,51 @@ func (c *authServiceClient) RefreshToken(ctx context.Context, in *RefreshTokenRe
 	return out, nil
 }
 
+func (c *authServiceClient) GetMFAStatus(ctx context.Context, in *GetMFAStatusRequest, opts ...grpc.CallOption) (*GetMFAStatusResponse, error) {
+	out := new(GetMFAStatusResponse)
+	err := c.cc.Invoke(ctx, AuthService_GetMFAStatus_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) EnableTOTP(ctx context.Context, in *EnableTOTPRequest, opts ...grpc.CallOption) (*EnableTOTPResponse, error) {
+	out := new(EnableTOTPResponse)
+	err := c.cc.Invoke(ctx, AuthService_EnableTOTP_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) DisableTOTP(ctx context.Context, in *DisableTOTPRequest, opts ...grpc.CallOption) (*DisableTOTPResponse, error) {
+	out := new(DisableTOTPResponse)
+	err := c.cc.Invoke(ctx, AuthService_DisableTOTP_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) CheckTOTP(ctx context.Context, in *CheckTOTPRequest, opts ...grpc.CallOption) (*CheckTOTPResponse, error) {
+	out := new(CheckTOTPResponse)
+	err := c.cc.Invoke(ctx, AuthService_CheckTOTP_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) RecoverTOTP(ctx context.Context, in *RecoverTOTPRequest, opts ...grpc.CallOption) (*RecoverTOTPResponse, error) {
+	out := new(RecoverTOTPResponse)
+	err := c.cc.Invoke(ctx, AuthService_RecoverTOTP_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServiceServer is the server API for AuthService service.
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility
@@ -81,6 +138,13 @@ type AuthServiceServer interface {
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	// Token刷新
 	RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error)
+	// 检查MFA状态，并返回MFA状态
+	GetMFAStatus(context.Context, *GetMFAStatusRequest) (*GetMFAStatusResponse, error)
+	// TOTP
+	EnableTOTP(context.Context, *EnableTOTPRequest) (*EnableTOTPResponse, error)
+	DisableTOTP(context.Context, *DisableTOTPRequest) (*DisableTOTPResponse, error)
+	CheckTOTP(context.Context, *CheckTOTPRequest) (*CheckTOTPResponse, error)
+	RecoverTOTP(context.Context, *RecoverTOTPRequest) (*RecoverTOTPResponse, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -96,6 +160,21 @@ func (UnimplementedAuthServiceServer) Login(context.Context, *LoginRequest) (*Lo
 }
 func (UnimplementedAuthServiceServer) RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RefreshToken not implemented")
+}
+func (UnimplementedAuthServiceServer) GetMFAStatus(context.Context, *GetMFAStatusRequest) (*GetMFAStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMFAStatus not implemented")
+}
+func (UnimplementedAuthServiceServer) EnableTOTP(context.Context, *EnableTOTPRequest) (*EnableTOTPResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EnableTOTP not implemented")
+}
+func (UnimplementedAuthServiceServer) DisableTOTP(context.Context, *DisableTOTPRequest) (*DisableTOTPResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DisableTOTP not implemented")
+}
+func (UnimplementedAuthServiceServer) CheckTOTP(context.Context, *CheckTOTPRequest) (*CheckTOTPResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckTOTP not implemented")
+}
+func (UnimplementedAuthServiceServer) RecoverTOTP(context.Context, *RecoverTOTPRequest) (*RecoverTOTPResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RecoverTOTP not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
 
@@ -164,6 +243,96 @@ func _AuthService_RefreshToken_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthService_GetMFAStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMFAStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).GetMFAStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_GetMFAStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).GetMFAStatus(ctx, req.(*GetMFAStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_EnableTOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EnableTOTPRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).EnableTOTP(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_EnableTOTP_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).EnableTOTP(ctx, req.(*EnableTOTPRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_DisableTOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DisableTOTPRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).DisableTOTP(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_DisableTOTP_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).DisableTOTP(ctx, req.(*DisableTOTPRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_CheckTOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckTOTPRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).CheckTOTP(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_CheckTOTP_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).CheckTOTP(ctx, req.(*CheckTOTPRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_RecoverTOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RecoverTOTPRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).RecoverTOTP(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_RecoverTOTP_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).RecoverTOTP(ctx, req.(*RecoverTOTPRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AuthService_ServiceDesc is the grpc.ServiceDesc for AuthService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -182,6 +351,26 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RefreshToken",
 			Handler:    _AuthService_RefreshToken_Handler,
+		},
+		{
+			MethodName: "GetMFAStatus",
+			Handler:    _AuthService_GetMFAStatus_Handler,
+		},
+		{
+			MethodName: "EnableTOTP",
+			Handler:    _AuthService_EnableTOTP_Handler,
+		},
+		{
+			MethodName: "DisableTOTP",
+			Handler:    _AuthService_DisableTOTP_Handler,
+		},
+		{
+			MethodName: "CheckTOTP",
+			Handler:    _AuthService_CheckTOTP_Handler,
+		},
+		{
+			MethodName: "RecoverTOTP",
+			Handler:    _AuthService_RecoverTOTP_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

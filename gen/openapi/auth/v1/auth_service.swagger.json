@@ -49,6 +49,168 @@
         ]
       }
     },
+    "/gapi/auth/v1/mfa/status": {
+      "post": {
+        "summary": "检查MFA状态，并返回MFA状态",
+        "operationId": "AuthService_GetMFAStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetMFAStatusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetMFAStatusRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/gapi/auth/v1/mfa/totp/check": {
+      "post": {
+        "operationId": "AuthService_CheckTOTP",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CheckTOTPResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CheckTOTPRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/gapi/auth/v1/mfa/totp/disable": {
+      "post": {
+        "operationId": "AuthService_DisableTOTP",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DisableTOTPResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1DisableTOTPRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/gapi/auth/v1/mfa/totp/enable": {
+      "post": {
+        "summary": "TOTP",
+        "operationId": "AuthService_EnableTOTP",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1EnableTOTPResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1EnableTOTPRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/gapi/auth/v1/mfa/totp/recover": {
+      "post": {
+        "operationId": "AuthService_RecoverTOTP",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RecoverTOTPResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RecoverTOTPRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
     "/gapi/auth/v1/refreshToken": {
       "post": {
         "summary": "Token刷新",
@@ -145,6 +307,67 @@
         }
       }
     },
+    "v1CheckTOTPRequest": {
+      "type": "object",
+      "properties": {
+        "totpCode": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CheckTOTPResponse": {
+      "type": "object"
+    },
+    "v1DisableTOTPRequest": {
+      "type": "object",
+      "properties": {
+        "totpCode": {
+          "type": "string"
+        }
+      }
+    },
+    "v1DisableTOTPResponse": {
+      "type": "object"
+    },
+    "v1EnableTOTPRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "verifyCode": {
+          "type": "string"
+        }
+      },
+      "title": "TOTP"
+    },
+    "v1EnableTOTPResponse": {
+      "type": "object",
+      "properties": {
+        "secretKey": {
+          "type": "string"
+        },
+        "recoveryCode": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1GetMFAStatusRequest": {
+      "type": "object"
+    },
+    "v1GetMFAStatusResponse": {
+      "type": "object",
+      "properties": {
+        "totpStatus": {
+          "$ref": "#/definitions/v1TOTPStatus",
+          "title": "SMSStatus sms_status = 2;"
+        }
+      },
+      "title": "为后期拓展可能做保留"
+    },
     "v1LoginRequest": {
       "type": "object",
       "properties": {
@@ -168,6 +391,31 @@
         },
         "refreshToken": {
           "type": "string"
+        }
+      }
+    },
+    "v1RecoverTOTPRequest": {
+      "type": "object",
+      "properties": {
+        "recoveryCode": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1RecoverTOTPResponse": {
+      "type": "object",
+      "properties": {
+        "newSecretKey": {
+          "type": "string"
+        },
+        "newRecoveryCode": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -212,6 +460,14 @@
         },
         "refreshToken": {
           "type": "string"
+        }
+      }
+    },
+    "v1TOTPStatus": {
+      "type": "object",
+      "properties": {
+        "isActive": {
+          "type": "boolean"
         }
       }
     }
