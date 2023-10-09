@@ -64,6 +64,47 @@ service AuthService {
     };
   }
 
+  // Email
+  rpc AddEmailMFA(AddEmailMFARequest) returns (AddEmailMFAResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/email/add",
+      body: "*"
+    };
+  }
+
+  rpc ActivateEmailMFA(ActivateEmailMFARequest) returns (ActivateEmailMFAResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/email/activate",
+      body: "*"
+    };
+  }
+
+  rpc SetPrimaryEmailMFA(SetPrimaryEmailMFARequest) returns (SetPrimaryEmailMFAResponse) {
+    option (google.api.http) = {
+        post: "/gapi/auth/v1/mfa/email/setPrimary",
+        body: "*"
+      };
+  }
+  rpc SendCodeEmailMFA(SendCodeEmailMFARequest) returns (SendCodeEmailMFAResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/email/send",
+      body: "*"
+    };
+  }
+
+  rpc CheckEmailMFA(CheckEmailMFARequest) returns (CheckEmailMFAResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/email/check",
+      body: "*"
+    };
+  }
+
+  rpc DisableEmailMFA(DisableEmailMFARequest) returns (DisableEmailMFAResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/email/diable",
+      body: "*"
+    };
+  }
 }
 
 message RegisterRequest {
@@ -102,17 +143,18 @@ message GetMFAStatusRequest {}
 // 为后期拓展可能做保留
 message GetMFAStatusResponse {
   TOTPStatus totp_status = 1;
-//  SMSStatus sms_status = 2;
+  EmailStatus email_status = 2;
 }
 
 message TOTPStatus {
   bool is_active = 1;
 }
 
-//message SMSStatus {   // SMS状态
-//  bool is_active = 1;
-//  string phone_number = 2;
-//}
+message EmailStatus {
+  string email = 1;
+  bool   primary = 2;
+  bool   is_active = 3;
+}
 
 // TOTP
 message EnableTOTPRequest {
@@ -142,3 +184,40 @@ message RecoverTOTPResponse {
   string new_secret_key = 1;
   repeated string new_recovery_code = 2;
 }
+
+// Email MFA
+message AddEmailMFARequest {
+  string email = 1;
+}
+message AddEmailMFAResponse {}
+
+message ActivateEmailMFARequest {
+  string email = 1;
+  string verification_code = 2;
+}
+message ActivateEmailMFAResponse {}
+
+message SetPrimaryEmailMFARequest {
+  string new_email = 1;
+  string old_email = 2;
+  string code_old_email = 3;
+}
+message SetPrimaryEmailMFAResponse {}
+
+message SendCodeEmailMFARequest{
+  string email = 1;
+}
+message SendCodeEmailMFAResponse{}
+
+message CheckEmailMFARequest {
+  string email = 1;
+  string verification_code = 2;
+}
+message CheckEmailMFAResponse {}
+
+message DisableEmailMFARequest {
+  string email = 1;
+  string verification_code = 2;
+}
+
+message DisableEmailMFAResponse {}
