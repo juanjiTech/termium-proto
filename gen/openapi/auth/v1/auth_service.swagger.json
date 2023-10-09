@@ -49,6 +49,199 @@
         ]
       }
     },
+    "/gapi/auth/v1/mfa/email/activate": {
+      "post": {
+        "operationId": "AuthService_ActivateEmailMFA",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ActivateEmailMFAResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ActivateEmailMFARequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/gapi/auth/v1/mfa/email/add": {
+      "post": {
+        "summary": "Email",
+        "operationId": "AuthService_AddEmailMFA",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AddEmailMFAResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AddEmailMFARequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/gapi/auth/v1/mfa/email/check": {
+      "post": {
+        "operationId": "AuthService_CheckEmailMFA",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CheckEmailMFAResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CheckEmailMFARequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/gapi/auth/v1/mfa/email/diable": {
+      "post": {
+        "operationId": "AuthService_DisableEmailMFA",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DisableEmailMFAResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1DisableEmailMFARequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/gapi/auth/v1/mfa/email/send": {
+      "post": {
+        "operationId": "AuthService_SendCodeEmailMFA",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SendCodeEmailMFAResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SendCodeEmailMFARequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/gapi/auth/v1/mfa/email/setPrimary": {
+      "post": {
+        "operationId": "AuthService_SetPrimaryEmailMFA",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SetPrimaryEmailMFAResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SetPrimaryEmailMFARequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
     "/gapi/auth/v1/mfa/status": {
       "post": {
         "summary": "检查MFA状态，并返回MFA状态",
@@ -307,6 +500,46 @@
         }
       }
     },
+    "v1ActivateEmailMFARequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "verificationCode": {
+          "type": "string"
+        }
+      }
+    },
+    "v1ActivateEmailMFAResponse": {
+      "type": "object"
+    },
+    "v1AddEmailMFARequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      },
+      "title": "Email MFA"
+    },
+    "v1AddEmailMFAResponse": {
+      "type": "object"
+    },
+    "v1CheckEmailMFARequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "verificationCode": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CheckEmailMFAResponse": {
+      "type": "object"
+    },
     "v1CheckTOTPRequest": {
       "type": "object",
       "properties": {
@@ -316,6 +549,20 @@
       }
     },
     "v1CheckTOTPResponse": {
+      "type": "object"
+    },
+    "v1DisableEmailMFARequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "verificationCode": {
+          "type": "string"
+        }
+      }
+    },
+    "v1DisableEmailMFAResponse": {
       "type": "object"
     },
     "v1DisableTOTPRequest": {
@@ -328,6 +575,20 @@
     },
     "v1DisableTOTPResponse": {
       "type": "object"
+    },
+    "v1EmailStatus": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "primary": {
+          "type": "boolean"
+        },
+        "isActive": {
+          "type": "boolean"
+        }
+      }
     },
     "v1EnableTOTPRequest": {
       "type": "object",
@@ -362,8 +623,10 @@
       "type": "object",
       "properties": {
         "totpStatus": {
-          "$ref": "#/definitions/v1TOTPStatus",
-          "title": "SMSStatus sms_status = 2;"
+          "$ref": "#/definitions/v1TOTPStatus"
+        },
+        "emailStatus": {
+          "$ref": "#/definitions/v1EmailStatus"
         }
       },
       "title": "为后期拓展可能做保留"
@@ -462,6 +725,34 @@
           "type": "string"
         }
       }
+    },
+    "v1SendCodeEmailMFARequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "v1SendCodeEmailMFAResponse": {
+      "type": "object"
+    },
+    "v1SetPrimaryEmailMFARequest": {
+      "type": "object",
+      "properties": {
+        "newEmail": {
+          "type": "string"
+        },
+        "oldEmail": {
+          "type": "string"
+        },
+        "codeOldEmail": {
+          "type": "string"
+        }
+      }
+    },
+    "v1SetPrimaryEmailMFAResponse": {
+      "type": "object"
     },
     "v1TOTPStatus": {
       "type": "object",

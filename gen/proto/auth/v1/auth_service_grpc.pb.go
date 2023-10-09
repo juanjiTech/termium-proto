@@ -19,14 +19,20 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	AuthService_Register_FullMethodName     = "/auth.v1.AuthService/Register"
-	AuthService_Login_FullMethodName        = "/auth.v1.AuthService/Login"
-	AuthService_RefreshToken_FullMethodName = "/auth.v1.AuthService/RefreshToken"
-	AuthService_GetMFAStatus_FullMethodName = "/auth.v1.AuthService/GetMFAStatus"
-	AuthService_EnableTOTP_FullMethodName   = "/auth.v1.AuthService/EnableTOTP"
-	AuthService_DisableTOTP_FullMethodName  = "/auth.v1.AuthService/DisableTOTP"
-	AuthService_CheckTOTP_FullMethodName    = "/auth.v1.AuthService/CheckTOTP"
-	AuthService_RecoverTOTP_FullMethodName  = "/auth.v1.AuthService/RecoverTOTP"
+	AuthService_Register_FullMethodName           = "/auth.v1.AuthService/Register"
+	AuthService_Login_FullMethodName              = "/auth.v1.AuthService/Login"
+	AuthService_RefreshToken_FullMethodName       = "/auth.v1.AuthService/RefreshToken"
+	AuthService_GetMFAStatus_FullMethodName       = "/auth.v1.AuthService/GetMFAStatus"
+	AuthService_EnableTOTP_FullMethodName         = "/auth.v1.AuthService/EnableTOTP"
+	AuthService_DisableTOTP_FullMethodName        = "/auth.v1.AuthService/DisableTOTP"
+	AuthService_CheckTOTP_FullMethodName          = "/auth.v1.AuthService/CheckTOTP"
+	AuthService_RecoverTOTP_FullMethodName        = "/auth.v1.AuthService/RecoverTOTP"
+	AuthService_AddEmailMFA_FullMethodName        = "/auth.v1.AuthService/AddEmailMFA"
+	AuthService_ActivateEmailMFA_FullMethodName   = "/auth.v1.AuthService/ActivateEmailMFA"
+	AuthService_SetPrimaryEmailMFA_FullMethodName = "/auth.v1.AuthService/SetPrimaryEmailMFA"
+	AuthService_SendCodeEmailMFA_FullMethodName   = "/auth.v1.AuthService/SendCodeEmailMFA"
+	AuthService_CheckEmailMFA_FullMethodName      = "/auth.v1.AuthService/CheckEmailMFA"
+	AuthService_DisableEmailMFA_FullMethodName    = "/auth.v1.AuthService/DisableEmailMFA"
 )
 
 // AuthServiceClient is the client API for AuthService service.
@@ -46,6 +52,13 @@ type AuthServiceClient interface {
 	DisableTOTP(ctx context.Context, in *DisableTOTPRequest, opts ...grpc.CallOption) (*DisableTOTPResponse, error)
 	CheckTOTP(ctx context.Context, in *CheckTOTPRequest, opts ...grpc.CallOption) (*CheckTOTPResponse, error)
 	RecoverTOTP(ctx context.Context, in *RecoverTOTPRequest, opts ...grpc.CallOption) (*RecoverTOTPResponse, error)
+	// Email
+	AddEmailMFA(ctx context.Context, in *AddEmailMFARequest, opts ...grpc.CallOption) (*AddEmailMFAResponse, error)
+	ActivateEmailMFA(ctx context.Context, in *ActivateEmailMFARequest, opts ...grpc.CallOption) (*ActivateEmailMFAResponse, error)
+	SetPrimaryEmailMFA(ctx context.Context, in *SetPrimaryEmailMFARequest, opts ...grpc.CallOption) (*SetPrimaryEmailMFAResponse, error)
+	SendCodeEmailMFA(ctx context.Context, in *SendCodeEmailMFARequest, opts ...grpc.CallOption) (*SendCodeEmailMFAResponse, error)
+	CheckEmailMFA(ctx context.Context, in *CheckEmailMFARequest, opts ...grpc.CallOption) (*CheckEmailMFAResponse, error)
+	DisableEmailMFA(ctx context.Context, in *DisableEmailMFARequest, opts ...grpc.CallOption) (*DisableEmailMFAResponse, error)
 }
 
 type authServiceClient struct {
@@ -128,6 +141,60 @@ func (c *authServiceClient) RecoverTOTP(ctx context.Context, in *RecoverTOTPRequ
 	return out, nil
 }
 
+func (c *authServiceClient) AddEmailMFA(ctx context.Context, in *AddEmailMFARequest, opts ...grpc.CallOption) (*AddEmailMFAResponse, error) {
+	out := new(AddEmailMFAResponse)
+	err := c.cc.Invoke(ctx, AuthService_AddEmailMFA_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) ActivateEmailMFA(ctx context.Context, in *ActivateEmailMFARequest, opts ...grpc.CallOption) (*ActivateEmailMFAResponse, error) {
+	out := new(ActivateEmailMFAResponse)
+	err := c.cc.Invoke(ctx, AuthService_ActivateEmailMFA_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) SetPrimaryEmailMFA(ctx context.Context, in *SetPrimaryEmailMFARequest, opts ...grpc.CallOption) (*SetPrimaryEmailMFAResponse, error) {
+	out := new(SetPrimaryEmailMFAResponse)
+	err := c.cc.Invoke(ctx, AuthService_SetPrimaryEmailMFA_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) SendCodeEmailMFA(ctx context.Context, in *SendCodeEmailMFARequest, opts ...grpc.CallOption) (*SendCodeEmailMFAResponse, error) {
+	out := new(SendCodeEmailMFAResponse)
+	err := c.cc.Invoke(ctx, AuthService_SendCodeEmailMFA_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) CheckEmailMFA(ctx context.Context, in *CheckEmailMFARequest, opts ...grpc.CallOption) (*CheckEmailMFAResponse, error) {
+	out := new(CheckEmailMFAResponse)
+	err := c.cc.Invoke(ctx, AuthService_CheckEmailMFA_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) DisableEmailMFA(ctx context.Context, in *DisableEmailMFARequest, opts ...grpc.CallOption) (*DisableEmailMFAResponse, error) {
+	out := new(DisableEmailMFAResponse)
+	err := c.cc.Invoke(ctx, AuthService_DisableEmailMFA_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServiceServer is the server API for AuthService service.
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility
@@ -145,6 +212,13 @@ type AuthServiceServer interface {
 	DisableTOTP(context.Context, *DisableTOTPRequest) (*DisableTOTPResponse, error)
 	CheckTOTP(context.Context, *CheckTOTPRequest) (*CheckTOTPResponse, error)
 	RecoverTOTP(context.Context, *RecoverTOTPRequest) (*RecoverTOTPResponse, error)
+	// Email
+	AddEmailMFA(context.Context, *AddEmailMFARequest) (*AddEmailMFAResponse, error)
+	ActivateEmailMFA(context.Context, *ActivateEmailMFARequest) (*ActivateEmailMFAResponse, error)
+	SetPrimaryEmailMFA(context.Context, *SetPrimaryEmailMFARequest) (*SetPrimaryEmailMFAResponse, error)
+	SendCodeEmailMFA(context.Context, *SendCodeEmailMFARequest) (*SendCodeEmailMFAResponse, error)
+	CheckEmailMFA(context.Context, *CheckEmailMFARequest) (*CheckEmailMFAResponse, error)
+	DisableEmailMFA(context.Context, *DisableEmailMFARequest) (*DisableEmailMFAResponse, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -175,6 +249,24 @@ func (UnimplementedAuthServiceServer) CheckTOTP(context.Context, *CheckTOTPReque
 }
 func (UnimplementedAuthServiceServer) RecoverTOTP(context.Context, *RecoverTOTPRequest) (*RecoverTOTPResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RecoverTOTP not implemented")
+}
+func (UnimplementedAuthServiceServer) AddEmailMFA(context.Context, *AddEmailMFARequest) (*AddEmailMFAResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddEmailMFA not implemented")
+}
+func (UnimplementedAuthServiceServer) ActivateEmailMFA(context.Context, *ActivateEmailMFARequest) (*ActivateEmailMFAResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ActivateEmailMFA not implemented")
+}
+func (UnimplementedAuthServiceServer) SetPrimaryEmailMFA(context.Context, *SetPrimaryEmailMFARequest) (*SetPrimaryEmailMFAResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetPrimaryEmailMFA not implemented")
+}
+func (UnimplementedAuthServiceServer) SendCodeEmailMFA(context.Context, *SendCodeEmailMFARequest) (*SendCodeEmailMFAResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendCodeEmailMFA not implemented")
+}
+func (UnimplementedAuthServiceServer) CheckEmailMFA(context.Context, *CheckEmailMFARequest) (*CheckEmailMFAResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckEmailMFA not implemented")
+}
+func (UnimplementedAuthServiceServer) DisableEmailMFA(context.Context, *DisableEmailMFARequest) (*DisableEmailMFAResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DisableEmailMFA not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
 
@@ -333,6 +425,114 @@ func _AuthService_RecoverTOTP_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthService_AddEmailMFA_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddEmailMFARequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).AddEmailMFA(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_AddEmailMFA_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).AddEmailMFA(ctx, req.(*AddEmailMFARequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_ActivateEmailMFA_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ActivateEmailMFARequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).ActivateEmailMFA(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_ActivateEmailMFA_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).ActivateEmailMFA(ctx, req.(*ActivateEmailMFARequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_SetPrimaryEmailMFA_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetPrimaryEmailMFARequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).SetPrimaryEmailMFA(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_SetPrimaryEmailMFA_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).SetPrimaryEmailMFA(ctx, req.(*SetPrimaryEmailMFARequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_SendCodeEmailMFA_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendCodeEmailMFARequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).SendCodeEmailMFA(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_SendCodeEmailMFA_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).SendCodeEmailMFA(ctx, req.(*SendCodeEmailMFARequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_CheckEmailMFA_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckEmailMFARequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).CheckEmailMFA(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_CheckEmailMFA_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).CheckEmailMFA(ctx, req.(*CheckEmailMFARequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_DisableEmailMFA_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DisableEmailMFARequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).DisableEmailMFA(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_DisableEmailMFA_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).DisableEmailMFA(ctx, req.(*DisableEmailMFARequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AuthService_ServiceDesc is the grpc.ServiceDesc for AuthService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -371,6 +571,30 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RecoverTOTP",
 			Handler:    _AuthService_RecoverTOTP_Handler,
+		},
+		{
+			MethodName: "AddEmailMFA",
+			Handler:    _AuthService_AddEmailMFA_Handler,
+		},
+		{
+			MethodName: "ActivateEmailMFA",
+			Handler:    _AuthService_ActivateEmailMFA_Handler,
+		},
+		{
+			MethodName: "SetPrimaryEmailMFA",
+			Handler:    _AuthService_SetPrimaryEmailMFA_Handler,
+		},
+		{
+			MethodName: "SendCodeEmailMFA",
+			Handler:    _AuthService_SendCodeEmailMFA_Handler,
+		},
+		{
+			MethodName: "CheckEmailMFA",
+			Handler:    _AuthService_CheckEmailMFA_Handler,
+		},
+		{
+			MethodName: "DisableEmailMFA",
+			Handler:    _AuthService_DisableEmailMFA_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
