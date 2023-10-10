@@ -39,12 +39,21 @@ service AuthService {
   }
 
   // TOTP
-  rpc EnableTOTP(EnableTOTPRequest) returns (EnableTOTPResponse) {
+  // 添加TOTP
+  rpc AddTOTP(AddTOTPRequest) returns (AddTOTPResponse) {
     option (google.api.http) = {
-      post: "/gapi/auth/v1/mfa/totp/enable",
+      post: "/gapi/auth/v1/mfa/totp/add",
       body: "*"
     };
   }
+  // 激活TOTP
+  rpc ActiveTOTP(ActiveTOTPRequest) returns (ActiveTOTPResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/totp/active",
+      body: "*"
+    };
+  }
+
   rpc DisableTOTP(DisableTOTPRequest) returns (DisableTOTPResponse) {
     option (google.api.http) = {
       post: "/gapi/auth/v1/mfa/totp/disable",
@@ -157,14 +166,19 @@ message EmailStatus {
 }
 
 // TOTP
-message EnableTOTPRequest {
+message AddTOTPRequest {
   string email = 1;
   string verify_code = 2;
 }
-message EnableTOTPResponse {
+message AddTOTPResponse {
   string secret_key = 1;
   repeated string recovery_code = 2;
 }
+
+message ActiveTOTPRequest{
+  string totp_code = 1;
+}
+message ActiveTOTPResponse{}
 
 message DisableTOTPRequest {
   string totp_code = 1;
@@ -200,7 +214,6 @@ message ActivateEmailMFAResponse {}
 message SetPrimaryEmailMFARequest {
   string new_email = 1;
   string old_email = 2;
-  string code_old_email = 3;
 }
 message SetPrimaryEmailMFAResponse {}
 
@@ -217,7 +230,8 @@ message CheckEmailMFAResponse {}
 
 message DisableEmailMFARequest {
   string email = 1;
-  string verification_code = 2;
+  string totp_code = 2;
+  string primary_email_code =3;
 }
 
 message DisableEmailMFAResponse {}
