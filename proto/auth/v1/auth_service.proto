@@ -40,13 +40,6 @@ service AuthService {
 
   // TOTP
   // 添加TOTP
-  rpc AddTOTP(AddTOTPRequest) returns (AddTOTPResponse) {
-    option (google.api.http) = {
-      post: "/gapi/auth/v1/mfa/totp/add",
-      body: "*"
-    };
-  }
-  // 激活TOTP
   rpc ActiveTOTP(ActiveTOTPRequest) returns (ActiveTOTPResponse) {
     option (google.api.http) = {
       post: "/gapi/auth/v1/mfa/totp/active",
@@ -110,7 +103,14 @@ service AuthService {
 
   rpc DisableEmailMFA(DisableEmailMFARequest) returns (DisableEmailMFAResponse) {
     option (google.api.http) = {
-      post: "/gapi/auth/v1/mfa/email/diable",
+      post: "/gapi/auth/v1/mfa/email/disable",
+      body: "*"
+    };
+  }
+
+  rpc GetAccountStatus(GetAccountStatusRequest) returns (GetAccountStatusResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/account/status",
       body: "*"
     };
   }
@@ -161,22 +161,14 @@ message TOTPStatus {
 
 message EmailStatus {
   string email = 1;
-  bool   primary = 2;
+  bool   is_primary = 2;
   bool   is_active = 3;
 }
 
 // TOTP
-message AddTOTPRequest {
-  string email = 1;
-  string verify_code = 2;
-}
-message AddTOTPResponse {
-  string secret_key = 1;
-  repeated string recovery_code = 2;
-}
-
 message ActiveTOTPRequest{
-  string totp_code = 1;
+  string secret_key = 1;
+  string totp_code = 2;
 }
 message ActiveTOTPResponse{}
 
@@ -235,3 +227,8 @@ message DisableEmailMFARequest {
 }
 
 message DisableEmailMFAResponse {}
+
+message GetAccountStatusRequest{}
+message GetAccountStatusResponse{
+  int64 sudo_ttl = 1;
+}
