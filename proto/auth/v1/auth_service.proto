@@ -108,6 +108,7 @@ service AuthService {
     };
   }
 
+  // GetAccountStatus 获取sudo的ttl
   rpc GetAccountStatus(GetAccountStatusRequest) returns (GetAccountStatusResponse) {
     option (google.api.http) = {
       post: "/gapi/auth/v1/account/status",
@@ -152,7 +153,7 @@ message GetMFAStatusRequest {}
 // 为后期拓展可能做保留
 message GetMFAStatusResponse {
   TOTPStatus totp_status = 1;
-  EmailStatus email_status = 2;
+  repeated EmailStatus email_status = 2;
 }
 
 message TOTPStatus {
@@ -222,10 +223,7 @@ message CheckEmailMFAResponse {}
 
 message DisableEmailMFARequest {
   string email = 1;
-  string totp_code = 2;
-  string primary_email_code =3;
 }
-
 message DisableEmailMFAResponse {}
 
 message GetAccountStatusRequest{}
