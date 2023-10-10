@@ -23,7 +23,8 @@ const (
 	AuthService_Login_FullMethodName              = "/auth.v1.AuthService/Login"
 	AuthService_RefreshToken_FullMethodName       = "/auth.v1.AuthService/RefreshToken"
 	AuthService_GetMFAStatus_FullMethodName       = "/auth.v1.AuthService/GetMFAStatus"
-	AuthService_EnableTOTP_FullMethodName         = "/auth.v1.AuthService/EnableTOTP"
+	AuthService_AddTOTP_FullMethodName            = "/auth.v1.AuthService/AddTOTP"
+	AuthService_ActiveTOTP_FullMethodName         = "/auth.v1.AuthService/ActiveTOTP"
 	AuthService_DisableTOTP_FullMethodName        = "/auth.v1.AuthService/DisableTOTP"
 	AuthService_CheckTOTP_FullMethodName          = "/auth.v1.AuthService/CheckTOTP"
 	AuthService_RecoverTOTP_FullMethodName        = "/auth.v1.AuthService/RecoverTOTP"
@@ -48,7 +49,10 @@ type AuthServiceClient interface {
 	// 检查MFA状态，并返回MFA状态
 	GetMFAStatus(ctx context.Context, in *GetMFAStatusRequest, opts ...grpc.CallOption) (*GetMFAStatusResponse, error)
 	// TOTP
-	EnableTOTP(ctx context.Context, in *EnableTOTPRequest, opts ...grpc.CallOption) (*EnableTOTPResponse, error)
+	// 添加TOTP
+	AddTOTP(ctx context.Context, in *AddTOTPRequest, opts ...grpc.CallOption) (*AddTOTPResponse, error)
+	// 激活TOTP
+	ActiveTOTP(ctx context.Context, in *ActiveTOTPRequest, opts ...grpc.CallOption) (*ActiveTOTPResponse, error)
 	DisableTOTP(ctx context.Context, in *DisableTOTPRequest, opts ...grpc.CallOption) (*DisableTOTPResponse, error)
 	CheckTOTP(ctx context.Context, in *CheckTOTPRequest, opts ...grpc.CallOption) (*CheckTOTPResponse, error)
 	RecoverTOTP(ctx context.Context, in *RecoverTOTPRequest, opts ...grpc.CallOption) (*RecoverTOTPResponse, error)
@@ -105,9 +109,18 @@ func (c *authServiceClient) GetMFAStatus(ctx context.Context, in *GetMFAStatusRe
 	return out, nil
 }
 
-func (c *authServiceClient) EnableTOTP(ctx context.Context, in *EnableTOTPRequest, opts ...grpc.CallOption) (*EnableTOTPResponse, error) {
-	out := new(EnableTOTPResponse)
-	err := c.cc.Invoke(ctx, AuthService_EnableTOTP_FullMethodName, in, out, opts...)
+func (c *authServiceClient) AddTOTP(ctx context.Context, in *AddTOTPRequest, opts ...grpc.CallOption) (*AddTOTPResponse, error) {
+	out := new(AddTOTPResponse)
+	err := c.cc.Invoke(ctx, AuthService_AddTOTP_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) ActiveTOTP(ctx context.Context, in *ActiveTOTPRequest, opts ...grpc.CallOption) (*ActiveTOTPResponse, error) {
+	out := new(ActiveTOTPResponse)
+	err := c.cc.Invoke(ctx, AuthService_ActiveTOTP_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -208,7 +221,10 @@ type AuthServiceServer interface {
 	// 检查MFA状态，并返回MFA状态
 	GetMFAStatus(context.Context, *GetMFAStatusRequest) (*GetMFAStatusResponse, error)
 	// TOTP
-	EnableTOTP(context.Context, *EnableTOTPRequest) (*EnableTOTPResponse, error)
+	// 添加TOTP
+	AddTOTP(context.Context, *AddTOTPRequest) (*AddTOTPResponse, error)
+	// 激活TOTP
+	ActiveTOTP(context.Context, *ActiveTOTPRequest) (*ActiveTOTPResponse, error)
 	DisableTOTP(context.Context, *DisableTOTPRequest) (*DisableTOTPResponse, error)
 	CheckTOTP(context.Context, *CheckTOTPRequest) (*CheckTOTPResponse, error)
 	RecoverTOTP(context.Context, *RecoverTOTPRequest) (*RecoverTOTPResponse, error)
@@ -238,8 +254,11 @@ func (UnimplementedAuthServiceServer) RefreshToken(context.Context, *RefreshToke
 func (UnimplementedAuthServiceServer) GetMFAStatus(context.Context, *GetMFAStatusRequest) (*GetMFAStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMFAStatus not implemented")
 }
-func (UnimplementedAuthServiceServer) EnableTOTP(context.Context, *EnableTOTPRequest) (*EnableTOTPResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method EnableTOTP not implemented")
+func (UnimplementedAuthServiceServer) AddTOTP(context.Context, *AddTOTPRequest) (*AddTOTPResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddTOTP not implemented")
+}
+func (UnimplementedAuthServiceServer) ActiveTOTP(context.Context, *ActiveTOTPRequest) (*ActiveTOTPResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ActiveTOTP not implemented")
 }
 func (UnimplementedAuthServiceServer) DisableTOTP(context.Context, *DisableTOTPRequest) (*DisableTOTPResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DisableTOTP not implemented")
@@ -353,20 +372,38 @@ func _AuthService_GetMFAStatus_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthService_EnableTOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EnableTOTPRequest)
+func _AuthService_AddTOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddTOTPRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).EnableTOTP(ctx, in)
+		return srv.(AuthServiceServer).AddTOTP(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AuthService_EnableTOTP_FullMethodName,
+		FullMethod: AuthService_AddTOTP_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).EnableTOTP(ctx, req.(*EnableTOTPRequest))
+		return srv.(AuthServiceServer).AddTOTP(ctx, req.(*AddTOTPRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_ActiveTOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ActiveTOTPRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).ActiveTOTP(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_ActiveTOTP_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).ActiveTOTP(ctx, req.(*ActiveTOTPRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -557,8 +594,12 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AuthService_GetMFAStatus_Handler,
 		},
 		{
-			MethodName: "EnableTOTP",
-			Handler:    _AuthService_EnableTOTP_Handler,
+			MethodName: "AddTOTP",
+			Handler:    _AuthService_AddTOTP_Handler,
+		},
+		{
+			MethodName: "ActiveTOTP",
+			Handler:    _AuthService_ActiveTOTP_Handler,
 		},
 		{
 			MethodName: "DisableTOTP",
