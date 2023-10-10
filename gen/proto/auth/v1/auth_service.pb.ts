@@ -54,14 +54,21 @@ export type EmailStatus = {
   isActive?: boolean
 }
 
-export type EnableTOTPRequest = {
+export type AddTOTPRequest = {
   email?: string
   verifyCode?: string
 }
 
-export type EnableTOTPResponse = {
+export type AddTOTPResponse = {
   secretKey?: string
   recoveryCode?: string[]
+}
+
+export type ActiveTOTPRequest = {
+  totpCode?: string
+}
+
+export type ActiveTOTPResponse = {
 }
 
 export type DisableTOTPRequest = {
@@ -105,7 +112,6 @@ export type ActivateEmailMFAResponse = {
 export type SetPrimaryEmailMFARequest = {
   newEmail?: string
   oldEmail?: string
-  codeOldEmail?: string
 }
 
 export type SetPrimaryEmailMFAResponse = {
@@ -128,7 +134,8 @@ export type CheckEmailMFAResponse = {
 
 export type DisableEmailMFARequest = {
   email?: string
-  verificationCode?: string
+  totpCode?: string
+  primaryEmailCode?: string
 }
 
 export type DisableEmailMFAResponse = {
@@ -147,8 +154,11 @@ export class AuthService {
   static GetMFAStatus(req: GetMFAStatusRequest, initReq?: fm.InitReq): Promise<GetMFAStatusResponse> {
     return fm.fetchReq<GetMFAStatusRequest, GetMFAStatusResponse>(`/gapi/auth/v1/mfa/status`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
-  static EnableTOTP(req: EnableTOTPRequest, initReq?: fm.InitReq): Promise<EnableTOTPResponse> {
-    return fm.fetchReq<EnableTOTPRequest, EnableTOTPResponse>(`/gapi/auth/v1/mfa/totp/enable`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  static AddTOTP(req: AddTOTPRequest, initReq?: fm.InitReq): Promise<AddTOTPResponse> {
+    return fm.fetchReq<AddTOTPRequest, AddTOTPResponse>(`/gapi/auth/v1/mfa/totp/add`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  }
+  static ActiveTOTP(req: ActiveTOTPRequest, initReq?: fm.InitReq): Promise<ActiveTOTPResponse> {
+    return fm.fetchReq<ActiveTOTPRequest, ActiveTOTPResponse>(`/gapi/auth/v1/mfa/totp/active`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
   static DisableTOTP(req: DisableTOTPRequest, initReq?: fm.InitReq): Promise<DisableTOTPResponse> {
     return fm.fetchReq<DisableTOTPRequest, DisableTOTPResponse>(`/gapi/auth/v1/mfa/totp/disable`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
