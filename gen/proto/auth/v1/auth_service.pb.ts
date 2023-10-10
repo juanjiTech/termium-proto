@@ -50,21 +50,12 @@ export type TOTPStatus = {
 
 export type EmailStatus = {
   email?: string
-  primary?: boolean
+  isPrimary?: boolean
   isActive?: boolean
 }
 
-export type AddTOTPRequest = {
-  email?: string
-  verifyCode?: string
-}
-
-export type AddTOTPResponse = {
-  secretKey?: string
-  recoveryCode?: string[]
-}
-
 export type ActiveTOTPRequest = {
+  secretKey?: string
   totpCode?: string
 }
 
@@ -141,6 +132,13 @@ export type DisableEmailMFARequest = {
 export type DisableEmailMFAResponse = {
 }
 
+export type GetAccountStatusRequest = {
+}
+
+export type GetAccountStatusResponse = {
+  sudoTtl?: string
+}
+
 export class AuthService {
   static Register(req: RegisterRequest, initReq?: fm.InitReq): Promise<RegisterResponse> {
     return fm.fetchReq<RegisterRequest, RegisterResponse>(`/gapi/auth/v1/register`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
@@ -153,9 +151,6 @@ export class AuthService {
   }
   static GetMFAStatus(req: GetMFAStatusRequest, initReq?: fm.InitReq): Promise<GetMFAStatusResponse> {
     return fm.fetchReq<GetMFAStatusRequest, GetMFAStatusResponse>(`/gapi/auth/v1/mfa/status`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
-  }
-  static AddTOTP(req: AddTOTPRequest, initReq?: fm.InitReq): Promise<AddTOTPResponse> {
-    return fm.fetchReq<AddTOTPRequest, AddTOTPResponse>(`/gapi/auth/v1/mfa/totp/add`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
   static ActiveTOTP(req: ActiveTOTPRequest, initReq?: fm.InitReq): Promise<ActiveTOTPResponse> {
     return fm.fetchReq<ActiveTOTPRequest, ActiveTOTPResponse>(`/gapi/auth/v1/mfa/totp/active`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
@@ -185,6 +180,9 @@ export class AuthService {
     return fm.fetchReq<CheckEmailMFARequest, CheckEmailMFAResponse>(`/gapi/auth/v1/mfa/email/check`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
   static DisableEmailMFA(req: DisableEmailMFARequest, initReq?: fm.InitReq): Promise<DisableEmailMFAResponse> {
-    return fm.fetchReq<DisableEmailMFARequest, DisableEmailMFAResponse>(`/gapi/auth/v1/mfa/email/diable`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+    return fm.fetchReq<DisableEmailMFARequest, DisableEmailMFAResponse>(`/gapi/auth/v1/mfa/email/disable`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  }
+  static GetAccountStatus(req: GetAccountStatusRequest, initReq?: fm.InitReq): Promise<GetAccountStatusResponse> {
+    return fm.fetchReq<GetAccountStatusRequest, GetAccountStatusResponse>(`/gapi/auth/v1/account/status`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
 }

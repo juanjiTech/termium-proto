@@ -16,6 +16,38 @@
     "application/json"
   ],
   "paths": {
+    "/gapi/auth/v1/account/status": {
+      "post": {
+        "operationId": "AuthService_GetAccountStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAccountStatusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetAccountStatusRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
     "/gapi/auth/v1/login": {
       "post": {
         "summary": "用户登录",
@@ -146,7 +178,7 @@
         ]
       }
     },
-    "/gapi/auth/v1/mfa/email/diable": {
+    "/gapi/auth/v1/mfa/email/disable": {
       "post": {
         "operationId": "AuthService_DisableEmailMFA",
         "responses": {
@@ -277,7 +309,7 @@
     },
     "/gapi/auth/v1/mfa/totp/active": {
       "post": {
-        "summary": "激活TOTP",
+        "summary": "TOTP\n添加TOTP",
         "operationId": "AuthService_ActiveTOTP",
         "responses": {
           "200": {
@@ -300,39 +332,6 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1ActiveTOTPRequest"
-            }
-          }
-        ],
-        "tags": [
-          "AuthService"
-        ]
-      }
-    },
-    "/gapi/auth/v1/mfa/totp/add": {
-      "post": {
-        "summary": "TOTP\n添加TOTP",
-        "operationId": "AuthService_AddTOTP",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1AddTOTPResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1AddTOTPRequest"
             }
           }
         ],
@@ -550,10 +549,14 @@
     "v1ActiveTOTPRequest": {
       "type": "object",
       "properties": {
+        "secretKey": {
+          "type": "string"
+        },
         "totpCode": {
           "type": "string"
         }
-      }
+      },
+      "title": "TOTP"
     },
     "v1ActiveTOTPResponse": {
       "type": "object"
@@ -569,32 +572,6 @@
     },
     "v1AddEmailMFAResponse": {
       "type": "object"
-    },
-    "v1AddTOTPRequest": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string"
-        },
-        "verifyCode": {
-          "type": "string"
-        }
-      },
-      "title": "TOTP"
-    },
-    "v1AddTOTPResponse": {
-      "type": "object",
-      "properties": {
-        "secretKey": {
-          "type": "string"
-        },
-        "recoveryCode": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
     },
     "v1CheckEmailMFARequest": {
       "type": "object",
@@ -655,11 +632,23 @@
         "email": {
           "type": "string"
         },
-        "primary": {
+        "isPrimary": {
           "type": "boolean"
         },
         "isActive": {
           "type": "boolean"
+        }
+      }
+    },
+    "v1GetAccountStatusRequest": {
+      "type": "object"
+    },
+    "v1GetAccountStatusResponse": {
+      "type": "object",
+      "properties": {
+        "sudoTtl": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },

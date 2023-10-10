@@ -23,7 +23,6 @@ const (
 	AuthService_Login_FullMethodName              = "/auth.v1.AuthService/Login"
 	AuthService_RefreshToken_FullMethodName       = "/auth.v1.AuthService/RefreshToken"
 	AuthService_GetMFAStatus_FullMethodName       = "/auth.v1.AuthService/GetMFAStatus"
-	AuthService_AddTOTP_FullMethodName            = "/auth.v1.AuthService/AddTOTP"
 	AuthService_ActiveTOTP_FullMethodName         = "/auth.v1.AuthService/ActiveTOTP"
 	AuthService_DisableTOTP_FullMethodName        = "/auth.v1.AuthService/DisableTOTP"
 	AuthService_CheckTOTP_FullMethodName          = "/auth.v1.AuthService/CheckTOTP"
@@ -34,6 +33,7 @@ const (
 	AuthService_SendCodeEmailMFA_FullMethodName   = "/auth.v1.AuthService/SendCodeEmailMFA"
 	AuthService_CheckEmailMFA_FullMethodName      = "/auth.v1.AuthService/CheckEmailMFA"
 	AuthService_DisableEmailMFA_FullMethodName    = "/auth.v1.AuthService/DisableEmailMFA"
+	AuthService_GetAccountStatus_FullMethodName   = "/auth.v1.AuthService/GetAccountStatus"
 )
 
 // AuthServiceClient is the client API for AuthService service.
@@ -50,8 +50,6 @@ type AuthServiceClient interface {
 	GetMFAStatus(ctx context.Context, in *GetMFAStatusRequest, opts ...grpc.CallOption) (*GetMFAStatusResponse, error)
 	// TOTP
 	// 添加TOTP
-	AddTOTP(ctx context.Context, in *AddTOTPRequest, opts ...grpc.CallOption) (*AddTOTPResponse, error)
-	// 激活TOTP
 	ActiveTOTP(ctx context.Context, in *ActiveTOTPRequest, opts ...grpc.CallOption) (*ActiveTOTPResponse, error)
 	DisableTOTP(ctx context.Context, in *DisableTOTPRequest, opts ...grpc.CallOption) (*DisableTOTPResponse, error)
 	CheckTOTP(ctx context.Context, in *CheckTOTPRequest, opts ...grpc.CallOption) (*CheckTOTPResponse, error)
@@ -63,6 +61,7 @@ type AuthServiceClient interface {
 	SendCodeEmailMFA(ctx context.Context, in *SendCodeEmailMFARequest, opts ...grpc.CallOption) (*SendCodeEmailMFAResponse, error)
 	CheckEmailMFA(ctx context.Context, in *CheckEmailMFARequest, opts ...grpc.CallOption) (*CheckEmailMFAResponse, error)
 	DisableEmailMFA(ctx context.Context, in *DisableEmailMFARequest, opts ...grpc.CallOption) (*DisableEmailMFAResponse, error)
+	GetAccountStatus(ctx context.Context, in *GetAccountStatusRequest, opts ...grpc.CallOption) (*GetAccountStatusResponse, error)
 }
 
 type authServiceClient struct {
@@ -103,15 +102,6 @@ func (c *authServiceClient) RefreshToken(ctx context.Context, in *RefreshTokenRe
 func (c *authServiceClient) GetMFAStatus(ctx context.Context, in *GetMFAStatusRequest, opts ...grpc.CallOption) (*GetMFAStatusResponse, error) {
 	out := new(GetMFAStatusResponse)
 	err := c.cc.Invoke(ctx, AuthService_GetMFAStatus_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *authServiceClient) AddTOTP(ctx context.Context, in *AddTOTPRequest, opts ...grpc.CallOption) (*AddTOTPResponse, error) {
-	out := new(AddTOTPResponse)
-	err := c.cc.Invoke(ctx, AuthService_AddTOTP_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -208,6 +198,15 @@ func (c *authServiceClient) DisableEmailMFA(ctx context.Context, in *DisableEmai
 	return out, nil
 }
 
+func (c *authServiceClient) GetAccountStatus(ctx context.Context, in *GetAccountStatusRequest, opts ...grpc.CallOption) (*GetAccountStatusResponse, error) {
+	out := new(GetAccountStatusResponse)
+	err := c.cc.Invoke(ctx, AuthService_GetAccountStatus_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServiceServer is the server API for AuthService service.
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility
@@ -222,8 +221,6 @@ type AuthServiceServer interface {
 	GetMFAStatus(context.Context, *GetMFAStatusRequest) (*GetMFAStatusResponse, error)
 	// TOTP
 	// 添加TOTP
-	AddTOTP(context.Context, *AddTOTPRequest) (*AddTOTPResponse, error)
-	// 激活TOTP
 	ActiveTOTP(context.Context, *ActiveTOTPRequest) (*ActiveTOTPResponse, error)
 	DisableTOTP(context.Context, *DisableTOTPRequest) (*DisableTOTPResponse, error)
 	CheckTOTP(context.Context, *CheckTOTPRequest) (*CheckTOTPResponse, error)
@@ -235,6 +232,7 @@ type AuthServiceServer interface {
 	SendCodeEmailMFA(context.Context, *SendCodeEmailMFARequest) (*SendCodeEmailMFAResponse, error)
 	CheckEmailMFA(context.Context, *CheckEmailMFARequest) (*CheckEmailMFAResponse, error)
 	DisableEmailMFA(context.Context, *DisableEmailMFARequest) (*DisableEmailMFAResponse, error)
+	GetAccountStatus(context.Context, *GetAccountStatusRequest) (*GetAccountStatusResponse, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -253,9 +251,6 @@ func (UnimplementedAuthServiceServer) RefreshToken(context.Context, *RefreshToke
 }
 func (UnimplementedAuthServiceServer) GetMFAStatus(context.Context, *GetMFAStatusRequest) (*GetMFAStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMFAStatus not implemented")
-}
-func (UnimplementedAuthServiceServer) AddTOTP(context.Context, *AddTOTPRequest) (*AddTOTPResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddTOTP not implemented")
 }
 func (UnimplementedAuthServiceServer) ActiveTOTP(context.Context, *ActiveTOTPRequest) (*ActiveTOTPResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ActiveTOTP not implemented")
@@ -286,6 +281,9 @@ func (UnimplementedAuthServiceServer) CheckEmailMFA(context.Context, *CheckEmail
 }
 func (UnimplementedAuthServiceServer) DisableEmailMFA(context.Context, *DisableEmailMFARequest) (*DisableEmailMFAResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DisableEmailMFA not implemented")
+}
+func (UnimplementedAuthServiceServer) GetAccountStatus(context.Context, *GetAccountStatusRequest) (*GetAccountStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAccountStatus not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
 
@@ -368,24 +366,6 @@ func _AuthService_GetMFAStatus_Handler(srv interface{}, ctx context.Context, dec
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServiceServer).GetMFAStatus(ctx, req.(*GetMFAStatusRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _AuthService_AddTOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddTOTPRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthServiceServer).AddTOTP(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: AuthService_AddTOTP_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).AddTOTP(ctx, req.(*AddTOTPRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -570,6 +550,24 @@ func _AuthService_DisableEmailMFA_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthService_GetAccountStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAccountStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).GetAccountStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_GetAccountStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).GetAccountStatus(ctx, req.(*GetAccountStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AuthService_ServiceDesc is the grpc.ServiceDesc for AuthService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -592,10 +590,6 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetMFAStatus",
 			Handler:    _AuthService_GetMFAStatus_Handler,
-		},
-		{
-			MethodName: "AddTOTP",
-			Handler:    _AuthService_AddTOTP_Handler,
 		},
 		{
 			MethodName: "ActiveTOTP",
@@ -636,6 +630,10 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DisableEmailMFA",
 			Handler:    _AuthService_DisableEmailMFA_Handler,
+		},
+		{
+			MethodName: "GetAccountStatus",
+			Handler:    _AuthService_GetAccountStatus_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
