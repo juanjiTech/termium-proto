@@ -41,7 +41,7 @@ export type GetMFAStatusRequest = {
 
 export type GetMFAStatusResponse = {
   totpStatus?: TOTPStatus
-  emailStatus?: EmailStatus
+  emailStatus?: EmailStatus[]
 }
 
 export type TOTPStatus = {
@@ -125,8 +125,6 @@ export type CheckEmailMFAResponse = {
 
 export type DisableEmailMFARequest = {
   email?: string
-  totpCode?: string
-  primaryEmailCode?: string
 }
 
 export type DisableEmailMFAResponse = {

@@ -18,6 +18,7 @@
   "paths": {
     "/gapi/auth/v1/account/status": {
       "post": {
+        "summary": "GetAccountStatus 获取sudo的ttl",
         "operationId": "AuthService_GetAccountStatus",
         "responses": {
           "200": {
@@ -603,12 +604,6 @@
       "properties": {
         "email": {
           "type": "string"
-        },
-        "totpCode": {
-          "type": "string"
-        },
-        "primaryEmailCode": {
-          "type": "string"
         }
       }
     },
@@ -662,7 +657,11 @@
           "$ref": "#/definitions/v1TOTPStatus"
         },
         "emailStatus": {
-          "$ref": "#/definitions/v1EmailStatus"
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1EmailStatus"
+          }
         }
       },
       "title": "为后期拓展可能做保留"

@@ -61,6 +61,7 @@ type AuthServiceClient interface {
 	SendCodeEmailMFA(ctx context.Context, in *SendCodeEmailMFARequest, opts ...grpc.CallOption) (*SendCodeEmailMFAResponse, error)
 	CheckEmailMFA(ctx context.Context, in *CheckEmailMFARequest, opts ...grpc.CallOption) (*CheckEmailMFAResponse, error)
 	DisableEmailMFA(ctx context.Context, in *DisableEmailMFARequest, opts ...grpc.CallOption) (*DisableEmailMFAResponse, error)
+	// GetAccountStatus 获取sudo的ttl
 	GetAccountStatus(ctx context.Context, in *GetAccountStatusRequest, opts ...grpc.CallOption) (*GetAccountStatusResponse, error)
 }
 
@@ -232,6 +233,7 @@ type AuthServiceServer interface {
 	SendCodeEmailMFA(context.Context, *SendCodeEmailMFARequest) (*SendCodeEmailMFAResponse, error)
 	CheckEmailMFA(context.Context, *CheckEmailMFARequest) (*CheckEmailMFAResponse, error)
 	DisableEmailMFA(context.Context, *DisableEmailMFARequest) (*DisableEmailMFAResponse, error)
+	// GetAccountStatus 获取sudo的ttl
 	GetAccountStatus(context.Context, *GetAccountStatusRequest) (*GetAccountStatusResponse, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
