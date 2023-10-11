@@ -29,6 +29,92 @@ service AuthService {
       body: "*"
     };
   }
+
+  // 检查MFA状态，并返回MFA状态
+  rpc GetMFAStatus(GetMFAStatusRequest) returns (GetMFAStatusResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/status",
+      body: "*"
+    };
+  }
+
+  // TOTP
+  // 添加TOTP
+  rpc ActiveTOTP(ActiveTOTPRequest) returns (ActiveTOTPResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/totp/active",
+      body: "*"
+    };
+  }
+
+  rpc DisableTOTP(DisableTOTPRequest) returns (DisableTOTPResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/totp/disable",
+      body: "*"
+    };
+  }
+  rpc CheckTOTP(CheckTOTPRequest) returns (CheckTOTPResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/totp/check",
+      body: "*"
+    };
+  }
+  rpc RecoverTOTP(RecoverTOTPRequest) returns (RecoverTOTPResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/totp/recover",
+      body: "*"
+    };
+  }
+
+  // Email
+  rpc AddEmailMFA(AddEmailMFARequest) returns (AddEmailMFAResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/email/add",
+      body: "*"
+    };
+  }
+
+  rpc ActivateEmailMFA(ActivateEmailMFARequest) returns (ActivateEmailMFAResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/email/activate",
+      body: "*"
+    };
+  }
+
+  rpc SetPrimaryEmailMFA(SetPrimaryEmailMFARequest) returns (SetPrimaryEmailMFAResponse) {
+    option (google.api.http) = {
+        post: "/gapi/auth/v1/mfa/email/setPrimary",
+        body: "*"
+      };
+  }
+  rpc SendCodeEmailMFA(SendCodeEmailMFARequest) returns (SendCodeEmailMFAResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/email/send",
+      body: "*"
+    };
+  }
+
+  rpc CheckEmailMFA(CheckEmailMFARequest) returns (CheckEmailMFAResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/email/check",
+      body: "*"
+    };
+  }
+
+  rpc DisableEmailMFA(DisableEmailMFARequest) returns (DisableEmailMFAResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/mfa/email/disable",
+      body: "*"
+    };
+  }
+
+  // GetAccountStatus 获取sudo的ttl
+  rpc GetAccountStatus(GetAccountStatusRequest) returns (GetAccountStatusResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/account/status",
+      body: "*"
+    };
+  }
 }
 
 message RegisterRequest {
@@ -60,4 +146,87 @@ message RefreshTokenRequest {
 message RefreshTokenResponse {
   string access_token = 1;
   string refresh_token = 3;
+}
+
+message GetMFAStatusRequest {}
+
+// 为后期拓展可能做保留
+message GetMFAStatusResponse {
+  TOTPStatus totp_status = 1;
+  repeated EmailStatus email_status = 2;
+}
+
+message TOTPStatus {
+  bool is_active = 1;
+}
+
+message EmailStatus {
+  string email = 1;
+  bool   is_primary = 2;
+  bool   is_active = 3;
+}
+
+// TOTP
+message ActiveTOTPRequest{
+  string secret_key = 1;
+  string totp_code = 2;
+}
+message ActiveTOTPResponse{}
+
+message DisableTOTPRequest {
+  string totp_code = 1;
+}
+message DisableTOTPResponse {}
+
+message CheckTOTPRequest {
+  string totp_code = 1;
+}
+message CheckTOTPResponse {}
+
+message RecoverTOTPRequest {
+  repeated string recovery_code= 1;
+}
+
+message RecoverTOTPResponse {
+  string new_secret_key = 1;
+  repeated string new_recovery_code = 2;
+}
+
+// Email MFA
+message AddEmailMFARequest {
+  string email = 1;
+}
+message AddEmailMFAResponse {}
+
+message ActivateEmailMFARequest {
+  string email = 1;
+  string verification_code = 2;
+}
+message ActivateEmailMFAResponse {}
+
+message SetPrimaryEmailMFARequest {
+  string new_email = 1;
+  string old_email = 2;
+}
+message SetPrimaryEmailMFAResponse {}
+
+message SendCodeEmailMFARequest{
+  string email = 1;
+}
+message SendCodeEmailMFAResponse{}
+
+message CheckEmailMFARequest {
+  string email = 1;
+  string verification_code = 2;
+}
+message CheckEmailMFAResponse {}
+
+message DisableEmailMFARequest {
+  string email = 1;
+}
+message DisableEmailMFAResponse {}
+
+message GetAccountStatusRequest{}
+message GetAccountStatusResponse{
+  int64 sudo_ttl = 1;
 }
