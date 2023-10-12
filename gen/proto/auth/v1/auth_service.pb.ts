@@ -60,6 +60,7 @@ export type ActiveTOTPRequest = {
 }
 
 export type ActiveTOTPResponse = {
+  recoveryCode?: string[]
 }
 
 export type DisableTOTPRequest = {
