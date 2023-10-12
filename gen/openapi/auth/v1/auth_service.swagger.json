@@ -560,7 +560,15 @@
       "title": "TOTP"
     },
     "v1ActiveTOTPResponse": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "recoveryCode": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     },
     "v1AddEmailMFARequest": {
       "type": "object",
