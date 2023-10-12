@@ -171,7 +171,9 @@ message ActiveTOTPRequest{
   string secret_key = 1;
   string totp_code = 2;
 }
-message ActiveTOTPResponse{}
+message ActiveTOTPResponse{
+  repeated string recovery_code = 1;
+}
 
 message DisableTOTPRequest {
   string totp_code = 1;
