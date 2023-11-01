@@ -13,11 +13,23 @@ service AuthService {
       body: "*"
     };
   }
+  rpc RegisterFinalize(RegisterFinalizeRequest) returns (RegisterFinalizeResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/register-finalize",
+      body: "*"
+    };
+  }
 
   // 用户登录
   rpc Login(LoginRequest) returns (LoginResponse) {
     option (google.api.http) = {
       post: "/gapi/auth/v1/login",
+      body: "*"
+    };
+  }
+  rpc LoginFinalize(LoginFinalizeRequest) returns (LoginFinalizeResponse) {
+    option (google.api.http) = {
+      post: "/gapi/auth/v1/login-finalize",
       body: "*"
     };
   }
@@ -119,41 +131,61 @@ service AuthService {
 
 message RegisterRequest {
   string email = 1;
-  string verify_code = 2;
-  string password = 3;
-}
-
-message LoginResponse {
-  string access_token = 1;
-  string refresh_token = 3;
+  string verifyCode = 2;
+  bytes message1 = 3; // OPAQUE 协议的 RegistrationRequest
 }
 
 message RegisterResponse {
-  string access_token = 1;
-  string refresh_token = 3;
+  bytes message2 = 1; // OPAQUE 协议的 RegistrationResponse
+  string contextId = 2; // 注册会话的上下文ID
+}
+
+message RegisterFinalizeRequest {
+  bytes message3 = 1; // OPAQUE 协议的 RegistrationRecord
+  string contextId = 2; // 注册会话的上下文ID
+}
+
+message RegisterFinalizeResponse {
+  string accessToken = 1;
+  string refreshToken = 3;
 }
 
 message LoginRequest {
   string username = 1; // 账户 可为手机号或邮箱
-  string password = 2;
-  string two_factor_auth = 3;
+  bytes message1 = 2; // OPAQUE 协议的 KE1
+  string twoFactorAuth = 3;
+}
+
+message LoginResponse {
+  bytes message2 = 1; // OPAQUE 协议的 KE2
+  string contextId = 2; // 登陆会话的上下文ID
+}
+
+message LoginFinalizeRequest {
+  bytes message3 = 1; // OPAQUE 协议的 KE3
+  string contextId = 2; // 登陆会话的上下文ID
+}
+
+message LoginFinalizeResponse {
+  string accessToken = 1;
+  string refreshToken = 3;
 }
 
 message RefreshTokenRequest {
-  string refresh_token = 1;
+  string refreshToken = 1;
 }
 
 message RefreshTokenResponse {
-  string access_token = 1;
-  string refresh_token = 3;
+  string accessToken = 1;
+  string refreshToken = 3;
 }
 
 message GetMFAStatusRequest {}
 
 // 为后期拓展可能做保留
 message GetMFAStatusResponse {
-  TOTPStatus totp_status = 1;
-  repeated EmailStatus email_status = 2;
+  TOTPStatus totpStatus = 1;
+  repeated EmailStatus emailStatus = 2;
 }
 
 message TOTPStatus {
@@ -162,36 +194,36 @@ message TOTPStatus {
 
 message EmailStatus {
   string email = 1;
-  bool   is_primary = 2;
-  bool   is_active = 3;
+  bool   isPrimary = 2;
+  bool   isActive = 3;
 }
 
 // TOTP
 message ActiveTOTPRequest{
-  string secret_key = 1;
-  string totp_code = 2;
+  string secretKey = 1;
+  string totpCode = 2;
 }
 message ActiveTOTPResponse{
-  repeated string recovery_code = 1;
+  repeated string recoveryCode = 1;
 }
 
 message DisableTOTPRequest {
-  string totp_code = 1;
+  string totpCode = 1;
 }
 message DisableTOTPResponse {}
 
 message CheckTOTPRequest {
-  string totp_code = 1;
+  string totpCode = 1;
 }
 message CheckTOTPResponse {}
 
 message RecoverTOTPRequest {
-  repeated string recovery_code= 1;
+  repeated string recoveryCode= 1;
 }
 
 message RecoverTOTPResponse {
-  string new_secret_key = 1;
-  repeated string new_recovery_code = 2;
+  string newSecretKey = 1;
+  repeated string newRecoveryCode = 2;
 }
 
 // Email MFA
@@ -202,13 +234,13 @@ message AddEmailMFAResponse {}
 
 message ActivateEmailMFARequest {
   string email = 1;
-  string verification_code = 2;
+  string verificationCode = 2;
 }
 message ActivateEmailMFAResponse {}
 
 message SetPrimaryEmailMFARequest {
-  string new_email = 1;
-  string old_email = 2;
+  string newEmail = 1;
+  string oldEmail = 2;
 }
 message SetPrimaryEmailMFAResponse {}
 
@@ -230,5 +262,5 @@ message DisableEmailMFAResponse {}
 
 message GetAccountStatusRequest{}
 message GetAccountStatusResponse{
-  int64 sudo_ttl = 1;
+  int64 sudoTtl = 1;
 }

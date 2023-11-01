@@ -5,5 +5,7 @@ breaking:
 lint:
   use:
     - DEFAULT
+  except:
+    - FIELD_LOWER_SNAKE_CASE
 deps:
   - buf.build/googleapis/googleapis

@@ -20,7 +20,9 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	AuthService_Register_FullMethodName           = "/auth.v1.AuthService/Register"
+	AuthService_RegisterFinalize_FullMethodName   = "/auth.v1.AuthService/RegisterFinalize"
 	AuthService_Login_FullMethodName              = "/auth.v1.AuthService/Login"
+	AuthService_LoginFinalize_FullMethodName      = "/auth.v1.AuthService/LoginFinalize"
 	AuthService_RefreshToken_FullMethodName       = "/auth.v1.AuthService/RefreshToken"
 	AuthService_GetMFAStatus_FullMethodName       = "/auth.v1.AuthService/GetMFAStatus"
 	AuthService_ActiveTOTP_FullMethodName         = "/auth.v1.AuthService/ActiveTOTP"
@@ -42,8 +44,10 @@ const (
 type AuthServiceClient interface {
 	// 用户注册
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
+	RegisterFinalize(ctx context.Context, in *RegisterFinalizeRequest, opts ...grpc.CallOption) (*RegisterFinalizeResponse, error)
 	// 用户登录
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	LoginFinalize(ctx context.Context, in *LoginFinalizeRequest, opts ...grpc.CallOption) (*LoginFinalizeResponse, error)
 	// Token刷新
 	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*RefreshTokenResponse, error)
 	// 检查MFA状态，并返回MFA状态
@@ -82,9 +86,27 @@ func (c *authServiceClient) Register(ctx context.Context, in *RegisterRequest, o
 	return out, nil
 }
 
+func (c *authServiceClient) RegisterFinalize(ctx context.Context, in *RegisterFinalizeRequest, opts ...grpc.CallOption) (*RegisterFinalizeResponse, error) {
+	out := new(RegisterFinalizeResponse)
+	err := c.cc.Invoke(ctx, AuthService_RegisterFinalize_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *authServiceClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
 	out := new(LoginResponse)
 	err := c.cc.Invoke(ctx, AuthService_Login_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) LoginFinalize(ctx context.Context, in *LoginFinalizeRequest, opts ...grpc.CallOption) (*LoginFinalizeResponse, error) {
+	out := new(LoginFinalizeResponse)
+	err := c.cc.Invoke(ctx, AuthService_LoginFinalize_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -214,8 +236,10 @@ func (c *authServiceClient) GetAccountStatus(ctx context.Context, in *GetAccount
 type AuthServiceServer interface {
 	// 用户注册
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
+	RegisterFinalize(context.Context, *RegisterFinalizeRequest) (*RegisterFinalizeResponse, error)
 	// 用户登录
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
+	LoginFinalize(context.Context, *LoginFinalizeRequest) (*LoginFinalizeResponse, error)
 	// Token刷新
 	RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error)
 	// 检查MFA状态，并返回MFA状态
@@ -245,8 +269,14 @@ type UnimplementedAuthServiceServer struct {
 func (UnimplementedAuthServiceServer) Register(context.Context, *RegisterRequest) (*RegisterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
+func (UnimplementedAuthServiceServer) RegisterFinalize(context.Context, *RegisterFinalizeRequest) (*RegisterFinalizeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterFinalize not implemented")
+}
 func (UnimplementedAuthServiceServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedAuthServiceServer) LoginFinalize(context.Context, *LoginFinalizeRequest) (*LoginFinalizeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoginFinalize not implemented")
 }
 func (UnimplementedAuthServiceServer) RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RefreshToken not implemented")
@@ -318,6 +348,24 @@ func _AuthService_Register_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthService_RegisterFinalize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterFinalizeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).RegisterFinalize(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_RegisterFinalize_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).RegisterFinalize(ctx, req.(*RegisterFinalizeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AuthService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LoginRequest)
 	if err := dec(in); err != nil {
@@ -332,6 +380,24 @@ func _AuthService_Login_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServiceServer).Login(ctx, req.(*LoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_LoginFinalize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginFinalizeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).LoginFinalize(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_LoginFinalize_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).LoginFinalize(ctx, req.(*LoginFinalizeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -582,8 +648,16 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AuthService_Register_Handler,
 		},
 		{
+			MethodName: "RegisterFinalize",
+			Handler:    _AuthService_RegisterFinalize_Handler,
+		},
+		{
 			MethodName: "Login",
 			Handler:    _AuthService_Login_Handler,
+		},
+		{
+			MethodName: "LoginFinalize",
+			Handler:    _AuthService_LoginFinalize_Handler,
 		},
 		{
 			MethodName: "RefreshToken",
