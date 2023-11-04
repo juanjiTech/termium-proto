@@ -8,23 +8,43 @@ import * as fm from "../../fetch.pb"
 export type RegisterRequest = {
   email?: string
   verifyCode?: string
-  password?: string
-}
-
-export type LoginResponse = {
-  accessToken?: string
-  refreshToken?: string
+  message1?: Uint8Array
 }
 
 export type RegisterResponse = {
+  message2?: Uint8Array
+  contextId?: string
+}
+
+export type RegisterFinalizeRequest = {
+  message3?: Uint8Array
+  contextId?: string
+}
+
+export type RegisterFinalizeResponse = {
   accessToken?: string
   refreshToken?: string
 }
 
 export type LoginRequest = {
   username?: string
-  password?: string
+  message1?: Uint8Array
   twoFactorAuth?: string
+}
+
+export type LoginResponse = {
+  message2?: Uint8Array
+  contextId?: string
+}
+
+export type LoginFinalizeRequest = {
+  message3?: Uint8Array
+  contextId?: string
+}
+
+export type LoginFinalizeResponse = {
+  accessToken?: string
+  refreshToken?: string
 }
 
 export type RefreshTokenRequest = {
@@ -142,8 +162,14 @@ export class AuthService {
   static Register(req: RegisterRequest, initReq?: fm.InitReq): Promise<RegisterResponse> {
     return fm.fetchReq<RegisterRequest, RegisterResponse>(`/gapi/auth/v1/register`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
+  static RegisterFinalize(req: RegisterFinalizeRequest, initReq?: fm.InitReq): Promise<RegisterFinalizeResponse> {
+    return fm.fetchReq<RegisterFinalizeRequest, RegisterFinalizeResponse>(`/gapi/auth/v1/register-finalize`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  }
   static Login(req: LoginRequest, initReq?: fm.InitReq): Promise<LoginResponse> {
     return fm.fetchReq<LoginRequest, LoginResponse>(`/gapi/auth/v1/login`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  }
+  static LoginFinalize(req: LoginFinalizeRequest, initReq?: fm.InitReq): Promise<LoginFinalizeResponse> {
+    return fm.fetchReq<LoginFinalizeRequest, LoginFinalizeResponse>(`/gapi/auth/v1/login-finalize`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
   static RefreshToken(req: RefreshTokenRequest, initReq?: fm.InitReq): Promise<RefreshTokenResponse> {
     return fm.fetchReq<RefreshTokenRequest, RefreshTokenResponse>(`/gapi/auth/v1/refreshToken`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})

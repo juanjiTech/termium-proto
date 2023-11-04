@@ -82,6 +82,38 @@
         ]
       }
     },
+    "/gapi/auth/v1/login-finalize": {
+      "post": {
+        "operationId": "AuthService_LoginFinalize",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LoginFinalizeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1LoginFinalizeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
     "/gapi/auth/v1/mfa/email/activate": {
       "post": {
         "operationId": "AuthService_ActivateEmailMFA",
@@ -502,6 +534,38 @@
           "AuthService"
         ]
       }
+    },
+    "/gapi/auth/v1/register-finalize": {
+      "post": {
+        "operationId": "AuthService_RegisterFinalize",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RegisterFinalizeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RegisterFinalizeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
     }
   },
   "definitions": {
@@ -674,6 +738,31 @@
       },
       "title": "为后期拓展可能做保留"
     },
+    "v1LoginFinalizeRequest": {
+      "type": "object",
+      "properties": {
+        "message3": {
+          "type": "string",
+          "format": "byte",
+          "title": "OPAQUE 协议的 KE3"
+        },
+        "contextId": {
+          "type": "string",
+          "title": "登陆会话的上下文ID"
+        }
+      }
+    },
+    "v1LoginFinalizeResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
     "v1LoginRequest": {
       "type": "object",
       "properties": {
@@ -681,8 +770,10 @@
           "type": "string",
           "title": "账户 可为手机号或邮箱"
         },
-        "password": {
-          "type": "string"
+        "message1": {
+          "type": "string",
+          "format": "byte",
+          "title": "OPAQUE 协议的 KE1"
         },
         "twoFactorAuth": {
           "type": "string"
@@ -692,11 +783,14 @@
     "v1LoginResponse": {
       "type": "object",
       "properties": {
-        "accessToken": {
-          "type": "string"
+        "message2": {
+          "type": "string",
+          "format": "byte",
+          "title": "OPAQUE 协议的 KE2"
         },
-        "refreshToken": {
-          "type": "string"
+        "contextId": {
+          "type": "string",
+          "title": "登陆会话的上下文ID"
         }
       }
     },
@@ -744,6 +838,31 @@
         }
       }
     },
+    "v1RegisterFinalizeRequest": {
+      "type": "object",
+      "properties": {
+        "message3": {
+          "type": "string",
+          "format": "byte",
+          "title": "OPAQUE 协议的 RegistrationRecord"
+        },
+        "contextId": {
+          "type": "string",
+          "title": "注册会话的上下文ID"
+        }
+      }
+    },
+    "v1RegisterFinalizeResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
     "v1RegisterRequest": {
       "type": "object",
       "properties": {
@@ -753,19 +872,24 @@
         "verifyCode": {
           "type": "string"
         },
-        "password": {
-          "type": "string"
+        "message1": {
+          "type": "string",
+          "format": "byte",
+          "title": "OPAQUE 协议的 RegistrationRequest"
         }
       }
     },
     "v1RegisterResponse": {
       "type": "object",
       "properties": {
-        "accessToken": {
-          "type": "string"
+        "message2": {
+          "type": "string",
+          "format": "byte",
+          "title": "OPAQUE 协议的 RegistrationResponse"
         },
-        "refreshToken": {
-          "type": "string"
+        "contextId": {
+          "type": "string",
+          "title": "注册会话的上下文ID"
         }
       }
     },
