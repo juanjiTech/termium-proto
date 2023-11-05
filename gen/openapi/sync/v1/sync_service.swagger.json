@@ -55,6 +55,37 @@
         ]
       }
     },
+    "/gapi/sync/v1/sync_get_encrypted_key": {
+      "get": {
+        "summary": "获取mater key加密后的解密密钥,对应组",
+        "operationId": "SyncService_GetEncryptedKey",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetEncryptedKeyResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "gid",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "SyncService"
+        ]
+      }
+    },
     "/gapi/sync/v1/sync_group": {
       "get": {
         "summary": "通过UID获取所有组信息",
@@ -80,6 +111,39 @@
             "required": false,
             "type": "string",
             "format": "date-time"
+          }
+        ],
+        "tags": [
+          "SyncService"
+        ]
+      }
+    },
+    "/gapi/sync/v1/sync_update_encrypted_key": {
+      "post": {
+        "summary": "更新mater key后修改加密后密钥,提交多组上去，将全部相关信息修改，不能有缺失。",
+        "operationId": "SyncService_UpdateEncryptedKey",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateEncryptedKeyResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateEncryptedKeyRequest"
+            }
           }
         ],
         "tags": [
@@ -122,7 +186,7 @@
     },
     "/gapi/sync/v1/update_group": {
       "post": {
-        "summary": "更新组信息",
+        "summary": "更新组信息 如果创建一个新的组，需要同时处理生成新的密钥",
         "operationId": "SyncService_UpdateGroup",
         "responses": {
           "200": {
@@ -180,6 +244,25 @@
             "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
+        }
+      }
+    },
+    "v1EncryptedKeyInfo": {
+      "type": "object",
+      "properties": {
+        "gid": {
+          "type": "string"
+        },
+        "encryptedKey": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GetEncryptedKeyResponse": {
+      "type": "object",
+      "properties": {
+        "encryptedKeyInfo": {
+          "$ref": "#/definitions/v1EncryptedKeyInfo"
         }
       }
     },
@@ -457,6 +540,21 @@
           }
         }
       }
+    },
+    "v1UpdateEncryptedKeyRequest": {
+      "type": "object",
+      "properties": {
+        "updateEncryptedKey": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1EncryptedKeyInfo"
+          }
+        }
+      }
+    },
+    "v1UpdateEncryptedKeyResponse": {
+      "type": "object"
     },
     "v1UpdateGroupRequest": {
       "type": "object",

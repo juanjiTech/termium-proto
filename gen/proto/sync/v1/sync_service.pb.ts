@@ -63,6 +63,26 @@ export type SyncGroupResponse = {
   groups?: SyncV1Group.Group[]
 }
 
+export type GetEncryptedKeyRequest = {
+  gid?: string
+}
+
+export type GetEncryptedKeyResponse = {
+  encryptedKeyInfo?: EncryptedKeyInfo
+}
+
+export type UpdateEncryptedKeyRequest = {
+  updateEncryptedKey?: EncryptedKeyInfo[]
+}
+
+export type EncryptedKeyInfo = {
+  gid?: string
+  encryptedKey?: string
+}
+
+export type UpdateEncryptedKeyResponse = {
+}
+
 export class SyncService {
   static Sync(req: SyncRequest, initReq?: fm.InitReq): Promise<SyncResponse> {
     return fm.fetchReq<SyncRequest, SyncResponse>(`/gapi/sync/v1/sync?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
@@ -75,5 +95,11 @@ export class SyncService {
   }
   static SyncGroup(req: SyncGroupRequest, initReq?: fm.InitReq): Promise<SyncGroupResponse> {
     return fm.fetchReq<SyncGroupRequest, SyncGroupResponse>(`/gapi/sync/v1/sync_group?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
+  }
+  static GetEncryptedKey(req: GetEncryptedKeyRequest, initReq?: fm.InitReq): Promise<GetEncryptedKeyResponse> {
+    return fm.fetchReq<GetEncryptedKeyRequest, GetEncryptedKeyResponse>(`/gapi/sync/v1/sync_get_encrypted_key?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
+  }
+  static UpdateEncryptedKey(req: UpdateEncryptedKeyRequest, initReq?: fm.InitReq): Promise<UpdateEncryptedKeyResponse> {
+    return fm.fetchReq<UpdateEncryptedKeyRequest, UpdateEncryptedKeyResponse>(`/gapi/sync/v1/sync_update_encrypted_key`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
 }

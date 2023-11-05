@@ -19,10 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	SyncService_Sync_FullMethodName        = "/sync.v1.SyncService/Sync"
-	SyncService_Update_FullMethodName      = "/sync.v1.SyncService/Update"
-	SyncService_UpdateGroup_FullMethodName = "/sync.v1.SyncService/UpdateGroup"
-	SyncService_SyncGroup_FullMethodName   = "/sync.v1.SyncService/SyncGroup"
+	SyncService_Sync_FullMethodName               = "/sync.v1.SyncService/Sync"
+	SyncService_Update_FullMethodName             = "/sync.v1.SyncService/Update"
+	SyncService_UpdateGroup_FullMethodName        = "/sync.v1.SyncService/UpdateGroup"
+	SyncService_SyncGroup_FullMethodName          = "/sync.v1.SyncService/SyncGroup"
+	SyncService_GetEncryptedKey_FullMethodName    = "/sync.v1.SyncService/GetEncryptedKey"
+	SyncService_UpdateEncryptedKey_FullMethodName = "/sync.v1.SyncService/UpdateEncryptedKey"
 )
 
 // SyncServiceClient is the client API for SyncService service.
@@ -33,10 +35,14 @@ type SyncServiceClient interface {
 	Sync(ctx context.Context, in *SyncRequest, opts ...grpc.CallOption) (*SyncResponse, error)
 	// 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。
 	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
-	// 更新组信息
+	// 更新组信息 如果创建一个新的组，需要同时处理生成新的密钥
 	UpdateGroup(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*UpdateGroupResponse, error)
 	// 通过UID获取所有组信息
 	SyncGroup(ctx context.Context, in *SyncGroupRequest, opts ...grpc.CallOption) (*SyncGroupResponse, error)
+	// 获取mater key加密后的解密密钥,对应组
+	GetEncryptedKey(ctx context.Context, in *GetEncryptedKeyRequest, opts ...grpc.CallOption) (*GetEncryptedKeyResponse, error)
+	// 更新mater key后修改加密后密钥,提交多组上去，将全部相关信息修改，不能有缺失。
+	UpdateEncryptedKey(ctx context.Context, in *UpdateEncryptedKeyRequest, opts ...grpc.CallOption) (*UpdateEncryptedKeyResponse, error)
 }
 
 type syncServiceClient struct {
@@ -83,6 +89,24 @@ func (c *syncServiceClient) SyncGroup(ctx context.Context, in *SyncGroupRequest,
 	return out, nil
 }
 
+func (c *syncServiceClient) GetEncryptedKey(ctx context.Context, in *GetEncryptedKeyRequest, opts ...grpc.CallOption) (*GetEncryptedKeyResponse, error) {
+	out := new(GetEncryptedKeyResponse)
+	err := c.cc.Invoke(ctx, SyncService_GetEncryptedKey_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *syncServiceClient) UpdateEncryptedKey(ctx context.Context, in *UpdateEncryptedKeyRequest, opts ...grpc.CallOption) (*UpdateEncryptedKeyResponse, error) {
+	out := new(UpdateEncryptedKeyResponse)
+	err := c.cc.Invoke(ctx, SyncService_UpdateEncryptedKey_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SyncServiceServer is the server API for SyncService service.
 // All implementations must embed UnimplementedSyncServiceServer
 // for forward compatibility
@@ -91,10 +115,14 @@ type SyncServiceServer interface {
 	Sync(context.Context, *SyncRequest) (*SyncResponse, error)
 	// 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。
 	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
-	// 更新组信息
+	// 更新组信息 如果创建一个新的组，需要同时处理生成新的密钥
 	UpdateGroup(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error)
 	// 通过UID获取所有组信息
 	SyncGroup(context.Context, *SyncGroupRequest) (*SyncGroupResponse, error)
+	// 获取mater key加密后的解密密钥,对应组
+	GetEncryptedKey(context.Context, *GetEncryptedKeyRequest) (*GetEncryptedKeyResponse, error)
+	// 更新mater key后修改加密后密钥,提交多组上去，将全部相关信息修改，不能有缺失。
+	UpdateEncryptedKey(context.Context, *UpdateEncryptedKeyRequest) (*UpdateEncryptedKeyResponse, error)
 	mustEmbedUnimplementedSyncServiceServer()
 }
 
@@ -113,6 +141,12 @@ func (UnimplementedSyncServiceServer) UpdateGroup(context.Context, *UpdateGroupR
 }
 func (UnimplementedSyncServiceServer) SyncGroup(context.Context, *SyncGroupRequest) (*SyncGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SyncGroup not implemented")
+}
+func (UnimplementedSyncServiceServer) GetEncryptedKey(context.Context, *GetEncryptedKeyRequest) (*GetEncryptedKeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetEncryptedKey not implemented")
+}
+func (UnimplementedSyncServiceServer) UpdateEncryptedKey(context.Context, *UpdateEncryptedKeyRequest) (*UpdateEncryptedKeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateEncryptedKey not implemented")
 }
 func (UnimplementedSyncServiceServer) mustEmbedUnimplementedSyncServiceServer() {}
 
@@ -199,6 +233,42 @@ func _SyncService_SyncGroup_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SyncService_GetEncryptedKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetEncryptedKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SyncServiceServer).GetEncryptedKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SyncService_GetEncryptedKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SyncServiceServer).GetEncryptedKey(ctx, req.(*GetEncryptedKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SyncService_UpdateEncryptedKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateEncryptedKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SyncServiceServer).UpdateEncryptedKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SyncService_UpdateEncryptedKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SyncServiceServer).UpdateEncryptedKey(ctx, req.(*UpdateEncryptedKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SyncService_ServiceDesc is the grpc.ServiceDesc for SyncService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -221,6 +291,14 @@ var SyncService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SyncGroup",
 			Handler:    _SyncService_SyncGroup_Handler,
+		},
+		{
+			MethodName: "GetEncryptedKey",
+			Handler:    _SyncService_GetEncryptedKey_Handler,
+		},
+		{
+			MethodName: "UpdateEncryptedKey",
+			Handler:    _SyncService_UpdateEncryptedKey_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
