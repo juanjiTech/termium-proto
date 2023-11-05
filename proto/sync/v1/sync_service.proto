@@ -22,7 +22,7 @@ service SyncService {
       body: "*"
     };
   }
-  // 更新组信息
+  // 更新组信息 如果创建一个新的组，需要同时处理生成新的密钥
   rpc UpdateGroup(UpdateGroupRequest) returns (UpdateGroupResponse) {
     option (google.api.http) = {
       post:"/gapi/sync/v1/update_group"
@@ -32,6 +32,19 @@ service SyncService {
   // 通过UID获取所有组信息
   rpc SyncGroup(SyncGroupRequest) returns (SyncGroupResponse) {
     option (google.api.http) = {get:"/gapi/sync/v1/sync_group"};
+  }
+
+  // 获取mater key加密后的解密密钥,对应组
+  rpc GetEncryptedKey(GetEncryptedKeyRequest) returns (GetEncryptedKeyResponse) {
+    option (google.api.http) = {get:"/gapi/sync/v1/sync_get_encrypted_key"};
+  }
+  
+  // 更新mater key后修改加密后密钥,提交多组上去，将全部相关信息修改，不能有缺失。
+  rpc UpdateEncryptedKey(UpdateEncryptedKeyRequest) returns (UpdateEncryptedKeyResponse) {
+    option (google.api.http) = {
+      post:"/gapi/sync/v1/sync_update_encrypted_key"
+      body: "*"
+    };
   }
 }
 
@@ -81,3 +94,22 @@ message SyncGroupResponse {
   google.protobuf.Timestamp server_time = 1;
   repeated Group groups = 11;
 }
+
+message GetEncryptedKeyRequest {
+  string gid = 1;
+}
+
+message GetEncryptedKeyResponse {
+  EncryptedKeyInfo encrypted_key_info = 1;
+}
+
+message UpdateEncryptedKeyRequest {
+  repeated EncryptedKeyInfo update_encrypted_key = 1;
+}
+
+message EncryptedKeyInfo {
+  string gid = 1;
+  string encrypted_key = 2;
+}
+
+message UpdateEncryptedKeyResponse {}
