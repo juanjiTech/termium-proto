@@ -633,9 +633,6 @@
         "groupId": {
           "type": "string"
         },
-        "masterKey": {
-          "type": "string"
-        },
         "host": {
           "$ref": "#/definitions/v1Host"
         },
