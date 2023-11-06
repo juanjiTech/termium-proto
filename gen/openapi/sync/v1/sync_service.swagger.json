@@ -178,7 +178,7 @@
     },
     "/gapi/sync/v1/update_user_key_chain": {
       "post": {
-        "summary": "修改用户密钥对",
+        "summary": "修改用户密钥对，修改的时候所有相关组的加密密钥均要替换",
         "operationId": "SyncService_UpdateUserKeyChain",
         "responses": {
           "200": {
@@ -247,6 +247,13 @@
         },
         "encryptedPrivateKey": {
           "type": "string"
+        },
+        "userKeyWalletSet": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1UserKeyWallet"
+          }
         }
       }
     },
@@ -593,11 +600,29 @@
         },
         "encryptedPrivateKey": {
           "type": "string"
+        },
+        "userKeyWalletSet": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1UserKeyWallet"
+          }
         }
       }
     },
     "v1UpdateUserKeyChainResponse": {
       "type": "object"
+    },
+    "v1UserKeyWallet": {
+      "type": "object",
+      "properties": {
+        "gid": {
+          "type": "string"
+        },
+        "encryptedGroupPrivateKey": {
+          "type": "string"
+        }
+      }
     }
   }
 }

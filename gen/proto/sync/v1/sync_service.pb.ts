@@ -71,11 +71,18 @@ export type GetUserKeyChainRequest = {
 export type GetUserKeyChainResponse = {
   publicKey?: string
   encryptedPrivateKey?: string
+  userKeyWalletSet?: UserKeyWallet[]
 }
 
 export type UpdateUserKeyChainRequest = {
   publicKey?: string
   encryptedPrivateKey?: string
+  userKeyWalletSet?: UserKeyWallet[]
+}
+
+export type UserKeyWallet = {
+  gid?: string
+  encryptedGroupPrivateKey?: string
 }
 
 export type UpdateUserKeyChainResponse = {

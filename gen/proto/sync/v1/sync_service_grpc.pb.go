@@ -41,7 +41,7 @@ type SyncServiceClient interface {
 	SyncGroup(ctx context.Context, in *SyncGroupRequest, opts ...grpc.CallOption) (*SyncGroupResponse, error)
 	// 获取用户密钥对
 	GetUserKeyChain(ctx context.Context, in *GetUserKeyChainRequest, opts ...grpc.CallOption) (*GetUserKeyChainResponse, error)
-	// 修改用户密钥对
+	// 修改用户密钥对，修改的时候所有相关组的加密密钥均要替换
 	UpdateUserKeyChain(ctx context.Context, in *UpdateUserKeyChainRequest, opts ...grpc.CallOption) (*UpdateUserKeyChainResponse, error)
 }
 
@@ -121,7 +121,7 @@ type SyncServiceServer interface {
 	SyncGroup(context.Context, *SyncGroupRequest) (*SyncGroupResponse, error)
 	// 获取用户密钥对
 	GetUserKeyChain(context.Context, *GetUserKeyChainRequest) (*GetUserKeyChainResponse, error)
-	// 修改用户密钥对
+	// 修改用户密钥对，修改的时候所有相关组的加密密钥均要替换
 	UpdateUserKeyChain(context.Context, *UpdateUserKeyChainRequest) (*UpdateUserKeyChainResponse, error)
 	mustEmbedUnimplementedSyncServiceServer()
 }
