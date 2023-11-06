@@ -22,7 +22,7 @@ service SyncService {
       body: "*"
     };
   }
-  // 更新组信息 如果创建一个新的组，需要同时处理生成新的密钥
+  // 更新组信息 如果创建一个新的组
   rpc UpdateGroup(UpdateGroupRequest) returns (UpdateGroupResponse) {
     option (google.api.http) = {
       post:"/gapi/sync/v1/update_group"
@@ -33,37 +33,15 @@ service SyncService {
   rpc SyncGroup(SyncGroupRequest) returns (SyncGroupResponse) {
     option (google.api.http) = {get:"/gapi/sync/v1/sync_group"};
   }
-
-  // 生成用户密钥对
-  rpc GenUserKeyChain(GenUserKeyChainRequest) returns (GenUserKeyChainResponse) {
-    option (google.api.http) = {
-      post:"/gapi/sync/v1/gen_user_key_chain"
-      body: "*"
-    };
-  }
-
   // 获取用户密钥对
   rpc GetUserKeyChain(GetUserKeyChainRequest) returns (GetUserKeyChainResponse) {
     option (google.api.http) = {get:"/gapi/sync/v1/get_user_key_chain"};
   }
 
-  // 修改用户加密后的私钥
+  // 修改用户密钥对
   rpc UpdateUserKeyChain(UpdateUserKeyChainRequest) returns (UpdateUserKeyChainResponse) {
     option (google.api.http) = {
       post:"/gapi/sync/v1/update_user_key_chain"
-      body: "*"
-    };
-  }
-
-  // 获取mater key加密后的解密密钥,对应组
-  rpc GetEncryptedKey(GetEncryptedKeyRequest) returns (GetEncryptedKeyResponse) {
-    option (google.api.http) = {get:"/gapi/sync/v1/sync_get_encrypted_key"};
-  }
-  
-  // 更新mater key后修改加密后密钥,提交多组上去，将全部相关信息修改，不能有缺失。
-  rpc UpdateEncryptedKey(UpdateEncryptedKeyRequest) returns (UpdateEncryptedKeyResponse) {
-    option (google.api.http) = {
-      post:"/gapi/sync/v1/sync_update_encrypted_key"
       body: "*"
     };
   }
@@ -85,6 +63,8 @@ message SyncResponse {
 // 如果是用于创建新的组，则提供master_key,用于加密rsa密钥
 message UpdateRequest {
   string group_id = 2;
+  string publicKey = 3;
+  string encrypted_privateKey = 4;  // 创建者的私钥
   oneof data {
     Host host = 11;
     KnownHost known_host = 12;
@@ -105,7 +85,6 @@ message UpdateResponse {
 
 message UpdateGroupRequest {
   Group group = 1;
-  string master_key = 2; // 创建者指定master_key，用于加密密钥
 }
 
 message UpdateGroupResponse {}
@@ -119,47 +98,16 @@ message SyncGroupResponse {
   repeated Group groups = 11;
 }
 
-message GetEncryptedKeyRequest {
-  string gid = 1;
-}
-
-message GetEncryptedKeyResponse {
-  EncryptedKeyInfo encrypted_key_info = 1;
-}
-
-message UpdateEncryptedKeyRequest {
-  repeated EncryptedKeyInfo update_encrypted_key = 1;
-}
-
-message EncryptedKeyInfo {
-  string gid = 1;
-  string encrypted_key = 2;
-}
-
-message UpdateEncryptedKeyResponse {}
-
-message GenUserKeyChainRequest {
-  string master_key = 1;
-}
-
-message GenUserKeyChainResponse {
-  string public_key = 2;
-  string encrypted_private_key = 3;
-}
-
 message GetUserKeyChainRequest {}
 
 message GetUserKeyChainResponse {
-  string public_key = 2;
-  string encrypted_private_key = 3;
+  string publicKey = 2;
+  string encrypted_privateKey = 3;
 }
 
 message UpdateUserKeyChainRequest {
-  string old_master_key = 1;
-  string new_master_key = 2;
+  string publicKey = 1;
+  string encrypted_privateKey = 2;
 }
 
-message UpdateUserKeyChainResponse {
-  string public_key = 2;
-  string encrypted_private_key = 3;
-}
+message UpdateUserKeyChainResponse {}
