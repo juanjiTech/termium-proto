@@ -272,6 +272,39 @@
           "SyncService"
         ]
       }
+    },
+    "/gapi/sync/v1/update_user_key_chain": {
+      "post": {
+        "summary": "修改用户加密后的私钥",
+        "operationId": "SyncService_UpdateUserKeyChain",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserKeyChainResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserKeyChainRequest"
+            }
+          }
+        ],
+        "tags": [
+          "SyncService"
+        ]
+      }
     }
   },
   "definitions": {
@@ -700,6 +733,28 @@
         },
         "identity": {
           "$ref": "#/definitions/v1Identity"
+        }
+      }
+    },
+    "v1UpdateUserKeyChainRequest": {
+      "type": "object",
+      "properties": {
+        "oldMasterKey": {
+          "type": "string"
+        },
+        "newMasterKey": {
+          "type": "string"
+        }
+      }
+    },
+    "v1UpdateUserKeyChainResponse": {
+      "type": "object",
+      "properties": {
+        "publicKey": {
+          "type": "string"
+        },
+        "encryptedPrivateKey": {
+          "type": "string"
         }
       }
     }

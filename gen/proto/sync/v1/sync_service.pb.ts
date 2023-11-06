@@ -102,6 +102,16 @@ export type GetUserKeyChainResponse = {
   encryptedPrivateKey?: string
 }
 
+export type UpdateUserKeyChainRequest = {
+  oldMasterKey?: string
+  newMasterKey?: string
+}
+
+export type UpdateUserKeyChainResponse = {
+  publicKey?: string
+  encryptedPrivateKey?: string
+}
+
 export class SyncService {
   static Sync(req: SyncRequest, initReq?: fm.InitReq): Promise<SyncResponse> {
     return fm.fetchReq<SyncRequest, SyncResponse>(`/gapi/sync/v1/sync?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
@@ -120,6 +130,9 @@ export class SyncService {
   }
   static GetUserKeyChain(req: GetUserKeyChainRequest, initReq?: fm.InitReq): Promise<GetUserKeyChainResponse> {
     return fm.fetchReq<GetUserKeyChainRequest, GetUserKeyChainResponse>(`/gapi/sync/v1/get_user_key_chain?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
+  }
+  static UpdateUserKeyChain(req: UpdateUserKeyChainRequest, initReq?: fm.InitReq): Promise<UpdateUserKeyChainResponse> {
+    return fm.fetchReq<UpdateUserKeyChainRequest, UpdateUserKeyChainResponse>(`/gapi/sync/v1/update_user_key_chain`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
   static GetEncryptedKey(req: GetEncryptedKeyRequest, initReq?: fm.InitReq): Promise<GetEncryptedKeyResponse> {
     return fm.fetchReq<GetEncryptedKeyRequest, GetEncryptedKeyResponse>(`/gapi/sync/v1/sync_get_encrypted_key?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})

@@ -25,6 +25,7 @@ const (
 	SyncService_SyncGroup_FullMethodName          = "/sync.v1.SyncService/SyncGroup"
 	SyncService_GenUserKeyChain_FullMethodName    = "/sync.v1.SyncService/GenUserKeyChain"
 	SyncService_GetUserKeyChain_FullMethodName    = "/sync.v1.SyncService/GetUserKeyChain"
+	SyncService_UpdateUserKeyChain_FullMethodName = "/sync.v1.SyncService/UpdateUserKeyChain"
 	SyncService_GetEncryptedKey_FullMethodName    = "/sync.v1.SyncService/GetEncryptedKey"
 	SyncService_UpdateEncryptedKey_FullMethodName = "/sync.v1.SyncService/UpdateEncryptedKey"
 )
@@ -45,6 +46,8 @@ type SyncServiceClient interface {
 	GenUserKeyChain(ctx context.Context, in *GenUserKeyChainRequest, opts ...grpc.CallOption) (*GenUserKeyChainResponse, error)
 	// 获取用户密钥对
 	GetUserKeyChain(ctx context.Context, in *GetUserKeyChainRequest, opts ...grpc.CallOption) (*GetUserKeyChainResponse, error)
+	// 修改用户加密后的私钥
+	UpdateUserKeyChain(ctx context.Context, in *UpdateUserKeyChainRequest, opts ...grpc.CallOption) (*UpdateUserKeyChainResponse, error)
 	// 获取mater key加密后的解密密钥,对应组
 	GetEncryptedKey(ctx context.Context, in *GetEncryptedKeyRequest, opts ...grpc.CallOption) (*GetEncryptedKeyResponse, error)
 	// 更新mater key后修改加密后密钥,提交多组上去，将全部相关信息修改，不能有缺失。
@@ -113,6 +116,15 @@ func (c *syncServiceClient) GetUserKeyChain(ctx context.Context, in *GetUserKeyC
 	return out, nil
 }
 
+func (c *syncServiceClient) UpdateUserKeyChain(ctx context.Context, in *UpdateUserKeyChainRequest, opts ...grpc.CallOption) (*UpdateUserKeyChainResponse, error) {
+	out := new(UpdateUserKeyChainResponse)
+	err := c.cc.Invoke(ctx, SyncService_UpdateUserKeyChain_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *syncServiceClient) GetEncryptedKey(ctx context.Context, in *GetEncryptedKeyRequest, opts ...grpc.CallOption) (*GetEncryptedKeyResponse, error) {
 	out := new(GetEncryptedKeyResponse)
 	err := c.cc.Invoke(ctx, SyncService_GetEncryptedKey_FullMethodName, in, out, opts...)
@@ -147,6 +159,8 @@ type SyncServiceServer interface {
 	GenUserKeyChain(context.Context, *GenUserKeyChainRequest) (*GenUserKeyChainResponse, error)
 	// 获取用户密钥对
 	GetUserKeyChain(context.Context, *GetUserKeyChainRequest) (*GetUserKeyChainResponse, error)
+	// 修改用户加密后的私钥
+	UpdateUserKeyChain(context.Context, *UpdateUserKeyChainRequest) (*UpdateUserKeyChainResponse, error)
 	// 获取mater key加密后的解密密钥,对应组
 	GetEncryptedKey(context.Context, *GetEncryptedKeyRequest) (*GetEncryptedKeyResponse, error)
 	// 更新mater key后修改加密后密钥,提交多组上去，将全部相关信息修改，不能有缺失。
@@ -175,6 +189,9 @@ func (UnimplementedSyncServiceServer) GenUserKeyChain(context.Context, *GenUserK
 }
 func (UnimplementedSyncServiceServer) GetUserKeyChain(context.Context, *GetUserKeyChainRequest) (*GetUserKeyChainResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserKeyChain not implemented")
+}
+func (UnimplementedSyncServiceServer) UpdateUserKeyChain(context.Context, *UpdateUserKeyChainRequest) (*UpdateUserKeyChainResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserKeyChain not implemented")
 }
 func (UnimplementedSyncServiceServer) GetEncryptedKey(context.Context, *GetEncryptedKeyRequest) (*GetEncryptedKeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetEncryptedKey not implemented")
@@ -303,6 +320,24 @@ func _SyncService_GetUserKeyChain_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SyncService_UpdateUserKeyChain_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserKeyChainRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SyncServiceServer).UpdateUserKeyChain(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SyncService_UpdateUserKeyChain_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SyncServiceServer).UpdateUserKeyChain(ctx, req.(*UpdateUserKeyChainRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _SyncService_GetEncryptedKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetEncryptedKeyRequest)
 	if err := dec(in); err != nil {
@@ -369,6 +404,10 @@ var SyncService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserKeyChain",
 			Handler:    _SyncService_GetUserKeyChain_Handler,
+		},
+		{
+			MethodName: "UpdateUserKeyChain",
+			Handler:    _SyncService_UpdateUserKeyChain_Handler,
 		},
 		{
 			MethodName: "GetEncryptedKey",
