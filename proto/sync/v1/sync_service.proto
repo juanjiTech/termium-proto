@@ -42,6 +42,11 @@ service SyncService {
     };
   }
 
+  // 获取用户密钥对
+  rpc GetUserKeyChain(GetUserKeyChainRequest) returns (GetUserKeyChainResponse) {
+    option (google.api.http) = {get:"/gapi/sync/v1/get_user_key_chain"};
+  }
+
   // 获取mater key加密后的解密密钥,对应组
   rpc GetEncryptedKey(GetEncryptedKeyRequest) returns (GetEncryptedKeyResponse) {
     option (google.api.http) = {get:"/gapi/sync/v1/sync_get_encrypted_key"};
@@ -130,6 +135,13 @@ message GenUserKeyChainRequest {
 }
 
 message GenUserKeyChainResponse {
+  string public_key = 2;
+  string encrypted_private_key = 3;
+}
+
+message GetUserKeyChainRequest {}
+
+message GetUserKeyChainResponse {
   string public_key = 2;
   string encrypted_private_key = 3;
 }
