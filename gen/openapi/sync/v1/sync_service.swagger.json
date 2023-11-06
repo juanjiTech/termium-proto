@@ -49,6 +49,29 @@
         ]
       }
     },
+    "/gapi/sync/v1/get_user_key_chain": {
+      "get": {
+        "summary": "获取用户密钥对",
+        "operationId": "SyncService_GetUserKeyChain",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetUserKeyChainResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "SyncService"
+        ]
+      }
+    },
     "/gapi/sync/v1/sync": {
       "get": {
         "summary": "拉取指定时间点之后的配置变动信息",
@@ -315,6 +338,17 @@
       "properties": {
         "encryptedKeyInfo": {
           "$ref": "#/definitions/v1EncryptedKeyInfo"
+        }
+      }
+    },
+    "v1GetUserKeyChainResponse": {
+      "type": "object",
+      "properties": {
+        "publicKey": {
+          "type": "string"
+        },
+        "encryptedPrivateKey": {
+          "type": "string"
         }
       }
     },
