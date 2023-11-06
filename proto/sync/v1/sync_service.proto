@@ -61,8 +61,10 @@ message SyncResponse {
   repeated Identity identity_set = 14;
 }
 
+// 如果是用于创建新的组，则提供master_key,用于加密rsa密钥
 message UpdateRequest {
   string group_id = 2;
+  string master_key = 3;
   oneof data {
     Host host = 11;
     KnownHost known_host = 12;
@@ -72,6 +74,7 @@ message UpdateRequest {
 }
 
 message UpdateResponse {
+  string encrypted_key = 1; // 被master_key加密后的密钥，用于解密后续的密文,返回给本地以再次存储。
   oneof data { // 返回更新数据的服务端版本，因为新建的数据会加上ID和时间
     Host host = 11;
     KnownHost known_host = 12;
@@ -82,6 +85,7 @@ message UpdateResponse {
 
 message UpdateGroupRequest {
   Group group = 1;
+  string master_key = 2; // 创建者指定master_key，用于加密密钥
 }
 
 message UpdateGroupResponse {}

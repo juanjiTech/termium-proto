@@ -573,6 +573,9 @@
         "groupId": {
           "type": "string"
         },
+        "masterKey": {
+          "type": "string"
+        },
         "host": {
           "$ref": "#/definitions/v1Host"
         },
@@ -585,11 +588,16 @@
         "identity": {
           "$ref": "#/definitions/v1Identity"
         }
-      }
+      },
+      "title": "如果是用于创建新的组，则提供master_key,用于加密rsa密钥"
     },
     "v1UpdateResponse": {
       "type": "object",
       "properties": {
+        "encryptedKey": {
+          "type": "string",
+          "title": "被master_key加密后的密钥，用于解密后续的密文,返回给本地以再次存储。"
+        },
         "host": {
           "$ref": "#/definitions/v1Host"
         },
