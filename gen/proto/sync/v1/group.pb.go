@@ -89,7 +89,7 @@ type GroupBasic struct {
 	Description string                 `protobuf:"bytes,6,opt,name=description,proto3" json:"description,omitempty"`
 	Avatar      string                 `protobuf:"bytes,7,opt,name=avatar,proto3" json:"avatar,omitempty"`
 	Uid         string                 `protobuf:"bytes,8,opt,name=uid,proto3" json:"uid,omitempty"`             // 创建者
-	PublicKey   string                 `protobuf:"bytes,9,opt,name=publicKey,proto3" json:"publicKey,omitempty"` // 公钥 这里不存私钥，私钥加密后存在用户手上
+	PublicKey   string                 `protobuf:"bytes,9,opt,name=publicKey,proto3" json:"publicKey,omitempty"` // 公钥,公钥存在服务器上，加密的私钥与相关用户关联存储
 }
 
 func (x *GroupBasic) Reset() {
