@@ -19,4 +19,5 @@ export type GroupBasic = {
   description?: string
   avatar?: string
   uid?: string
+  publicKey?: string
 }

@@ -51,6 +51,7 @@ export type UpdateResponse = BaseUpdateResponse
 
 export type UpdateGroupRequest = {
   group?: SyncV1Group.Group
+  masterKey?: string
 }
 
 export type UpdateGroupResponse = {

@@ -310,6 +310,10 @@
         "uid": {
           "type": "string",
           "title": "创建者"
+        },
+        "publicKey": {
+          "type": "string",
+          "title": "公钥 这里不存私钥，私钥加密后存在用户手上"
         }
       }
     },
@@ -561,6 +565,10 @@
       "properties": {
         "group": {
           "$ref": "#/definitions/v1Group"
+        },
+        "masterKey": {
+          "type": "string",
+          "title": "创建者指定master_key，用于加密密钥"
         }
       }
     },
