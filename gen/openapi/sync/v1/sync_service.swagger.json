@@ -145,7 +145,7 @@
     },
     "/gapi/sync/v1/update_group": {
       "post": {
-        "summary": "更新组信息 如果创建一个新的组",
+        "summary": "更新组信息，如果是创建组的请求则同时处理密钥",
         "operationId": "SyncService_UpdateGroup",
         "responses": {
           "200": {
@@ -571,10 +571,6 @@
     "v1UpdateResponse": {
       "type": "object",
       "properties": {
-        "encryptedKey": {
-          "type": "string",
-          "title": "被master_key加密后的密钥，用于解密后续的密文,返回给本地以再次存储。"
-        },
         "host": {
           "$ref": "#/definitions/v1Host"
         },

@@ -35,7 +35,7 @@ type SyncServiceClient interface {
 	Sync(ctx context.Context, in *SyncRequest, opts ...grpc.CallOption) (*SyncResponse, error)
 	// 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。
 	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
-	// 更新组信息 如果创建一个新的组
+	// 更新组信息，如果是创建组的请求则同时处理密钥
 	UpdateGroup(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*UpdateGroupResponse, error)
 	// 通过UID获取所有组信息
 	SyncGroup(ctx context.Context, in *SyncGroupRequest, opts ...grpc.CallOption) (*SyncGroupResponse, error)
@@ -115,7 +115,7 @@ type SyncServiceServer interface {
 	Sync(context.Context, *SyncRequest) (*SyncResponse, error)
 	// 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。
 	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
-	// 更新组信息 如果创建一个新的组
+	// 更新组信息，如果是创建组的请求则同时处理密钥
 	UpdateGroup(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error)
 	// 通过UID获取所有组信息
 	SyncGroup(context.Context, *SyncGroupRequest) (*SyncGroupResponse, error)

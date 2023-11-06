@@ -44,7 +44,6 @@ export type UpdateRequest = BaseUpdateRequest
 
 
 type BaseUpdateResponse = {
-  encryptedKey?: string
 }
 
 export type UpdateResponse = BaseUpdateResponse
