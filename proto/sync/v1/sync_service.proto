@@ -37,7 +37,6 @@ service SyncService {
   rpc GetUserKeyChain(GetUserKeyChainRequest) returns (GetUserKeyChainResponse) {
     option (google.api.http) = {get:"/gapi/sync/v1/get_user_key_chain"};
   }
-
   // 修改用户密钥对，修改的时候所有相关组的加密密钥均要替换
   rpc UpdateUserKeyChain(UpdateUserKeyChainRequest) returns (UpdateUserKeyChainResponse) {
     option (google.api.http) = {
@@ -102,6 +101,7 @@ message GetUserKeyChainRequest {}
 message GetUserKeyChainResponse {
   string publicKey = 2;
   string encrypted_privateKey = 3;
+  repeated UserKeyWallet user_key_wallet_set = 4;
 }
 
 message UpdateUserKeyChainRequest {
