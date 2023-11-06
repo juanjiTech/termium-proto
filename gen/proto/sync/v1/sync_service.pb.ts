@@ -35,6 +35,8 @@ export type SyncResponse = {
 
 type BaseUpdateRequest = {
   groupId?: string
+  publicKey?: string
+  encryptedPrivateKey?: string
 }
 
 export type UpdateRequest = BaseUpdateRequest
@@ -50,7 +52,6 @@ export type UpdateResponse = BaseUpdateResponse
 
 export type UpdateGroupRequest = {
   group?: SyncV1Group.Group
-  masterKey?: string
 }
 
 export type UpdateGroupResponse = {
@@ -65,35 +66,6 @@ export type SyncGroupResponse = {
   groups?: SyncV1Group.Group[]
 }
 
-export type GetEncryptedKeyRequest = {
-  gid?: string
-}
-
-export type GetEncryptedKeyResponse = {
-  encryptedKeyInfo?: EncryptedKeyInfo
-}
-
-export type UpdateEncryptedKeyRequest = {
-  updateEncryptedKey?: EncryptedKeyInfo[]
-}
-
-export type EncryptedKeyInfo = {
-  gid?: string
-  encryptedKey?: string
-}
-
-export type UpdateEncryptedKeyResponse = {
-}
-
-export type GenUserKeyChainRequest = {
-  masterKey?: string
-}
-
-export type GenUserKeyChainResponse = {
-  publicKey?: string
-  encryptedPrivateKey?: string
-}
-
 export type GetUserKeyChainRequest = {
 }
 
@@ -103,13 +75,11 @@ export type GetUserKeyChainResponse = {
 }
 
 export type UpdateUserKeyChainRequest = {
-  oldMasterKey?: string
-  newMasterKey?: string
+  publicKey?: string
+  encryptedPrivateKey?: string
 }
 
 export type UpdateUserKeyChainResponse = {
-  publicKey?: string
-  encryptedPrivateKey?: string
 }
 
 export class SyncService {
@@ -125,19 +95,10 @@ export class SyncService {
   static SyncGroup(req: SyncGroupRequest, initReq?: fm.InitReq): Promise<SyncGroupResponse> {
     return fm.fetchReq<SyncGroupRequest, SyncGroupResponse>(`/gapi/sync/v1/sync_group?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
   }
-  static GenUserKeyChain(req: GenUserKeyChainRequest, initReq?: fm.InitReq): Promise<GenUserKeyChainResponse> {
-    return fm.fetchReq<GenUserKeyChainRequest, GenUserKeyChainResponse>(`/gapi/sync/v1/gen_user_key_chain`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
-  }
   static GetUserKeyChain(req: GetUserKeyChainRequest, initReq?: fm.InitReq): Promise<GetUserKeyChainResponse> {
     return fm.fetchReq<GetUserKeyChainRequest, GetUserKeyChainResponse>(`/gapi/sync/v1/get_user_key_chain?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
   }
   static UpdateUserKeyChain(req: UpdateUserKeyChainRequest, initReq?: fm.InitReq): Promise<UpdateUserKeyChainResponse> {
     return fm.fetchReq<UpdateUserKeyChainRequest, UpdateUserKeyChainResponse>(`/gapi/sync/v1/update_user_key_chain`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
-  }
-  static GetEncryptedKey(req: GetEncryptedKeyRequest, initReq?: fm.InitReq): Promise<GetEncryptedKeyResponse> {
-    return fm.fetchReq<GetEncryptedKeyRequest, GetEncryptedKeyResponse>(`/gapi/sync/v1/sync_get_encrypted_key?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
-  }
-  static UpdateEncryptedKey(req: UpdateEncryptedKeyRequest, initReq?: fm.InitReq): Promise<UpdateEncryptedKeyResponse> {
-    return fm.fetchReq<UpdateEncryptedKeyRequest, UpdateEncryptedKeyResponse>(`/gapi/sync/v1/sync_update_encrypted_key`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
 }
