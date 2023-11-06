@@ -22,7 +22,7 @@ service SyncService {
       body: "*"
     };
   }
-  // 更新组信息 如果创建一个新的组
+  // 更新组信息，如果是创建组的请求则同时处理密钥
   rpc UpdateGroup(UpdateGroupRequest) returns (UpdateGroupResponse) {
     option (google.api.http) = {
       post:"/gapi/sync/v1/update_group"
@@ -74,7 +74,6 @@ message UpdateRequest {
 }
 
 message UpdateResponse {
-  string encrypted_key = 1; // 被master_key加密后的密钥，用于解密后续的密文,返回给本地以再次存储。
   oneof data { // 返回更新数据的服务端版本，因为新建的数据会加上ID和时间
     Host host = 11;
     KnownHost known_host = 12;
