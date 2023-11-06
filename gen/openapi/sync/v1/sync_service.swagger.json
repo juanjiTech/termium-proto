@@ -16,6 +16,39 @@
     "application/json"
   ],
   "paths": {
+    "/gapi/sync/v1/gen_user_key_chain": {
+      "post": {
+        "summary": "生成用户密钥对",
+        "operationId": "SyncService_GenUserKeyChain",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GenUserKeyChainResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GenUserKeyChainRequest"
+            }
+          }
+        ],
+        "tags": [
+          "SyncService"
+        ]
+      }
+    },
     "/gapi/sync/v1/sync": {
       "get": {
         "summary": "拉取指定时间点之后的配置变动信息",
@@ -254,6 +287,25 @@
           "type": "string"
         },
         "encryptedKey": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GenUserKeyChainRequest": {
+      "type": "object",
+      "properties": {
+        "masterKey": {
+          "type": "string"
+        }
+      }
+    },
+    "v1GenUserKeyChainResponse": {
+      "type": "object",
+      "properties": {
+        "publicKey": {
+          "type": "string"
+        },
+        "encryptedPrivateKey": {
           "type": "string"
         }
       }
