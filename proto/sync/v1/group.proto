@@ -19,5 +19,5 @@ message GroupBasic {
     string description = 6;
     string avatar = 7;
     string uid = 8;         // 创建者
-    string public_key = 9;  // 公钥 这里不存私钥，私钥加密后存在用户手上
+    string publicKey = 9;  // 公钥 这里不存私钥，私钥加密后存在用户手上
 }
