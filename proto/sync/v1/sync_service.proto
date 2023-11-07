@@ -59,11 +59,8 @@ message SyncResponse {
   repeated Identity identity_set = 14;
 }
 
-// 如果是用于创建新的组，则提供master_key,用于加密rsa密钥
 message UpdateRequest {
   string group_id = 2;
-  string publicKey = 3;
-  string encrypted_privateKey = 4;  // 创建者的私钥
   oneof data {
     Host host = 11;
     KnownHost known_host = 12;
@@ -81,8 +78,12 @@ message UpdateResponse {
   }
 }
 
+// 更新组信息，如果是创建组的请求则需要带上创建者的密钥
+// 密钥以1 2 字段为准，内部的密钥是为了在返回请求中展示
 message UpdateGroupRequest {
-  Group group = 1;
+  string publicKey = 1;
+  string encrypted_creator_privateKey = 2;
+  Group group = 3;
 }
 
 message UpdateGroupResponse {}
