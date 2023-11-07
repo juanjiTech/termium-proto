@@ -128,4 +128,7 @@ message UpdateUserKeyWalletResponse {
 message UserKeyWallet {
   string gid = 1;
   string encrypted_group_privateKey = 2;
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp updated_at = 4;
+  google.protobuf.Timestamp deleted_at = 5;
 }
