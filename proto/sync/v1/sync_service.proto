@@ -81,9 +81,9 @@ message UpdateResponse {
 // 更新组信息，如果是创建组的请求则需要带上创建者的密钥
 // 密钥以1 2 字段为准，内部的密钥是为了在返回请求中展示
 message UpdateGroupRequest {
-  string publicKey = 1;
-  string encrypted_creator_privateKey = 2;
-  Group group = 3;
+  Group group = 1;
+  string publicKey = 2;
+  string encrypted_creator_privateKey = 3;
 }
 
 message UpdateGroupResponse {}
