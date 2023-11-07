@@ -91,6 +91,9 @@ export type UpdateUserKeyWalletResponse = {
 export type UserKeyWallet = {
   gid?: string
   encryptedGroupPrivateKey?: string
+  createdAt?: GoogleProtobufTimestamp.Timestamp
+  updatedAt?: GoogleProtobufTimestamp.Timestamp
+  deletedAt?: GoogleProtobufTimestamp.Timestamp
 }
 
 export class SyncService {
