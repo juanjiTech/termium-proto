@@ -541,8 +541,15 @@
       "properties": {
         "group": {
           "$ref": "#/definitions/v1Group"
+        },
+        "publicKey": {
+          "type": "string"
+        },
+        "encryptedCreatorPrivateKey": {
+          "type": "string"
         }
-      }
+      },
+      "title": "更新组信息，如果是创建组的请求则需要带上创建者的密钥\n密钥以1 2 字段为准，内部的密钥是为了在返回请求中展示"
     },
     "v1UpdateGroupResponse": {
       "type": "object"
@@ -552,13 +559,6 @@
       "properties": {
         "groupId": {
           "type": "string"
-        },
-        "publicKey": {
-          "type": "string"
-        },
-        "encryptedPrivateKey": {
-          "type": "string",
-          "title": "创建者的私钥"
         },
         "host": {
           "$ref": "#/definitions/v1Host"
@@ -572,8 +572,7 @@
         "identity": {
           "$ref": "#/definitions/v1Identity"
         }
-      },
-      "title": "如果是用于创建新的组，则提供master_key,用于加密rsa密钥"
+      }
     },
     "v1UpdateResponse": {
       "type": "object",

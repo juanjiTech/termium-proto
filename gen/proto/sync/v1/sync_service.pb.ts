@@ -35,8 +35,6 @@ export type SyncResponse = {
 
 type BaseUpdateRequest = {
   groupId?: string
-  publicKey?: string
-  encryptedPrivateKey?: string
 }
 
 export type UpdateRequest = BaseUpdateRequest
@@ -51,6 +49,8 @@ export type UpdateResponse = BaseUpdateResponse
 
 export type UpdateGroupRequest = {
   group?: SyncV1Group.Group
+  publicKey?: string
+  encryptedCreatorPrivateKey?: string
 }
 
 export type UpdateGroupResponse = {
