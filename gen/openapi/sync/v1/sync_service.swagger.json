@@ -34,6 +34,16 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "after",
+            "description": "获取该时间之后的设置变化，若不设置该字段，则拉取全量配置信息",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
         "tags": [
           "SyncService"
         ]
@@ -242,6 +252,11 @@
     "v1GetUserKeyChainResponse": {
       "type": "object",
       "properties": {
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "title": "当前服务器时间，用于给客户端下一次拉取变动时做一个参照，避免因客户端时间偏差导致同步混乱"
+        },
         "publicKey": {
           "type": "string"
         },

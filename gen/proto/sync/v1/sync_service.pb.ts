@@ -66,9 +66,11 @@ export type SyncGroupResponse = {
 }
 
 export type GetUserKeyChainRequest = {
+  after?: GoogleProtobufTimestamp.Timestamp
 }
 
 export type GetUserKeyChainResponse = {
+  serverTime?: GoogleProtobufTimestamp.Timestamp
   publicKey?: string
   encryptedPrivateKey?: string
   userKeyWalletSet?: UserKeyWallet[]
