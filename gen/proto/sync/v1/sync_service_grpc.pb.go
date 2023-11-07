@@ -19,12 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	SyncService_Sync_FullMethodName               = "/sync.v1.SyncService/Sync"
-	SyncService_Update_FullMethodName             = "/sync.v1.SyncService/Update"
-	SyncService_UpdateGroup_FullMethodName        = "/sync.v1.SyncService/UpdateGroup"
-	SyncService_SyncGroup_FullMethodName          = "/sync.v1.SyncService/SyncGroup"
-	SyncService_GetUserKeyChain_FullMethodName    = "/sync.v1.SyncService/GetUserKeyChain"
-	SyncService_UpdateUserKeyChain_FullMethodName = "/sync.v1.SyncService/UpdateUserKeyChain"
+	SyncService_Sync_FullMethodName                = "/sync.v1.SyncService/Sync"
+	SyncService_Update_FullMethodName              = "/sync.v1.SyncService/Update"
+	SyncService_UpdateGroup_FullMethodName         = "/sync.v1.SyncService/UpdateGroup"
+	SyncService_SyncGroup_FullMethodName           = "/sync.v1.SyncService/SyncGroup"
+	SyncService_SyncUserKeyWallet_FullMethodName   = "/sync.v1.SyncService/SyncUserKeyWallet"
+	SyncService_UpdateUserKeyWallet_FullMethodName = "/sync.v1.SyncService/UpdateUserKeyWallet"
 )
 
 // SyncServiceClient is the client API for SyncService service.
@@ -40,9 +40,9 @@ type SyncServiceClient interface {
 	// 通过UID获取所有组信息
 	SyncGroup(ctx context.Context, in *SyncGroupRequest, opts ...grpc.CallOption) (*SyncGroupResponse, error)
 	// 获取用户密钥对
-	GetUserKeyChain(ctx context.Context, in *GetUserKeyChainRequest, opts ...grpc.CallOption) (*GetUserKeyChainResponse, error)
+	SyncUserKeyWallet(ctx context.Context, in *SyncUserKeyWalletRequest, opts ...grpc.CallOption) (*SyncUserKeyWalletResponse, error)
 	// 修改用户密钥对，修改的时候所有相关组的加密密钥均要替换
-	UpdateUserKeyChain(ctx context.Context, in *UpdateUserKeyChainRequest, opts ...grpc.CallOption) (*UpdateUserKeyChainResponse, error)
+	UpdateUserKeyWallet(ctx context.Context, in *UpdateUserKeyWalletRequest, opts ...grpc.CallOption) (*UpdateUserKeyWalletResponse, error)
 }
 
 type syncServiceClient struct {
@@ -89,18 +89,18 @@ func (c *syncServiceClient) SyncGroup(ctx context.Context, in *SyncGroupRequest,
 	return out, nil
 }
 
-func (c *syncServiceClient) GetUserKeyChain(ctx context.Context, in *GetUserKeyChainRequest, opts ...grpc.CallOption) (*GetUserKeyChainResponse, error) {
-	out := new(GetUserKeyChainResponse)
-	err := c.cc.Invoke(ctx, SyncService_GetUserKeyChain_FullMethodName, in, out, opts...)
+func (c *syncServiceClient) SyncUserKeyWallet(ctx context.Context, in *SyncUserKeyWalletRequest, opts ...grpc.CallOption) (*SyncUserKeyWalletResponse, error) {
+	out := new(SyncUserKeyWalletResponse)
+	err := c.cc.Invoke(ctx, SyncService_SyncUserKeyWallet_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *syncServiceClient) UpdateUserKeyChain(ctx context.Context, in *UpdateUserKeyChainRequest, opts ...grpc.CallOption) (*UpdateUserKeyChainResponse, error) {
-	out := new(UpdateUserKeyChainResponse)
-	err := c.cc.Invoke(ctx, SyncService_UpdateUserKeyChain_FullMethodName, in, out, opts...)
+func (c *syncServiceClient) UpdateUserKeyWallet(ctx context.Context, in *UpdateUserKeyWalletRequest, opts ...grpc.CallOption) (*UpdateUserKeyWalletResponse, error) {
+	out := new(UpdateUserKeyWalletResponse)
+	err := c.cc.Invoke(ctx, SyncService_UpdateUserKeyWallet_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -120,9 +120,9 @@ type SyncServiceServer interface {
 	// 通过UID获取所有组信息
 	SyncGroup(context.Context, *SyncGroupRequest) (*SyncGroupResponse, error)
 	// 获取用户密钥对
-	GetUserKeyChain(context.Context, *GetUserKeyChainRequest) (*GetUserKeyChainResponse, error)
+	SyncUserKeyWallet(context.Context, *SyncUserKeyWalletRequest) (*SyncUserKeyWalletResponse, error)
 	// 修改用户密钥对，修改的时候所有相关组的加密密钥均要替换
-	UpdateUserKeyChain(context.Context, *UpdateUserKeyChainRequest) (*UpdateUserKeyChainResponse, error)
+	UpdateUserKeyWallet(context.Context, *UpdateUserKeyWalletRequest) (*UpdateUserKeyWalletResponse, error)
 	mustEmbedUnimplementedSyncServiceServer()
 }
 
@@ -142,11 +142,11 @@ func (UnimplementedSyncServiceServer) UpdateGroup(context.Context, *UpdateGroupR
 func (UnimplementedSyncServiceServer) SyncGroup(context.Context, *SyncGroupRequest) (*SyncGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SyncGroup not implemented")
 }
-func (UnimplementedSyncServiceServer) GetUserKeyChain(context.Context, *GetUserKeyChainRequest) (*GetUserKeyChainResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUserKeyChain not implemented")
+func (UnimplementedSyncServiceServer) SyncUserKeyWallet(context.Context, *SyncUserKeyWalletRequest) (*SyncUserKeyWalletResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SyncUserKeyWallet not implemented")
 }
-func (UnimplementedSyncServiceServer) UpdateUserKeyChain(context.Context, *UpdateUserKeyChainRequest) (*UpdateUserKeyChainResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserKeyChain not implemented")
+func (UnimplementedSyncServiceServer) UpdateUserKeyWallet(context.Context, *UpdateUserKeyWalletRequest) (*UpdateUserKeyWalletResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserKeyWallet not implemented")
 }
 func (UnimplementedSyncServiceServer) mustEmbedUnimplementedSyncServiceServer() {}
 
@@ -233,38 +233,38 @@ func _SyncService_SyncGroup_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SyncService_GetUserKeyChain_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserKeyChainRequest)
+func _SyncService_SyncUserKeyWallet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SyncUserKeyWalletRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SyncServiceServer).GetUserKeyChain(ctx, in)
+		return srv.(SyncServiceServer).SyncUserKeyWallet(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: SyncService_GetUserKeyChain_FullMethodName,
+		FullMethod: SyncService_SyncUserKeyWallet_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SyncServiceServer).GetUserKeyChain(ctx, req.(*GetUserKeyChainRequest))
+		return srv.(SyncServiceServer).SyncUserKeyWallet(ctx, req.(*SyncUserKeyWalletRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SyncService_UpdateUserKeyChain_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateUserKeyChainRequest)
+func _SyncService_UpdateUserKeyWallet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserKeyWalletRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SyncServiceServer).UpdateUserKeyChain(ctx, in)
+		return srv.(SyncServiceServer).UpdateUserKeyWallet(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: SyncService_UpdateUserKeyChain_FullMethodName,
+		FullMethod: SyncService_UpdateUserKeyWallet_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SyncServiceServer).UpdateUserKeyChain(ctx, req.(*UpdateUserKeyChainRequest))
+		return srv.(SyncServiceServer).UpdateUserKeyWallet(ctx, req.(*UpdateUserKeyWalletRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -293,12 +293,12 @@ var SyncService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SyncService_SyncGroup_Handler,
 		},
 		{
-			MethodName: "GetUserKeyChain",
-			Handler:    _SyncService_GetUserKeyChain_Handler,
+			MethodName: "SyncUserKeyWallet",
+			Handler:    _SyncService_SyncUserKeyWallet_Handler,
 		},
 		{
-			MethodName: "UpdateUserKeyChain",
-			Handler:    _SyncService_UpdateUserKeyChain_Handler,
+			MethodName: "UpdateUserKeyWallet",
+			Handler:    _SyncService_UpdateUserKeyWallet_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

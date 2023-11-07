@@ -65,18 +65,24 @@ export type SyncGroupResponse = {
   groups?: SyncV1Group.Group[]
 }
 
-export type GetUserKeyChainRequest = {
+export type SyncUserKeyWalletRequest = {
   after?: GoogleProtobufTimestamp.Timestamp
 }
 
-export type GetUserKeyChainResponse = {
+export type SyncUserKeyWalletResponse = {
   serverTime?: GoogleProtobufTimestamp.Timestamp
   publicKey?: string
   encryptedPrivateKey?: string
   userKeyWalletSet?: UserKeyWallet[]
 }
 
-export type UpdateUserKeyChainRequest = {
+export type UpdateUserKeyWalletRequest = {
+  publicKey?: string
+  encryptedPrivateKey?: string
+  userKeyWalletSet?: UserKeyWallet[]
+}
+
+export type UpdateUserKeyWalletResponse = {
   publicKey?: string
   encryptedPrivateKey?: string
   userKeyWalletSet?: UserKeyWallet[]
@@ -85,9 +91,6 @@ export type UpdateUserKeyChainRequest = {
 export type UserKeyWallet = {
   gid?: string
   encryptedGroupPrivateKey?: string
-}
-
-export type UpdateUserKeyChainResponse = {
 }
 
 export class SyncService {
@@ -103,10 +106,10 @@ export class SyncService {
   static SyncGroup(req: SyncGroupRequest, initReq?: fm.InitReq): Promise<SyncGroupResponse> {
     return fm.fetchReq<SyncGroupRequest, SyncGroupResponse>(`/gapi/sync/v1/sync_group?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
   }
-  static GetUserKeyChain(req: GetUserKeyChainRequest, initReq?: fm.InitReq): Promise<GetUserKeyChainResponse> {
-    return fm.fetchReq<GetUserKeyChainRequest, GetUserKeyChainResponse>(`/gapi/sync/v1/get_user_key_chain?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
+  static SyncUserKeyWallet(req: SyncUserKeyWalletRequest, initReq?: fm.InitReq): Promise<SyncUserKeyWalletResponse> {
+    return fm.fetchReq<SyncUserKeyWalletRequest, SyncUserKeyWalletResponse>(`/gapi/sync/v1/sync_user_key_wallet?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
   }
-  static UpdateUserKeyChain(req: UpdateUserKeyChainRequest, initReq?: fm.InitReq): Promise<UpdateUserKeyChainResponse> {
-    return fm.fetchReq<UpdateUserKeyChainRequest, UpdateUserKeyChainResponse>(`/gapi/sync/v1/update_user_key_chain`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  static UpdateUserKeyWallet(req: UpdateUserKeyWalletRequest, initReq?: fm.InitReq): Promise<UpdateUserKeyWalletResponse> {
+    return fm.fetchReq<UpdateUserKeyWalletRequest, UpdateUserKeyWalletResponse>(`/gapi/sync/v1/update_user_key_wallet`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
 }
