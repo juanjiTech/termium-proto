@@ -7,7 +7,7 @@ option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/sync/v1;syncV1"
 
 message Group {
     GroupBasic group_basic = 1;
-    repeated  string  member_id = 2;
+    repeated GroupKeyChain group_keychain = 3;
 }
 
 message GroupBasic {
@@ -20,4 +20,9 @@ message GroupBasic {
     string avatar = 7;
     string uid = 8;         // 创建者
     string publicKey = 9;   // 公钥,公钥存在服务器上，加密的私钥与相关用户关联存储
+}
+
+message GroupKeyChain{
+    string member_id = 1;
+    string privateKey = 2;
 }
