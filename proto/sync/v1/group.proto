@@ -7,7 +7,7 @@ option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/sync/v1;syncV1"
 
 message Group {
     GroupBasic group_basic = 1;
-    repeated GroupKeyChain group_keychain = 3;
+    repeated GroupKeyChain group_keychain = 2;
 }
 
 message GroupBasic {
@@ -23,6 +23,6 @@ message GroupBasic {
 }
 
 message GroupKeyChain{
-    string member_id = 1;
-    string privateKey = 2;
+    string member_id = 11;
+    string privateKey = 12;
 }

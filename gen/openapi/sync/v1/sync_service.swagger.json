@@ -255,10 +255,11 @@
         "groupBasic": {
           "$ref": "#/definitions/v1GroupBasic"
         },
-        "memberId": {
+        "groupKeychain": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "object",
+            "$ref": "#/definitions/v1GroupKeyChain"
           }
         }
       }
@@ -297,6 +298,17 @@
         "publicKey": {
           "type": "string",
           "title": "公钥,公钥存在服务器上，加密的私钥与相关用户关联存储"
+        }
+      }
+    },
+    "v1GroupKeyChain": {
+      "type": "object",
+      "properties": {
+        "memberId": {
+          "type": "string"
+        },
+        "privateKey": {
+          "type": "string"
         }
       }
     },
