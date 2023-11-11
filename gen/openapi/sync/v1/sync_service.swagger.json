@@ -16,15 +16,15 @@
     "application/json"
   ],
   "paths": {
-    "/gapi/sync/v1/sync": {
+    "/gapi/sync/v1/sync_config": {
       "get": {
         "summary": "拉取指定时间点之后的配置变动信息",
-        "operationId": "SyncService_Sync",
+        "operationId": "SyncService_SyncConfig",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1SyncResponse"
+              "$ref": "#/definitions/v1SyncConfigResponse"
             }
           },
           "default": {
@@ -120,15 +120,15 @@
         ]
       }
     },
-    "/gapi/sync/v1/update": {
+    "/gapi/sync/v1/update_config": {
       "post": {
         "summary": "提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。",
-        "operationId": "SyncService_Update",
+        "operationId": "SyncService_UpdateConfig",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1UpdateResponse"
+              "$ref": "#/definitions/v1UpdateConfigResponse"
             }
           },
           "default": {
@@ -144,7 +144,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1UpdateRequest"
+              "$ref": "#/definitions/v1UpdateConfigRequest"
             }
           }
         ],
@@ -486,23 +486,7 @@
       },
       "title": "SSH 密钥"
     },
-    "v1SyncGroupResponse": {
-      "type": "object",
-      "properties": {
-        "serverTime": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "groups": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Group"
-          }
-        }
-      }
-    },
-    "v1SyncResponse": {
+    "v1SyncConfigResponse": {
       "type": "object",
       "properties": {
         "serverTime": {
@@ -540,6 +524,22 @@
         }
       }
     },
+    "v1SyncGroupResponse": {
+      "type": "object",
+      "properties": {
+        "serverTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Group"
+          }
+        }
+      }
+    },
     "v1SyncUserKeyWalletResponse": {
       "type": "object",
       "properties": {
@@ -563,25 +563,7 @@
         }
       }
     },
-    "v1UpdateGroupRequest": {
-      "type": "object",
-      "properties": {
-        "group": {
-          "$ref": "#/definitions/v1Group"
-        },
-        "publicKey": {
-          "type": "string"
-        },
-        "encryptedCreatorPrivateKey": {
-          "type": "string"
-        }
-      },
-      "title": "UpdateGroup\n更新组信息，如果是创建组的请求则需要带上创建者的密钥\n密钥以1 2 字段为准，内部的密钥是为了在返回请求中展示"
-    },
-    "v1UpdateGroupResponse": {
-      "type": "object"
-    },
-    "v1UpdateRequest": {
+    "v1UpdateConfigRequest": {
       "type": "object",
       "properties": {
         "groupId": {
@@ -600,9 +582,9 @@
           "$ref": "#/definitions/v1Identity"
         }
       },
-      "title": "Update"
+      "title": "UpdateConfig"
     },
-    "v1UpdateResponse": {
+    "v1UpdateConfigResponse": {
       "type": "object",
       "properties": {
         "host": {
@@ -618,6 +600,24 @@
           "$ref": "#/definitions/v1Identity"
         }
       }
+    },
+    "v1UpdateGroupRequest": {
+      "type": "object",
+      "properties": {
+        "group": {
+          "$ref": "#/definitions/v1Group"
+        },
+        "publicKey": {
+          "type": "string"
+        },
+        "encryptedCreatorPrivateKey": {
+          "type": "string"
+        }
+      },
+      "title": "UpdateGroup\n更新组信息，如果是创建组的请求则需要带上创建者的密钥\n密钥以1 2 字段为准，内部的密钥是为了在返回请求中展示"
+    },
+    "v1UpdateGroupResponse": {
+      "type": "object"
     },
     "v1UpdateUserKeyWalletRequest": {
       "type": "object",

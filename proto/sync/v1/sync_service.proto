@@ -12,13 +12,13 @@ option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/sync/v1;syncV1"
 
 service SyncService {
   // 拉取指定时间点之后的配置变动信息
-  rpc Sync(SyncRequest) returns (SyncResponse) {
-    option (google.api.http) = {get: "/gapi/sync/v1/sync"};
+  rpc SyncConfig(SyncConfigRequest) returns (SyncConfigResponse) {
+    option (google.api.http) = {get: "/gapi/sync/v1/sync_config"};
   }
   // 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。
-  rpc Update(UpdateRequest) returns (UpdateResponse) {
+  rpc UpdateConfig(UpdateConfigRequest) returns (UpdateConfigResponse) {
     option (google.api.http) = {
-      post:"/gapi/sync/v1/update"
+      post:"/gapi/sync/v1/update_config"
       body: "*"
     };
   }
@@ -45,13 +45,13 @@ service SyncService {
     };
   }
 }
-// Sync
-message SyncRequest {
+// SyncConfig
+message SyncConfigRequest {
   google.protobuf.Timestamp after = 1; // 获取该时间之后的设置变化，若不设置该字段，则拉取全量配置信息
   string group_id = 2;
 }
 
-message SyncResponse {
+message SyncConfigResponse {
   google.protobuf.Timestamp server_time = 1; // 当前服务器时间，用于给客户端下一次拉取变动时做一个参照，避免因客户端时间偏差导致同步混乱
   repeated Host host_set = 11;
   repeated KnownHost known_host_set = 12;
@@ -59,8 +59,8 @@ message SyncResponse {
   repeated Identity identity_set = 14;
 }
 
-// Update
-message UpdateRequest {
+// UpdateConfig
+message UpdateConfigRequest {
   string group_id = 2;
   oneof data {
     Host host = 11;
@@ -70,7 +70,7 @@ message UpdateRequest {
   }
 }
 
-message UpdateResponse {
+message UpdateConfigResponse {
   oneof data { // 返回更新数据的服务端版本，因为新建的数据会加上ID和时间
     Host host = 11;
     KnownHost known_host = 12;
@@ -85,7 +85,7 @@ message UpdateResponse {
 message UpdateGroupRequest {
   Group group = 1;
   string publicKey = 2;
-  string encrypted_creator_privateKey = 3;
+  string encryptedCreatorPrivateKey = 3;
 }
 
 message UpdateGroupResponse {}
@@ -108,26 +108,26 @@ message SyncUserKeyWalletRequest {
 message SyncUserKeyWalletResponse {
   google.protobuf.Timestamp server_time = 1; // 当前服务器时间，用于给客户端下一次拉取变动时做一个参照，避免因客户端时间偏差导致同步混乱
   string publicKey = 2;
-  string encrypted_privateKey = 3;
+  string encryptedPrivateKey = 3;
   repeated UserKeyWallet user_key_wallet_set = 4;
 }
 
 // UpdateUserKeyWallet
 message UpdateUserKeyWalletRequest {
   string publicKey = 1;
-  string encrypted_privateKey = 2;
+  string encryptedPrivateKey = 2;
   repeated UserKeyWallet user_key_wallet_set = 4;
 }
 
 message UpdateUserKeyWalletResponse {
   string publicKey = 1;
-  string encrypted_privateKey = 2;
+  string encryptedPrivateKey = 2;
   repeated UserKeyWallet user_key_wallet_set = 4;
 }
 
 message UserKeyWallet {
   string gid = 1;
-  string encrypted_group_privateKey = 2;
+  string encryptedGroupPrivateKey = 2;
   google.protobuf.Timestamp created_at = 3;
   google.protobuf.Timestamp updated_at = 4;
   google.protobuf.Timestamp deleted_at = 5;

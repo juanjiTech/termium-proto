@@ -19,12 +19,12 @@ type OneOf<T> =
       (K extends string & keyof T ? { [k in K]: T[K] } & Absent<T, K>
         : never)
     : never);
-export type SyncRequest = {
+export type SyncConfigRequest = {
   after?: GoogleProtobufTimestamp.Timestamp
   groupId?: string
 }
 
-export type SyncResponse = {
+export type SyncConfigResponse = {
   serverTime?: GoogleProtobufTimestamp.Timestamp
   hostSet?: SyncV1Host.Host[]
   knownHostSet?: SyncV1Known_hosts.KnownHost[]
@@ -33,18 +33,18 @@ export type SyncResponse = {
 }
 
 
-type BaseUpdateRequest = {
+type BaseUpdateConfigRequest = {
   groupId?: string
 }
 
-export type UpdateRequest = BaseUpdateRequest
+export type UpdateConfigRequest = BaseUpdateConfigRequest
   & OneOf<{ host: SyncV1Host.Host; knownHost: SyncV1Known_hosts.KnownHost; sshKey: SyncV1Keychain.SshKey; identity: SyncV1Keychain.Identity }>
 
 
-type BaseUpdateResponse = {
+type BaseUpdateConfigResponse = {
 }
 
-export type UpdateResponse = BaseUpdateResponse
+export type UpdateConfigResponse = BaseUpdateConfigResponse
   & OneOf<{ host: SyncV1Host.Host; knownHost: SyncV1Known_hosts.KnownHost; sshKey: SyncV1Keychain.SshKey; identity: SyncV1Keychain.Identity }>
 
 export type UpdateGroupRequest = {
@@ -97,11 +97,11 @@ export type UserKeyWallet = {
 }
 
 export class SyncService {
-  static Sync(req: SyncRequest, initReq?: fm.InitReq): Promise<SyncResponse> {
-    return fm.fetchReq<SyncRequest, SyncResponse>(`/gapi/sync/v1/sync?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
+  static SyncConfig(req: SyncConfigRequest, initReq?: fm.InitReq): Promise<SyncConfigResponse> {
+    return fm.fetchReq<SyncConfigRequest, SyncConfigResponse>(`/gapi/sync/v1/sync_config?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
   }
-  static Update(req: UpdateRequest, initReq?: fm.InitReq): Promise<UpdateResponse> {
-    return fm.fetchReq<UpdateRequest, UpdateResponse>(`/gapi/sync/v1/update`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  static UpdateConfig(req: UpdateConfigRequest, initReq?: fm.InitReq): Promise<UpdateConfigResponse> {
+    return fm.fetchReq<UpdateConfigRequest, UpdateConfigResponse>(`/gapi/sync/v1/update_config`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
   static UpdateGroup(req: UpdateGroupRequest, initReq?: fm.InitReq): Promise<UpdateGroupResponse> {
     return fm.fetchReq<UpdateGroupRequest, UpdateGroupResponse>(`/gapi/sync/v1/update_group`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
