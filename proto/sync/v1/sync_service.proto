@@ -15,14 +15,21 @@ service SyncService {
   rpc SyncConfig(SyncConfigRequest) returns (SyncConfigResponse) {
     option (google.api.http) = {get: "/gapi/sync/v1/sync_config"};
   }
-  // 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。
+  // 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。这里只负责配置内容修改。
   rpc UpdateConfig(UpdateConfigRequest) returns (UpdateConfigResponse) {
     option (google.api.http) = {
       post:"/gapi/sync/v1/update_config"
       body: "*"
     };
   }
-  // 更新组信息，如果是创建组的请求则同时处理密钥
+  // 组的所有者修改组的密钥链
+  rpc UpdateGroupKeyChain(UpdateGroupKeyChainRequest) returns (UpdateGroupKeyChainResponse) {
+    option (google.api.http) = {
+      post:"/gapi/sync/v1/update_group_key_chain"
+      body: "*"
+    };
+  }
+  // 更新组信息,如果服务端密钥为空不允许修改，请先去创建密钥链。
   rpc UpdateGroup(UpdateGroupRequest) returns (UpdateGroupResponse) {
     option (google.api.http) = {
       post:"/gapi/sync/v1/update_group"
@@ -79,13 +86,19 @@ message UpdateConfigResponse {
   }
 }
 
+// UpdateGroupKeyChain
+message UpdateGroupKeyChainRequest{
+  string group_id = 1;
+  string publicKey = 2;
+  string encryptedGroupPrivateKey = 3;
+  repeated UserKeyWallet user_key_wallet = 4;
+}
+
+message UpdateGroupKeyChainResponse{}
+
 // UpdateGroup
-// 更新组信息，如果是创建组的请求则需要带上创建者的密钥
-// 密钥以1 2 字段为准，内部的密钥是为了在返回请求中展示
 message UpdateGroupRequest {
   Group group = 1;
-  string publicKey = 2;
-  string encryptedCreatorPrivateKey = 3;
 }
 
 message UpdateGroupResponse {}
@@ -126,9 +139,10 @@ message UpdateUserKeyWalletResponse {
 }
 
 message UserKeyWallet {
-  string gid = 1;
-  string encryptedGroupPrivateKey = 2;
-  google.protobuf.Timestamp created_at = 3;
-  google.protobuf.Timestamp updated_at = 4;
-  google.protobuf.Timestamp deleted_at = 5;
+  string uid = 1;
+  string gid = 2;
+  string encryptedGroupPrivateKey = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+  google.protobuf.Timestamp deleted_at = 6;
 }
