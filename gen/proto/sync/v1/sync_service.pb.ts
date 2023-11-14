@@ -47,10 +47,18 @@ type BaseUpdateConfigResponse = {
 export type UpdateConfigResponse = BaseUpdateConfigResponse
   & OneOf<{ host: SyncV1Host.Host; knownHost: SyncV1Known_hosts.KnownHost; sshKey: SyncV1Keychain.SshKey; identity: SyncV1Keychain.Identity }>
 
+export type UpdateGroupKeyChainRequest = {
+  groupId?: string
+  publicKey?: string
+  encryptedGroupPrivateKey?: string
+  userKeyWallet?: UserKeyWallet[]
+}
+
+export type UpdateGroupKeyChainResponse = {
+}
+
 export type UpdateGroupRequest = {
   group?: SyncV1Group.Group
-  publicKey?: string
-  encryptedCreatorPrivateKey?: string
 }
 
 export type UpdateGroupResponse = {
@@ -89,6 +97,7 @@ export type UpdateUserKeyWalletResponse = {
 }
 
 export type UserKeyWallet = {
+  uid?: string
   gid?: string
   encryptedGroupPrivateKey?: string
   createdAt?: GoogleProtobufTimestamp.Timestamp
@@ -102,6 +111,9 @@ export class SyncService {
   }
   static UpdateConfig(req: UpdateConfigRequest, initReq?: fm.InitReq): Promise<UpdateConfigResponse> {
     return fm.fetchReq<UpdateConfigRequest, UpdateConfigResponse>(`/gapi/sync/v1/update_config`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  }
+  static UpdateGroupKeyChain(req: UpdateGroupKeyChainRequest, initReq?: fm.InitReq): Promise<UpdateGroupKeyChainResponse> {
+    return fm.fetchReq<UpdateGroupKeyChainRequest, UpdateGroupKeyChainResponse>(`/gapi/sync/v1/update_group_key_chain`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
   static UpdateGroup(req: UpdateGroupRequest, initReq?: fm.InitReq): Promise<UpdateGroupResponse> {
     return fm.fetchReq<UpdateGroupRequest, UpdateGroupResponse>(`/gapi/sync/v1/update_group`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})

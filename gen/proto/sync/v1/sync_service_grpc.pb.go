@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	SyncService_SyncConfig_FullMethodName          = "/sync.v1.SyncService/SyncConfig"
 	SyncService_UpdateConfig_FullMethodName        = "/sync.v1.SyncService/UpdateConfig"
+	SyncService_UpdateGroupKeyChain_FullMethodName = "/sync.v1.SyncService/UpdateGroupKeyChain"
 	SyncService_UpdateGroup_FullMethodName         = "/sync.v1.SyncService/UpdateGroup"
 	SyncService_SyncGroup_FullMethodName           = "/sync.v1.SyncService/SyncGroup"
 	SyncService_SyncUserKeyWallet_FullMethodName   = "/sync.v1.SyncService/SyncUserKeyWallet"
@@ -33,9 +34,11 @@ const (
 type SyncServiceClient interface {
 	// 拉取指定时间点之后的配置变动信息
 	SyncConfig(ctx context.Context, in *SyncConfigRequest, opts ...grpc.CallOption) (*SyncConfigResponse, error)
-	// 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。
+	// 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。这里只负责配置内容修改。
 	UpdateConfig(ctx context.Context, in *UpdateConfigRequest, opts ...grpc.CallOption) (*UpdateConfigResponse, error)
-	// 更新组信息，如果是创建组的请求则同时处理密钥
+	// 组的所有者修改组的密钥链
+	UpdateGroupKeyChain(ctx context.Context, in *UpdateGroupKeyChainRequest, opts ...grpc.CallOption) (*UpdateGroupKeyChainResponse, error)
+	// 更新组信息,如果服务端密钥为空不允许修改，请先去创建密钥链。
 	UpdateGroup(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*UpdateGroupResponse, error)
 	// 通过UID获取所有组信息
 	SyncGroup(ctx context.Context, in *SyncGroupRequest, opts ...grpc.CallOption) (*SyncGroupResponse, error)
@@ -65,6 +68,15 @@ func (c *syncServiceClient) SyncConfig(ctx context.Context, in *SyncConfigReques
 func (c *syncServiceClient) UpdateConfig(ctx context.Context, in *UpdateConfigRequest, opts ...grpc.CallOption) (*UpdateConfigResponse, error) {
 	out := new(UpdateConfigResponse)
 	err := c.cc.Invoke(ctx, SyncService_UpdateConfig_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *syncServiceClient) UpdateGroupKeyChain(ctx context.Context, in *UpdateGroupKeyChainRequest, opts ...grpc.CallOption) (*UpdateGroupKeyChainResponse, error) {
+	out := new(UpdateGroupKeyChainResponse)
+	err := c.cc.Invoke(ctx, SyncService_UpdateGroupKeyChain_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -113,9 +125,11 @@ func (c *syncServiceClient) UpdateUserKeyWallet(ctx context.Context, in *UpdateU
 type SyncServiceServer interface {
 	// 拉取指定时间点之后的配置变动信息
 	SyncConfig(context.Context, *SyncConfigRequest) (*SyncConfigResponse, error)
-	// 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。
+	// 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。这里只负责配置内容修改。
 	UpdateConfig(context.Context, *UpdateConfigRequest) (*UpdateConfigResponse, error)
-	// 更新组信息，如果是创建组的请求则同时处理密钥
+	// 组的所有者修改组的密钥链
+	UpdateGroupKeyChain(context.Context, *UpdateGroupKeyChainRequest) (*UpdateGroupKeyChainResponse, error)
+	// 更新组信息,如果服务端密钥为空不允许修改，请先去创建密钥链。
 	UpdateGroup(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error)
 	// 通过UID获取所有组信息
 	SyncGroup(context.Context, *SyncGroupRequest) (*SyncGroupResponse, error)
@@ -135,6 +149,9 @@ func (UnimplementedSyncServiceServer) SyncConfig(context.Context, *SyncConfigReq
 }
 func (UnimplementedSyncServiceServer) UpdateConfig(context.Context, *UpdateConfigRequest) (*UpdateConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateConfig not implemented")
+}
+func (UnimplementedSyncServiceServer) UpdateGroupKeyChain(context.Context, *UpdateGroupKeyChainRequest) (*UpdateGroupKeyChainResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateGroupKeyChain not implemented")
 }
 func (UnimplementedSyncServiceServer) UpdateGroup(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateGroup not implemented")
@@ -193,6 +210,24 @@ func _SyncService_UpdateConfig_Handler(srv interface{}, ctx context.Context, dec
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SyncServiceServer).UpdateConfig(ctx, req.(*UpdateConfigRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SyncService_UpdateGroupKeyChain_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateGroupKeyChainRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SyncServiceServer).UpdateGroupKeyChain(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SyncService_UpdateGroupKeyChain_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SyncServiceServer).UpdateGroupKeyChain(ctx, req.(*UpdateGroupKeyChainRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -283,6 +318,10 @@ var SyncService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateConfig",
 			Handler:    _SyncService_UpdateConfig_Handler,
+		},
+		{
+			MethodName: "UpdateGroupKeyChain",
+			Handler:    _SyncService_UpdateGroupKeyChain_Handler,
 		},
 		{
 			MethodName: "UpdateGroup",

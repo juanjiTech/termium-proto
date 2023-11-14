@@ -122,7 +122,7 @@
     },
     "/gapi/sync/v1/update_config": {
       "post": {
-        "summary": "提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。",
+        "summary": "提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。这里只负责配置内容修改。",
         "operationId": "SyncService_UpdateConfig",
         "responses": {
           "200": {
@@ -155,7 +155,7 @@
     },
     "/gapi/sync/v1/update_group": {
       "post": {
-        "summary": "更新组信息，如果是创建组的请求则同时处理密钥",
+        "summary": "更新组信息,如果服务端密钥为空不允许修改，请先去创建密钥链。",
         "operationId": "SyncService_UpdateGroup",
         "responses": {
           "200": {
@@ -178,6 +178,39 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/v1UpdateGroupRequest"
+            }
+          }
+        ],
+        "tags": [
+          "SyncService"
+        ]
+      }
+    },
+    "/gapi/sync/v1/update_group_key_chain": {
+      "post": {
+        "summary": "组的所有者修改组的密钥链",
+        "operationId": "SyncService_UpdateGroupKeyChain",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateGroupKeyChainResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateGroupKeyChainRequest"
             }
           }
         ],
@@ -601,20 +634,39 @@
         }
       }
     },
+    "v1UpdateGroupKeyChainRequest": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string"
+        },
+        "publicKey": {
+          "type": "string"
+        },
+        "encryptedGroupPrivateKey": {
+          "type": "string"
+        },
+        "userKeyWallet": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1UserKeyWallet"
+          }
+        }
+      },
+      "title": "UpdateGroupKeyChain"
+    },
+    "v1UpdateGroupKeyChainResponse": {
+      "type": "object"
+    },
     "v1UpdateGroupRequest": {
       "type": "object",
       "properties": {
         "group": {
           "$ref": "#/definitions/v1Group"
-        },
-        "publicKey": {
-          "type": "string"
-        },
-        "encryptedCreatorPrivateKey": {
-          "type": "string"
         }
       },
-      "title": "UpdateGroup\n更新组信息，如果是创建组的请求则需要带上创建者的密钥\n密钥以1 2 字段为准，内部的密钥是为了在返回请求中展示"
+      "title": "UpdateGroup"
     },
     "v1UpdateGroupResponse": {
       "type": "object"
@@ -659,6 +711,9 @@
     "v1UserKeyWallet": {
       "type": "object",
       "properties": {
+        "uid": {
+          "type": "string"
+        },
         "gid": {
           "type": "string"
         },
