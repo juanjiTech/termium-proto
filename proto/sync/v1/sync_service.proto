@@ -55,24 +55,24 @@ service SyncService {
 // SyncConfig
 message SyncConfigRequest {
   google.protobuf.Timestamp after = 1; // 获取该时间之后的设置变化，若不设置该字段，则拉取全量配置信息
-  string group_id = 2;
+  string groupId = 2;
 }
 
 message SyncConfigResponse {
   google.protobuf.Timestamp server_time = 1; // 当前服务器时间，用于给客户端下一次拉取变动时做一个参照，避免因客户端时间偏差导致同步混乱
-  repeated Host host_set = 11;
-  repeated KnownHost known_host_set = 12;
-  repeated SshKey ssh_key_set = 13;
-  repeated Identity identity_set = 14;
+  repeated Host hostSet = 11;
+  repeated KnownHost knownHostSet = 12;
+  repeated SshKey sshKeySet = 13;
+  repeated Identity identitySet = 14;
 }
 
 // UpdateConfig
 message UpdateConfigRequest {
-  string group_id = 2;
+  string groupId = 2;
   oneof data {
     Host host = 11;
-    KnownHost known_host = 12;
-    SshKey ssh_key = 13;
+    KnownHost knownHost = 12;
+    SshKey sshKey = 13;
     Identity identity = 14;
   }
 }
@@ -80,18 +80,18 @@ message UpdateConfigRequest {
 message UpdateConfigResponse {
   oneof data { // 返回更新数据的服务端版本，因为新建的数据会加上ID和时间
     Host host = 11;
-    KnownHost known_host = 12;
-    SshKey ssh_key = 13;
+    KnownHost knownHost = 12;
+    SshKey sshKey = 13;
     Identity identity = 14;
   }
 }
 
 // UpdateGroupKeyChain
 message UpdateGroupKeyChainRequest{
-  string group_id = 1;
+  string groupId = 1;
   string publicKey = 2;
   string encryptedGroupPrivateKey = 3;
-  repeated UserKeyWallet user_key_wallet = 4;
+  repeated UserKeyWallet userKeyWallet = 4;
 }
 
 message UpdateGroupKeyChainResponse{}
@@ -109,7 +109,7 @@ message SyncGroupRequest {
 }
 
 message SyncGroupResponse {
-  google.protobuf.Timestamp server_time = 1;
+  google.protobuf.Timestamp serverTime = 1;
   repeated Group groups = 11;
 }
 
@@ -119,30 +119,30 @@ message SyncUserKeyWalletRequest {
 }
 
 message SyncUserKeyWalletResponse {
-  google.protobuf.Timestamp server_time = 1; // 当前服务器时间，用于给客户端下一次拉取变动时做一个参照，避免因客户端时间偏差导致同步混乱
+  google.protobuf.Timestamp serverTime = 1; // 当前服务器时间，用于给客户端下一次拉取变动时做一个参照，避免因客户端时间偏差导致同步混乱
   string publicKey = 2;
   string encryptedPrivateKey = 3;
-  repeated UserKeyWallet user_key_wallet_set = 4;
+  repeated UserKeyWallet userKeyWalletSet = 4;
 }
 
 // UpdateUserKeyWallet
 message UpdateUserKeyWalletRequest {
   string publicKey = 1;
   string encryptedPrivateKey = 2;
-  repeated UserKeyWallet user_key_wallet_set = 4;
+  repeated UserKeyWallet userKeyWalletSet = 4;
 }
 
 message UpdateUserKeyWalletResponse {
   string publicKey = 1;
   string encryptedPrivateKey = 2;
-  repeated UserKeyWallet user_key_wallet_set = 4;
+  repeated UserKeyWallet userKeyWalletSet = 4;
 }
 
 message UserKeyWallet {
   string uid = 1;
   string gid = 2;
   string encryptedGroupPrivateKey = 3;
-  google.protobuf.Timestamp created_at = 4;
-  google.protobuf.Timestamp updated_at = 5;
-  google.protobuf.Timestamp deleted_at = 6;
+  google.protobuf.Timestamp createdAt = 4;
+  google.protobuf.Timestamp updatedAt = 5;
+  google.protobuf.Timestamp deletedAt = 6;
 }

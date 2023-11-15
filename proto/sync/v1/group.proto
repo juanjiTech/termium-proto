@@ -6,15 +6,15 @@ import "google/protobuf/timestamp.proto";
 option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/sync/v1;syncV1";
 
 message Group {
-    GroupBasic group_basic = 1;
-    repeated GroupKeyChain group_keychain = 2;
+    GroupBasic groupBasic = 1;
+    repeated GroupKeyChain groupKeychain = 2;
 }
 
 message GroupBasic {
     string id = 1;
-    google.protobuf.Timestamp created_at = 2;
-    google.protobuf.Timestamp updated_at = 3;
-    google.protobuf.Timestamp deleted_at = 4;
+    google.protobuf.Timestamp createdAt = 2;
+    google.protobuf.Timestamp updatedAt = 3;
+    google.protobuf.Timestamp deletedAt = 4;
     string name = 5;
     string description = 6;
     string avatar = 7;
@@ -23,6 +23,6 @@ message GroupBasic {
 }
 
 message GroupKeyChain{
-    string member_id = 11;
+    string memberId = 11;
     string privateKey = 12;
 }

@@ -189,7 +189,7 @@ message GetMFAStatusResponse {
 }
 
 message TOTPStatus {
-  bool is_active = 1;
+  bool isActive = 1;
 }
 
 message EmailStatus {
@@ -251,7 +251,7 @@ message SendCodeEmailMFAResponse{}
 
 message CheckEmailMFARequest {
   string email = 1;
-  string verification_code = 2;
+  string verificationCode = 2;
 }
 message CheckEmailMFAResponse {}
 
