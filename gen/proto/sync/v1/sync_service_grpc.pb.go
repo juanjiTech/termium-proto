@@ -21,11 +21,13 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	SyncService_SyncConfig_FullMethodName          = "/sync.v1.SyncService/SyncConfig"
 	SyncService_UpdateConfig_FullMethodName        = "/sync.v1.SyncService/UpdateConfig"
-	SyncService_UpdateGroupKeyChain_FullMethodName = "/sync.v1.SyncService/UpdateGroupKeyChain"
 	SyncService_UpdateGroup_FullMethodName         = "/sync.v1.SyncService/UpdateGroup"
 	SyncService_SyncGroup_FullMethodName           = "/sync.v1.SyncService/SyncGroup"
 	SyncService_SyncUserKeyWallet_FullMethodName   = "/sync.v1.SyncService/SyncUserKeyWallet"
 	SyncService_UpdateUserKeyWallet_FullMethodName = "/sync.v1.SyncService/UpdateUserKeyWallet"
+	SyncService_GroupInviteUser_FullMethodName     = "/sync.v1.SyncService/GroupInviteUser"
+	SyncService_GroupInviteAccept_FullMethodName   = "/sync.v1.SyncService/GroupInviteAccept"
+	SyncService_GroupDeleteUser_FullMethodName     = "/sync.v1.SyncService/GroupDeleteUser"
 )
 
 // SyncServiceClient is the client API for SyncService service.
@@ -36,8 +38,6 @@ type SyncServiceClient interface {
 	SyncConfig(ctx context.Context, in *SyncConfigRequest, opts ...grpc.CallOption) (*SyncConfigResponse, error)
 	// 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。这里只负责配置内容修改。
 	UpdateConfig(ctx context.Context, in *UpdateConfigRequest, opts ...grpc.CallOption) (*UpdateConfigResponse, error)
-	// 组的所有者修改组的密钥链
-	UpdateGroupKeyChain(ctx context.Context, in *UpdateGroupKeyChainRequest, opts ...grpc.CallOption) (*UpdateGroupKeyChainResponse, error)
 	// 更新组信息,如果服务端密钥为空不允许修改，请先去创建密钥链。
 	UpdateGroup(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*UpdateGroupResponse, error)
 	// 通过UID获取所有组信息
@@ -46,6 +46,12 @@ type SyncServiceClient interface {
 	SyncUserKeyWallet(ctx context.Context, in *SyncUserKeyWalletRequest, opts ...grpc.CallOption) (*SyncUserKeyWalletResponse, error)
 	// 修改用户密钥对，修改的时候所有相关组的加密密钥均要替换
 	UpdateUserKeyWallet(ctx context.Context, in *UpdateUserKeyWalletRequest, opts ...grpc.CallOption) (*UpdateUserKeyWalletResponse, error)
+	// 邀请用户加入，加密的密钥由邀请者那边去取被邀请者的公钥加密后存储
+	GroupInviteUser(ctx context.Context, in *GroupInviteUserRequest, opts ...grpc.CallOption) (*GroupInviteUserResponse, error)
+	// 邀请用户加入
+	GroupInviteAccept(ctx context.Context, in *GroupInviteAcceptRequest, opts ...grpc.CallOption) (*GroupInviteAcceptResponse, error)
+	// 删除用户
+	GroupDeleteUser(ctx context.Context, in *GroupDeleteUserRequest, opts ...grpc.CallOption) (*GroupDeleteUserResponse, error)
 }
 
 type syncServiceClient struct {
@@ -68,15 +74,6 @@ func (c *syncServiceClient) SyncConfig(ctx context.Context, in *SyncConfigReques
 func (c *syncServiceClient) UpdateConfig(ctx context.Context, in *UpdateConfigRequest, opts ...grpc.CallOption) (*UpdateConfigResponse, error) {
 	out := new(UpdateConfigResponse)
 	err := c.cc.Invoke(ctx, SyncService_UpdateConfig_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *syncServiceClient) UpdateGroupKeyChain(ctx context.Context, in *UpdateGroupKeyChainRequest, opts ...grpc.CallOption) (*UpdateGroupKeyChainResponse, error) {
-	out := new(UpdateGroupKeyChainResponse)
-	err := c.cc.Invoke(ctx, SyncService_UpdateGroupKeyChain_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -119,6 +116,33 @@ func (c *syncServiceClient) UpdateUserKeyWallet(ctx context.Context, in *UpdateU
 	return out, nil
 }
 
+func (c *syncServiceClient) GroupInviteUser(ctx context.Context, in *GroupInviteUserRequest, opts ...grpc.CallOption) (*GroupInviteUserResponse, error) {
+	out := new(GroupInviteUserResponse)
+	err := c.cc.Invoke(ctx, SyncService_GroupInviteUser_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *syncServiceClient) GroupInviteAccept(ctx context.Context, in *GroupInviteAcceptRequest, opts ...grpc.CallOption) (*GroupInviteAcceptResponse, error) {
+	out := new(GroupInviteAcceptResponse)
+	err := c.cc.Invoke(ctx, SyncService_GroupInviteAccept_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *syncServiceClient) GroupDeleteUser(ctx context.Context, in *GroupDeleteUserRequest, opts ...grpc.CallOption) (*GroupDeleteUserResponse, error) {
+	out := new(GroupDeleteUserResponse)
+	err := c.cc.Invoke(ctx, SyncService_GroupDeleteUser_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SyncServiceServer is the server API for SyncService service.
 // All implementations must embed UnimplementedSyncServiceServer
 // for forward compatibility
@@ -127,8 +151,6 @@ type SyncServiceServer interface {
 	SyncConfig(context.Context, *SyncConfigRequest) (*SyncConfigResponse, error)
 	// 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。这里只负责配置内容修改。
 	UpdateConfig(context.Context, *UpdateConfigRequest) (*UpdateConfigResponse, error)
-	// 组的所有者修改组的密钥链
-	UpdateGroupKeyChain(context.Context, *UpdateGroupKeyChainRequest) (*UpdateGroupKeyChainResponse, error)
 	// 更新组信息,如果服务端密钥为空不允许修改，请先去创建密钥链。
 	UpdateGroup(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error)
 	// 通过UID获取所有组信息
@@ -137,6 +159,12 @@ type SyncServiceServer interface {
 	SyncUserKeyWallet(context.Context, *SyncUserKeyWalletRequest) (*SyncUserKeyWalletResponse, error)
 	// 修改用户密钥对，修改的时候所有相关组的加密密钥均要替换
 	UpdateUserKeyWallet(context.Context, *UpdateUserKeyWalletRequest) (*UpdateUserKeyWalletResponse, error)
+	// 邀请用户加入，加密的密钥由邀请者那边去取被邀请者的公钥加密后存储
+	GroupInviteUser(context.Context, *GroupInviteUserRequest) (*GroupInviteUserResponse, error)
+	// 邀请用户加入
+	GroupInviteAccept(context.Context, *GroupInviteAcceptRequest) (*GroupInviteAcceptResponse, error)
+	// 删除用户
+	GroupDeleteUser(context.Context, *GroupDeleteUserRequest) (*GroupDeleteUserResponse, error)
 	mustEmbedUnimplementedSyncServiceServer()
 }
 
@@ -150,9 +178,6 @@ func (UnimplementedSyncServiceServer) SyncConfig(context.Context, *SyncConfigReq
 func (UnimplementedSyncServiceServer) UpdateConfig(context.Context, *UpdateConfigRequest) (*UpdateConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateConfig not implemented")
 }
-func (UnimplementedSyncServiceServer) UpdateGroupKeyChain(context.Context, *UpdateGroupKeyChainRequest) (*UpdateGroupKeyChainResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateGroupKeyChain not implemented")
-}
 func (UnimplementedSyncServiceServer) UpdateGroup(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateGroup not implemented")
 }
@@ -164,6 +189,15 @@ func (UnimplementedSyncServiceServer) SyncUserKeyWallet(context.Context, *SyncUs
 }
 func (UnimplementedSyncServiceServer) UpdateUserKeyWallet(context.Context, *UpdateUserKeyWalletRequest) (*UpdateUserKeyWalletResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserKeyWallet not implemented")
+}
+func (UnimplementedSyncServiceServer) GroupInviteUser(context.Context, *GroupInviteUserRequest) (*GroupInviteUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GroupInviteUser not implemented")
+}
+func (UnimplementedSyncServiceServer) GroupInviteAccept(context.Context, *GroupInviteAcceptRequest) (*GroupInviteAcceptResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GroupInviteAccept not implemented")
+}
+func (UnimplementedSyncServiceServer) GroupDeleteUser(context.Context, *GroupDeleteUserRequest) (*GroupDeleteUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GroupDeleteUser not implemented")
 }
 func (UnimplementedSyncServiceServer) mustEmbedUnimplementedSyncServiceServer() {}
 
@@ -210,24 +244,6 @@ func _SyncService_UpdateConfig_Handler(srv interface{}, ctx context.Context, dec
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SyncServiceServer).UpdateConfig(ctx, req.(*UpdateConfigRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _SyncService_UpdateGroupKeyChain_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateGroupKeyChainRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SyncServiceServer).UpdateGroupKeyChain(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: SyncService_UpdateGroupKeyChain_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SyncServiceServer).UpdateGroupKeyChain(ctx, req.(*UpdateGroupKeyChainRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -304,6 +320,60 @@ func _SyncService_UpdateUserKeyWallet_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SyncService_GroupInviteUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GroupInviteUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SyncServiceServer).GroupInviteUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SyncService_GroupInviteUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SyncServiceServer).GroupInviteUser(ctx, req.(*GroupInviteUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SyncService_GroupInviteAccept_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GroupInviteAcceptRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SyncServiceServer).GroupInviteAccept(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SyncService_GroupInviteAccept_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SyncServiceServer).GroupInviteAccept(ctx, req.(*GroupInviteAcceptRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SyncService_GroupDeleteUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GroupDeleteUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SyncServiceServer).GroupDeleteUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SyncService_GroupDeleteUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SyncServiceServer).GroupDeleteUser(ctx, req.(*GroupDeleteUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SyncService_ServiceDesc is the grpc.ServiceDesc for SyncService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -320,10 +390,6 @@ var SyncService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SyncService_UpdateConfig_Handler,
 		},
 		{
-			MethodName: "UpdateGroupKeyChain",
-			Handler:    _SyncService_UpdateGroupKeyChain_Handler,
-		},
-		{
 			MethodName: "UpdateGroup",
 			Handler:    _SyncService_UpdateGroup_Handler,
 		},
@@ -338,6 +404,18 @@ var SyncService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateUserKeyWallet",
 			Handler:    _SyncService_UpdateUserKeyWallet_Handler,
+		},
+		{
+			MethodName: "GroupInviteUser",
+			Handler:    _SyncService_GroupInviteUser_Handler,
+		},
+		{
+			MethodName: "GroupInviteAccept",
+			Handler:    _SyncService_GroupInviteAccept_Handler,
+		},
+		{
+			MethodName: "GroupDeleteUser",
+			Handler:    _SyncService_GroupDeleteUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

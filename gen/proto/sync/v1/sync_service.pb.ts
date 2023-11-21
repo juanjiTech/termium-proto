@@ -47,16 +47,6 @@ type BaseUpdateConfigResponse = {
 export type UpdateConfigResponse = BaseUpdateConfigResponse
   & OneOf<{ host: SyncV1Host.Host; knownHost: SyncV1Known_hosts.KnownHost; sshKey: SyncV1Keychain.SshKey; identity: SyncV1Keychain.Identity }>
 
-export type UpdateGroupKeyChainRequest = {
-  groupId?: string
-  publicKey?: string
-  encryptedGroupPrivateKey?: string
-  userKeyWallet?: UserKeyWallet[]
-}
-
-export type UpdateGroupKeyChainResponse = {
-}
-
 export type UpdateGroupRequest = {
   group?: SyncV1Group.Group
 }
@@ -105,15 +95,37 @@ export type UserKeyWallet = {
   deletedAt?: GoogleProtobufTimestamp.Timestamp
 }
 
+export type GroupInviteUserRequest = {
+  gid?: string
+  inviteeUid?: string
+  encryptedGroupPrivateKey?: string
+}
+
+export type GroupInviteUserResponse = {
+}
+
+export type GroupInviteAcceptRequest = {
+  gid?: string
+  isAccept?: boolean
+}
+
+export type GroupInviteAcceptResponse = {
+}
+
+export type GroupDeleteUserRequest = {
+  userDeletedUid?: string
+  gid?: string
+}
+
+export type GroupDeleteUserResponse = {
+}
+
 export class SyncService {
   static SyncConfig(req: SyncConfigRequest, initReq?: fm.InitReq): Promise<SyncConfigResponse> {
     return fm.fetchReq<SyncConfigRequest, SyncConfigResponse>(`/gapi/sync/v1/sync_config?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
   }
   static UpdateConfig(req: UpdateConfigRequest, initReq?: fm.InitReq): Promise<UpdateConfigResponse> {
     return fm.fetchReq<UpdateConfigRequest, UpdateConfigResponse>(`/gapi/sync/v1/update_config`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
-  }
-  static UpdateGroupKeyChain(req: UpdateGroupKeyChainRequest, initReq?: fm.InitReq): Promise<UpdateGroupKeyChainResponse> {
-    return fm.fetchReq<UpdateGroupKeyChainRequest, UpdateGroupKeyChainResponse>(`/gapi/sync/v1/update_group_key_chain`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
   static UpdateGroup(req: UpdateGroupRequest, initReq?: fm.InitReq): Promise<UpdateGroupResponse> {
     return fm.fetchReq<UpdateGroupRequest, UpdateGroupResponse>(`/gapi/sync/v1/update_group`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
@@ -126,5 +138,14 @@ export class SyncService {
   }
   static UpdateUserKeyWallet(req: UpdateUserKeyWalletRequest, initReq?: fm.InitReq): Promise<UpdateUserKeyWalletResponse> {
     return fm.fetchReq<UpdateUserKeyWalletRequest, UpdateUserKeyWalletResponse>(`/gapi/sync/v1/update_user_key_wallet`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  }
+  static GroupInviteUser(req: GroupInviteUserRequest, initReq?: fm.InitReq): Promise<GroupInviteUserResponse> {
+    return fm.fetchReq<GroupInviteUserRequest, GroupInviteUserResponse>(`/gapi/sync/v1/group_invite_user`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  }
+  static GroupInviteAccept(req: GroupInviteAcceptRequest, initReq?: fm.InitReq): Promise<GroupInviteAcceptResponse> {
+    return fm.fetchReq<GroupInviteAcceptRequest, GroupInviteAcceptResponse>(`/gapi/sync/v1/group_invite_accept`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  }
+  static GroupDeleteUser(req: GroupDeleteUserRequest, initReq?: fm.InitReq): Promise<GroupDeleteUserResponse> {
+    return fm.fetchReq<GroupDeleteUserRequest, GroupDeleteUserResponse>(`/gapi/sync/v1/group_delete_user`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
 }

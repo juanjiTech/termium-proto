@@ -22,13 +22,6 @@ service SyncService {
       body: "*"
     };
   }
-  // 组的所有者修改组的密钥链
-  rpc UpdateGroupKeyChain(UpdateGroupKeyChainRequest) returns (UpdateGroupKeyChainResponse) {
-    option (google.api.http) = {
-      post:"/gapi/sync/v1/update_group_key_chain"
-      body: "*"
-    };
-  }
   // 更新组信息,如果服务端密钥为空不允许修改，请先去创建密钥链。
   rpc UpdateGroup(UpdateGroupRequest) returns (UpdateGroupResponse) {
     option (google.api.http) = {
@@ -48,6 +41,27 @@ service SyncService {
   rpc UpdateUserKeyWallet(UpdateUserKeyWalletRequest) returns (UpdateUserKeyWalletResponse) {
     option (google.api.http) = {
       post:"/gapi/sync/v1/update_user_key_wallet"
+      body: "*"
+    };
+  }
+  // 邀请用户加入，加密的密钥由邀请者那边去取被邀请者的公钥加密后存储
+  rpc GroupInviteUser(GroupInviteUserRequest) returns (GroupInviteUserResponse){
+    option (google.api.http) = {
+      post:"/gapi/sync/v1/group_invite_user"
+      body: "*"
+    };
+  }
+  // 邀请用户加入
+  rpc GroupInviteAccept(GroupInviteAcceptRequest) returns (GroupInviteAcceptResponse){
+    option (google.api.http) = {
+      post:"/gapi/sync/v1/group_invite_accept"
+      body: "*"
+    };
+  }
+  // 删除用户
+  rpc GroupDeleteUser(GroupDeleteUserRequest) returns (GroupDeleteUserResponse){
+    option (google.api.http) = {
+      post:"/gapi/sync/v1/group_delete_user"
       body: "*"
     };
   }
@@ -85,16 +99,6 @@ message UpdateConfigResponse {
     Identity identity = 14;
   }
 }
-
-// UpdateGroupKeyChain
-message UpdateGroupKeyChainRequest{
-  string groupId = 1;
-  string publicKey = 2;
-  string encryptedGroupPrivateKey = 3;
-  repeated UserKeyWallet userKeyWallet = 4;
-}
-
-message UpdateGroupKeyChainResponse{}
 
 // UpdateGroup
 message UpdateGroupRequest {
@@ -146,3 +150,28 @@ message UserKeyWallet {
   google.protobuf.Timestamp updatedAt = 5;
   google.protobuf.Timestamp deletedAt = 6;
 }
+
+// GroupInviteUser
+message GroupInviteUserRequest {
+  string gid = 1;
+  string inviteeUid = 2;
+  string encryptedGroupPrivateKey = 4;
+}
+
+message GroupInviteUserResponse{}
+
+// GroupInviteAccept
+message GroupInviteAcceptRequest {
+  string gid = 1;
+  bool isAccept = 2;
+}
+
+message GroupInviteAcceptResponse {}
+
+// GroupDeleteUser
+message GroupDeleteUserRequest {
+  string userDeletedUid = 1;
+  string gid = 2;
+}
+
+message GroupDeleteUserResponse {}

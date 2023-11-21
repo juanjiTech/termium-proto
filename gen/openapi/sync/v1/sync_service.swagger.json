@@ -16,6 +16,105 @@
     "application/json"
   ],
   "paths": {
+    "/gapi/sync/v1/group_delete_user": {
+      "post": {
+        "summary": "删除用户",
+        "operationId": "SyncService_GroupDeleteUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GroupDeleteUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GroupDeleteUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "SyncService"
+        ]
+      }
+    },
+    "/gapi/sync/v1/group_invite_accept": {
+      "post": {
+        "summary": "邀请用户加入",
+        "operationId": "SyncService_GroupInviteAccept",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GroupInviteAcceptResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GroupInviteAcceptRequest"
+            }
+          }
+        ],
+        "tags": [
+          "SyncService"
+        ]
+      }
+    },
+    "/gapi/sync/v1/group_invite_user": {
+      "post": {
+        "summary": "邀请用户加入，加密的密钥由邀请者那边去取被邀请者的公钥加密后存储",
+        "operationId": "SyncService_GroupInviteUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GroupInviteUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GroupInviteUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "SyncService"
+        ]
+      }
+    },
     "/gapi/sync/v1/sync_config": {
       "get": {
         "summary": "拉取指定时间点之后的配置变动信息",
@@ -186,39 +285,6 @@
         ]
       }
     },
-    "/gapi/sync/v1/update_group_key_chain": {
-      "post": {
-        "summary": "组的所有者修改组的密钥链",
-        "operationId": "SyncService_UpdateGroupKeyChain",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1UpdateGroupKeyChainResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1UpdateGroupKeyChainRequest"
-            }
-          }
-        ],
-        "tags": [
-          "SyncService"
-        ]
-      }
-    },
     "/gapi/sync/v1/update_user_key_wallet": {
       "post": {
         "summary": "修改用户密钥对，修改的时候所有相关组的加密密钥均要替换",
@@ -333,6 +399,54 @@
           "title": "公钥,公钥存在服务器上，加密的私钥与相关用户关联存储"
         }
       }
+    },
+    "v1GroupDeleteUserRequest": {
+      "type": "object",
+      "properties": {
+        "userDeletedUid": {
+          "type": "string"
+        },
+        "gid": {
+          "type": "string"
+        }
+      },
+      "title": "GroupDeleteUser"
+    },
+    "v1GroupDeleteUserResponse": {
+      "type": "object"
+    },
+    "v1GroupInviteAcceptRequest": {
+      "type": "object",
+      "properties": {
+        "gid": {
+          "type": "string"
+        },
+        "isAccept": {
+          "type": "boolean"
+        }
+      },
+      "title": "GroupInviteAccept"
+    },
+    "v1GroupInviteAcceptResponse": {
+      "type": "object"
+    },
+    "v1GroupInviteUserRequest": {
+      "type": "object",
+      "properties": {
+        "gid": {
+          "type": "string"
+        },
+        "inviteeUid": {
+          "type": "string"
+        },
+        "encryptedGroupPrivateKey": {
+          "type": "string"
+        }
+      },
+      "title": "GroupInviteUser"
+    },
+    "v1GroupInviteUserResponse": {
+      "type": "object"
     },
     "v1GroupKeyChain": {
       "type": "object",
@@ -633,31 +747,6 @@
           "$ref": "#/definitions/v1Identity"
         }
       }
-    },
-    "v1UpdateGroupKeyChainRequest": {
-      "type": "object",
-      "properties": {
-        "groupId": {
-          "type": "string"
-        },
-        "publicKey": {
-          "type": "string"
-        },
-        "encryptedGroupPrivateKey": {
-          "type": "string"
-        },
-        "userKeyWallet": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1UserKeyWallet"
-          }
-        }
-      },
-      "title": "UpdateGroupKeyChain"
-    },
-    "v1UpdateGroupKeyChainResponse": {
-      "type": "object"
     },
     "v1UpdateGroupRequest": {
       "type": "object",
