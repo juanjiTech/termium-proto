@@ -109,6 +109,39 @@
         ]
       }
     },
+    "/gapi/team/v1/team/member/accept": {
+      "post": {
+        "summary": "接受邀请加入团队",
+        "operationId": "TeamService_AcceptInvite",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AcceptInviteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AcceptInviteRequest"
+            }
+          }
+        ],
+        "tags": [
+          "TeamService"
+        ]
+      }
+    },
     "/gapi/team/v1/team/member/invite": {
       "post": {
         "summary": "邀请成员加入团队",
@@ -237,6 +270,17 @@
           }
         }
       }
+    },
+    "v1AcceptInviteRequest": {
+      "type": "object",
+      "properties": {
+        "inviteId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1AcceptInviteResponse": {
+      "type": "object"
     },
     "v1CreateTeamRequest": {
       "type": "object",

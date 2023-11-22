@@ -54,6 +54,13 @@ export type RemoveMemberRequest = {
 export type RemoveMemberResponse = {
 }
 
+export type AcceptInviteRequest = {
+  inviteId?: string
+}
+
+export type AcceptInviteResponse = {
+}
+
 export class TeamService {
   static GetTeam(req: GetTeamRequest, initReq?: fm.InitReq): Promise<GetTeamResponse> {
     return fm.fetchReq<GetTeamRequest, GetTeamResponse>(`/gapi/team/v1/team?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
@@ -72,5 +79,8 @@ export class TeamService {
   }
   static RemoveMember(req: RemoveMemberRequest, initReq?: fm.InitReq): Promise<RemoveMemberResponse> {
     return fm.fetchReq<RemoveMemberRequest, RemoveMemberResponse>(`/gapi/team/v1/team/member/remove`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  }
+  static AcceptInvite(req: AcceptInviteRequest, initReq?: fm.InitReq): Promise<AcceptInviteResponse> {
+    return fm.fetchReq<AcceptInviteRequest, AcceptInviteResponse>(`/gapi/team/v1/team/member/accept`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
 }

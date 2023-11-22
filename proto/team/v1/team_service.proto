@@ -48,6 +48,13 @@ service TeamService {
       body: "*"
     };
   }
+  // 接受邀请加入团队
+  rpc AcceptInvite(AcceptInviteRequest) returns (AcceptInviteResponse) {
+    option (google.api.http) = {
+      post: "/gapi/team/v1/team/member/accept"
+      body: "*"
+    };
+  }
 }
 
 message GetTeamRequest {
@@ -95,3 +102,8 @@ message RemoveMemberRequest {
 
 message RemoveMemberResponse {}
 
+message AcceptInviteRequest {
+  string inviteId = 1;
+}
+
+message AcceptInviteResponse {}
