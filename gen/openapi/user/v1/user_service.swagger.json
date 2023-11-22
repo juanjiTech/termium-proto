@@ -222,10 +222,6 @@
         "avatar": {
           "type": "string",
           "title": "头像链接"
-        },
-        "email": {
-          "type": "string",
-          "title": "邮箱"
         }
       }
     },

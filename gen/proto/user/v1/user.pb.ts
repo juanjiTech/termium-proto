@@ -16,5 +16,4 @@ export type User = {
   nickName?: string
   status?: UserStatus
   avatar?: string
-  email?: string
 }
