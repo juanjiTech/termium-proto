@@ -15,7 +15,12 @@ export type GetTeamResponse = {
 }
 
 export type CreateTeamRequest = {
-  team?: TeamV1Team.Team
+  name?: string
+  description?: string
+  avatar?: string
+  uid?: string
+  publicKey?: string
+  encryptedPrivateKey?: string
 }
 
 export type CreateTeamResponse = {

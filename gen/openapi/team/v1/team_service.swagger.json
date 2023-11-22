@@ -285,8 +285,26 @@
     "v1CreateTeamRequest": {
       "type": "object",
       "properties": {
-        "team": {
-          "$ref": "#/definitions/v1Team"
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "uid": {
+          "type": "string",
+          "title": "创建者"
+        },
+        "publicKey": {
+          "type": "string",
+          "title": "公钥，公钥存在服务器上，加密的私钥与相关用户关联存储"
+        },
+        "encryptedPrivateKey": {
+          "type": "string",
+          "title": "创建者拥有的使用创建者公钥加密后的私钥"
         }
       }
     },
