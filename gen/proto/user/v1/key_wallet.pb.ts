@@ -7,7 +7,7 @@
 import * as GoogleProtobufTimestamp from "../../google/protobuf/timestamp.pb"
 export type UserKeyWallet = {
   uid?: string
-  gid?: string
+  tid?: string
   encryptedTeamPrivateKey?: string
   createdAt?: GoogleProtobufTimestamp.Timestamp
   updatedAt?: GoogleProtobufTimestamp.Timestamp

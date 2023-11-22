@@ -7,8 +7,8 @@
 import * as fm from "../../fetch.pb"
 import * as GoogleProtobufTimestamp from "../../google/protobuf/timestamp.pb"
 import * as TeamV1Team from "../../team/v1/team.pb"
+import * as UserV1Key_wallet from "../../user/v1/key_wallet.pb"
 import * as SyncV1Host from "./host.pb"
-import * as SyncV1Key_wallet from "./key_wallet.pb"
 import * as SyncV1Keychain from "./keychain.pb"
 import * as SyncV1Known_hosts from "./known_hosts.pb"
 
@@ -65,19 +65,19 @@ export type SyncUserKeyWalletResponse = {
   serverTime?: GoogleProtobufTimestamp.Timestamp
   publicKey?: string
   encryptedPrivateKey?: string
-  userKeyWalletSet?: SyncV1Key_wallet.UserKeyWallet[]
+  userKeyWalletSet?: UserV1Key_wallet.UserKeyWallet[]
 }
 
 export type UpdateUserKeyWalletRequest = {
   publicKey?: string
   encryptedPrivateKey?: string
-  userKeyWalletSet?: SyncV1Key_wallet.UserKeyWallet[]
+  userKeyWalletSet?: UserV1Key_wallet.UserKeyWallet[]
 }
 
 export type UpdateUserKeyWalletResponse = {
   publicKey?: string
   encryptedPrivateKey?: string
-  userKeyWalletSet?: SyncV1Key_wallet.UserKeyWallet[]
+  userKeyWalletSet?: UserV1Key_wallet.UserKeyWallet[]
 }
 
 export class SyncService {

@@ -1,13 +1,13 @@
 syntax = "proto3";
-package sync.v1;
+package user.v1;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/sync/v1;syncV1";
+option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/user/v1;userV1";
 
 message UserKeyWallet {
   string uid = 1;
-  string gid = 2;
+  string tid = 2;
   string encryptedTeamPrivateKey = 3;
   google.protobuf.Timestamp createdAt = 4;
   google.protobuf.Timestamp updatedAt = 5;

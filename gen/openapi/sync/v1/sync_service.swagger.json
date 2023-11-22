@@ -581,7 +581,7 @@
         "uid": {
           "type": "string"
         },
-        "gid": {
+        "tid": {
           "type": "string"
         },
         "encryptedTeamPrivateKey": {
