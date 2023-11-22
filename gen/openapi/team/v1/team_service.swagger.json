@@ -326,7 +326,7 @@
         "userId": {
           "type": "string"
         },
-        "encryptedGroupPrivateKey": {
+        "encryptedTeamPrivateKey": {
           "type": "string",
           "title": "使用受邀请用户的公钥加密后的团队私钥"
         }

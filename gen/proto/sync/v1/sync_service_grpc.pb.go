@@ -21,7 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	SyncService_SyncConfig_FullMethodName          = "/sync.v1.SyncService/SyncConfig"
 	SyncService_UpdateConfig_FullMethodName        = "/sync.v1.SyncService/UpdateConfig"
-	SyncService_SyncGroup_FullMethodName           = "/sync.v1.SyncService/SyncGroup"
+	SyncService_SyncTeam_FullMethodName            = "/sync.v1.SyncService/SyncTeam"
 	SyncService_SyncUserKeyWallet_FullMethodName   = "/sync.v1.SyncService/SyncUserKeyWallet"
 	SyncService_UpdateUserKeyWallet_FullMethodName = "/sync.v1.SyncService/UpdateUserKeyWallet"
 )
@@ -35,7 +35,7 @@ type SyncServiceClient interface {
 	// 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。这里只负责配置内容修改。
 	UpdateConfig(ctx context.Context, in *UpdateConfigRequest, opts ...grpc.CallOption) (*UpdateConfigResponse, error)
 	// 通过UID获取所有所在组变动信息
-	SyncGroup(ctx context.Context, in *SyncGroupRequest, opts ...grpc.CallOption) (*SyncGroupResponse, error)
+	SyncTeam(ctx context.Context, in *SyncTeamRequest, opts ...grpc.CallOption) (*SyncTeamResponse, error)
 	// 获取用户密钥对
 	SyncUserKeyWallet(ctx context.Context, in *SyncUserKeyWalletRequest, opts ...grpc.CallOption) (*SyncUserKeyWalletResponse, error)
 	// 修改用户密钥对，修改的时候所有相关组的加密密钥均要替换
@@ -68,9 +68,9 @@ func (c *syncServiceClient) UpdateConfig(ctx context.Context, in *UpdateConfigRe
 	return out, nil
 }
 
-func (c *syncServiceClient) SyncGroup(ctx context.Context, in *SyncGroupRequest, opts ...grpc.CallOption) (*SyncGroupResponse, error) {
-	out := new(SyncGroupResponse)
-	err := c.cc.Invoke(ctx, SyncService_SyncGroup_FullMethodName, in, out, opts...)
+func (c *syncServiceClient) SyncTeam(ctx context.Context, in *SyncTeamRequest, opts ...grpc.CallOption) (*SyncTeamResponse, error) {
+	out := new(SyncTeamResponse)
+	err := c.cc.Invoke(ctx, SyncService_SyncTeam_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +104,7 @@ type SyncServiceServer interface {
 	// 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。这里只负责配置内容修改。
 	UpdateConfig(context.Context, *UpdateConfigRequest) (*UpdateConfigResponse, error)
 	// 通过UID获取所有所在组变动信息
-	SyncGroup(context.Context, *SyncGroupRequest) (*SyncGroupResponse, error)
+	SyncTeam(context.Context, *SyncTeamRequest) (*SyncTeamResponse, error)
 	// 获取用户密钥对
 	SyncUserKeyWallet(context.Context, *SyncUserKeyWalletRequest) (*SyncUserKeyWalletResponse, error)
 	// 修改用户密钥对，修改的时候所有相关组的加密密钥均要替换
@@ -122,8 +122,8 @@ func (UnimplementedSyncServiceServer) SyncConfig(context.Context, *SyncConfigReq
 func (UnimplementedSyncServiceServer) UpdateConfig(context.Context, *UpdateConfigRequest) (*UpdateConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateConfig not implemented")
 }
-func (UnimplementedSyncServiceServer) SyncGroup(context.Context, *SyncGroupRequest) (*SyncGroupResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SyncGroup not implemented")
+func (UnimplementedSyncServiceServer) SyncTeam(context.Context, *SyncTeamRequest) (*SyncTeamResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SyncTeam not implemented")
 }
 func (UnimplementedSyncServiceServer) SyncUserKeyWallet(context.Context, *SyncUserKeyWalletRequest) (*SyncUserKeyWalletResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SyncUserKeyWallet not implemented")
@@ -180,20 +180,20 @@ func _SyncService_UpdateConfig_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SyncService_SyncGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SyncGroupRequest)
+func _SyncService_SyncTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SyncTeamRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SyncServiceServer).SyncGroup(ctx, in)
+		return srv.(SyncServiceServer).SyncTeam(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: SyncService_SyncGroup_FullMethodName,
+		FullMethod: SyncService_SyncTeam_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SyncServiceServer).SyncGroup(ctx, req.(*SyncGroupRequest))
+		return srv.(SyncServiceServer).SyncTeam(ctx, req.(*SyncTeamRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -250,8 +250,8 @@ var SyncService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SyncService_UpdateConfig_Handler,
 		},
 		{
-			MethodName: "SyncGroup",
-			Handler:    _SyncService_SyncGroup_Handler,
+			MethodName: "SyncTeam",
+			Handler:    _SyncService_SyncTeam_Handler,
 		},
 		{
 			MethodName: "SyncUserKeyWallet",

@@ -44,7 +44,7 @@
             "format": "date-time"
           },
           {
-            "name": "groupId",
+            "name": "teamId",
             "in": "query",
             "required": false,
             "type": "string"
@@ -79,38 +79,6 @@
             "schema": {
               "$ref": "#/definitions/v1UpdateConfigRequest"
             }
-          }
-        ],
-        "tags": [
-          "SyncService"
-        ]
-      }
-    },
-    "/gapi/sync/v1/group": {
-      "get": {
-        "summary": "通过UID获取所有所在组变动信息",
-        "operationId": "SyncService_SyncGroup",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1SyncGroupResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "after",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "date-time"
           }
         ],
         "tags": [
@@ -175,6 +143,38 @@
             "schema": {
               "$ref": "#/definitions/v1UpdateUserKeyWalletRequest"
             }
+          }
+        ],
+        "tags": [
+          "SyncService"
+        ]
+      }
+    },
+    "/gapi/sync/v1/team": {
+      "get": {
+        "summary": "通过UID获取所有所在组变动信息",
+        "operationId": "SyncService_SyncTeam",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SyncTeamResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "after",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
           }
         ],
         "tags": [
@@ -424,14 +424,14 @@
         }
       }
     },
-    "v1SyncGroupResponse": {
+    "v1SyncTeamResponse": {
       "type": "object",
       "properties": {
         "serverTime": {
           "type": "string",
           "format": "date-time"
         },
-        "groups": {
+        "teams": {
           "type": "array",
           "items": {
             "type": "object",
@@ -503,7 +503,7 @@
     "v1UpdateConfigRequest": {
       "type": "object",
       "properties": {
-        "groupId": {
+        "teamId": {
           "type": "string"
         },
         "host": {
@@ -584,7 +584,7 @@
         "gid": {
           "type": "string"
         },
-        "encryptedGroupPrivateKey": {
+        "encryptedTeamPrivateKey": {
           "type": "string"
         },
         "createdAt": {

@@ -40,7 +40,7 @@ export type DeleteTeamResponse = {
 export type InviteMemberRequest = {
   teamId?: string
   userId?: string
-  encryptedGroupPrivateKey?: string
+  encryptedTeamPrivateKey?: string
 }
 
 export type InviteMemberResponse = {

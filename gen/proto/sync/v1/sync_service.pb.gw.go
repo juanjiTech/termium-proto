@@ -102,37 +102,37 @@ func local_request_SyncService_UpdateConfig_0(ctx context.Context, marshaler run
 }
 
 var (
-	filter_SyncService_SyncGroup_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+	filter_SyncService_SyncTeam_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 )
 
-func request_SyncService_SyncGroup_0(ctx context.Context, marshaler runtime.Marshaler, client SyncServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq SyncGroupRequest
+func request_SyncService_SyncTeam_0(ctx context.Context, marshaler runtime.Marshaler, client SyncServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq SyncTeamRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SyncService_SyncGroup_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SyncService_SyncTeam_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := client.SyncGroup(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.SyncTeam(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_SyncService_SyncGroup_0(ctx context.Context, marshaler runtime.Marshaler, server SyncServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq SyncGroupRequest
+func local_request_SyncService_SyncTeam_0(ctx context.Context, marshaler runtime.Marshaler, server SyncServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq SyncTeamRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SyncService_SyncGroup_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SyncService_SyncTeam_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := server.SyncGroup(ctx, &protoReq)
+	msg, err := server.SyncTeam(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -263,7 +263,7 @@ func RegisterSyncServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 
 	})
 
-	mux.Handle("GET", pattern_SyncService_SyncGroup_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_SyncService_SyncTeam_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
@@ -271,12 +271,12 @@ func RegisterSyncServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/sync.v1.SyncService/SyncGroup", runtime.WithHTTPPathPattern("/gapi/sync/v1/group"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/sync.v1.SyncService/SyncTeam", runtime.WithHTTPPathPattern("/gapi/sync/v1/team"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_SyncService_SyncGroup_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_SyncService_SyncTeam_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
@@ -284,7 +284,7 @@ func RegisterSyncServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 			return
 		}
 
-		forward_SyncService_SyncGroup_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_SyncService_SyncTeam_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -423,25 +423,25 @@ func RegisterSyncServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 
 	})
 
-	mux.Handle("GET", pattern_SyncService_SyncGroup_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_SyncService_SyncTeam_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/sync.v1.SyncService/SyncGroup", runtime.WithHTTPPathPattern("/gapi/sync/v1/group"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/sync.v1.SyncService/SyncTeam", runtime.WithHTTPPathPattern("/gapi/sync/v1/team"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_SyncService_SyncGroup_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_SyncService_SyncTeam_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_SyncService_SyncGroup_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_SyncService_SyncTeam_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -497,7 +497,7 @@ var (
 
 	pattern_SyncService_UpdateConfig_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"gapi", "sync", "v1", "config"}, ""))
 
-	pattern_SyncService_SyncGroup_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"gapi", "sync", "v1", "group"}, ""))
+	pattern_SyncService_SyncTeam_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"gapi", "sync", "v1", "team"}, ""))
 
 	pattern_SyncService_SyncUserKeyWallet_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"gapi", "sync", "v1", "key_wallet"}, ""))
 
@@ -509,7 +509,7 @@ var (
 
 	forward_SyncService_UpdateConfig_0 = runtime.ForwardResponseMessage
 
-	forward_SyncService_SyncGroup_0 = runtime.ForwardResponseMessage
+	forward_SyncService_SyncTeam_0 = runtime.ForwardResponseMessage
 
 	forward_SyncService_SyncUserKeyWallet_0 = runtime.ForwardResponseMessage
 

@@ -90,7 +90,7 @@ message DeleteTeamResponse {}
 message InviteMemberRequest {
   string teamId = 1;
   string userId = 2;
-  string encryptedGroupPrivateKey = 3; // 使用受邀请用户的公钥加密后的团队私钥
+  string encryptedTeamPrivateKey = 3; // 使用受邀请用户的公钥加密后的团队私钥
 }
 
 message InviteMemberResponse {}

@@ -24,8 +24,8 @@ service SyncService {
     };
   }
   // 通过UID获取所有所在组变动信息
-  rpc SyncGroup(SyncGroupRequest) returns (SyncGroupResponse) {
-    option (google.api.http) = {get:"/gapi/sync/v1/group"};
+  rpc SyncTeam(SyncTeamRequest) returns (SyncTeamResponse) {
+    option (google.api.http) = {get:"/gapi/sync/v1/team"};
   }
   // 获取用户密钥对
   rpc SyncUserKeyWallet(SyncUserKeyWalletRequest) returns (SyncUserKeyWalletResponse) {
@@ -42,7 +42,7 @@ service SyncService {
 // SyncConfig
 message SyncConfigRequest {
   google.protobuf.Timestamp after = 1; // 获取该时间之后的设置变化，若不设置该字段，则拉取全量配置信息
-  string groupId = 2;
+  string teamId = 2;
 }
 
 message SyncConfigResponse {
@@ -55,7 +55,7 @@ message SyncConfigResponse {
 
 // UpdateConfig
 message UpdateConfigRequest {
-  string groupId = 2;
+  string teamId = 2;
   oneof data {
     Host host = 11;
     KnownHost knownHost = 12;
@@ -73,14 +73,14 @@ message UpdateConfigResponse {
   }
 }
 
-// SyncGroup
-message SyncGroupRequest {
+// SyncTeam
+message SyncTeamRequest {
   google.protobuf.Timestamp after = 1;
 }
 
-message SyncGroupResponse {
+message SyncTeamResponse {
   google.protobuf.Timestamp serverTime = 1;
-  repeated team.v1.Team groups = 11;
+  repeated team.v1.Team teams = 11;
 }
 
 // SyncUserKeyWallet

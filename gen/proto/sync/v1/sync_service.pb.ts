@@ -22,7 +22,7 @@ type OneOf<T> =
     : never);
 export type SyncConfigRequest = {
   after?: GoogleProtobufTimestamp.Timestamp
-  groupId?: string
+  teamId?: string
 }
 
 export type SyncConfigResponse = {
@@ -35,7 +35,7 @@ export type SyncConfigResponse = {
 
 
 type BaseUpdateConfigRequest = {
-  groupId?: string
+  teamId?: string
 }
 
 export type UpdateConfigRequest = BaseUpdateConfigRequest
@@ -48,13 +48,13 @@ type BaseUpdateConfigResponse = {
 export type UpdateConfigResponse = BaseUpdateConfigResponse
   & OneOf<{ host: SyncV1Host.Host; knownHost: SyncV1Known_hosts.KnownHost; sshKey: SyncV1Keychain.SshKey; identity: SyncV1Keychain.Identity }>
 
-export type SyncGroupRequest = {
+export type SyncTeamRequest = {
   after?: GoogleProtobufTimestamp.Timestamp
 }
 
-export type SyncGroupResponse = {
+export type SyncTeamResponse = {
   serverTime?: GoogleProtobufTimestamp.Timestamp
-  groups?: TeamV1Team.Team[]
+  teams?: TeamV1Team.Team[]
 }
 
 export type SyncUserKeyWalletRequest = {
@@ -87,8 +87,8 @@ export class SyncService {
   static UpdateConfig(req: UpdateConfigRequest, initReq?: fm.InitReq): Promise<UpdateConfigResponse> {
     return fm.fetchReq<UpdateConfigRequest, UpdateConfigResponse>(`/gapi/sync/v1/config`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
-  static SyncGroup(req: SyncGroupRequest, initReq?: fm.InitReq): Promise<SyncGroupResponse> {
-    return fm.fetchReq<SyncGroupRequest, SyncGroupResponse>(`/gapi/sync/v1/group?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
+  static SyncTeam(req: SyncTeamRequest, initReq?: fm.InitReq): Promise<SyncTeamResponse> {
+    return fm.fetchReq<SyncTeamRequest, SyncTeamResponse>(`/gapi/sync/v1/team?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
   }
   static SyncUserKeyWallet(req: SyncUserKeyWalletRequest, initReq?: fm.InitReq): Promise<SyncUserKeyWalletResponse> {
     return fm.fetchReq<SyncUserKeyWalletRequest, SyncUserKeyWalletResponse>(`/gapi/sync/v1/key_wallet?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
