@@ -1,0 +1,362 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "team/v1/team_service.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "TeamService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/gapi/team/v1/team": {
+      "get": {
+        "summary": "获取团队信息",
+        "operationId": "TeamService_GetTeam",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetTeamResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "TeamService"
+        ]
+      },
+      "post": {
+        "summary": "创建团队",
+        "operationId": "TeamService_CreateTeam",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateTeamResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateTeamRequest"
+            }
+          }
+        ],
+        "tags": [
+          "TeamService"
+        ]
+      },
+      "put": {
+        "summary": "更新团队信息",
+        "operationId": "TeamService_UpdateTeam",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateTeamResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateTeamRequest"
+            }
+          }
+        ],
+        "tags": [
+          "TeamService"
+        ]
+      }
+    },
+    "/gapi/team/v1/team/member/invite": {
+      "post": {
+        "summary": "邀请成员加入团队",
+        "operationId": "TeamService_InviteMember",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1InviteMemberResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1InviteMemberRequest"
+            }
+          }
+        ],
+        "tags": [
+          "TeamService"
+        ]
+      }
+    },
+    "/gapi/team/v1/team/member/remove": {
+      "post": {
+        "summary": "从团队中移除成员",
+        "operationId": "TeamService_RemoveMember",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RemoveMemberResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RemoveMemberRequest"
+            }
+          }
+        ],
+        "tags": [
+          "TeamService"
+        ]
+      }
+    },
+    "/gapi/team/v1/team/remove": {
+      "post": {
+        "summary": "删除团队",
+        "operationId": "TeamService_DeleteTeam",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteTeamResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1DeleteTeamRequest"
+            }
+          }
+        ],
+        "tags": [
+          "TeamService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1CreateTeamRequest": {
+      "type": "object",
+      "properties": {
+        "team": {
+          "$ref": "#/definitions/v1Team"
+        }
+      }
+    },
+    "v1CreateTeamResponse": {
+      "type": "object",
+      "properties": {
+        "team": {
+          "$ref": "#/definitions/v1Team"
+        }
+      }
+    },
+    "v1DeleteTeamRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "v1DeleteTeamResponse": {
+      "type": "object"
+    },
+    "v1GetTeamResponse": {
+      "type": "object",
+      "properties": {
+        "team": {
+          "$ref": "#/definitions/v1Team"
+        }
+      }
+    },
+    "v1InviteMemberRequest": {
+      "type": "object",
+      "properties": {
+        "teamId": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "encryptedGroupPrivateKey": {
+          "type": "string",
+          "title": "使用受邀请用户的公钥加密后的团队私钥"
+        }
+      }
+    },
+    "v1InviteMemberResponse": {
+      "type": "object"
+    },
+    "v1RemoveMemberRequest": {
+      "type": "object",
+      "properties": {
+        "teamId": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RemoveMemberResponse": {
+      "type": "object"
+    },
+    "v1Team": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deletedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "uid": {
+          "type": "string",
+          "title": "创建者"
+        },
+        "publicKey": {
+          "type": "string",
+          "title": "公钥，公钥存在服务器上，加密的私钥与相关用户关联存储"
+        }
+      }
+    },
+    "v1UpdateTeamRequest": {
+      "type": "object",
+      "properties": {
+        "team": {
+          "$ref": "#/definitions/v1Team"
+        }
+      }
+    },
+    "v1UpdateTeamResponse": {
+      "type": "object",
+      "properties": {
+        "team": {
+          "$ref": "#/definitions/v1Team"
+        }
+      }
+    }
+  }
+}

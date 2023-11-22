@@ -5,12 +5,7 @@
 */
 
 import * as GoogleProtobufTimestamp from "../../google/protobuf/timestamp.pb"
-export type Group = {
-  groupBasic?: GroupBasic
-  groupKeychain?: GroupKeyChain[]
-}
-
-export type GroupBasic = {
+export type Team = {
   id?: string
   createdAt?: GoogleProtobufTimestamp.Timestamp
   updatedAt?: GoogleProtobufTimestamp.Timestamp
@@ -20,9 +15,4 @@ export type GroupBasic = {
   avatar?: string
   uid?: string
   publicKey?: string
-}
-
-export type GroupKeyChain = {
-  memberId?: string
-  privateKey?: string
 }

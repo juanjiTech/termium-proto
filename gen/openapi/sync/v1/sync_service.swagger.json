@@ -16,106 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/gapi/sync/v1/group_delete_user": {
-      "post": {
-        "summary": "删除用户",
-        "operationId": "SyncService_GroupDeleteUser",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GroupDeleteUserResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GroupDeleteUserRequest"
-            }
-          }
-        ],
-        "tags": [
-          "SyncService"
-        ]
-      }
-    },
-    "/gapi/sync/v1/group_invite_accept": {
-      "post": {
-        "summary": "邀请用户加入",
-        "operationId": "SyncService_GroupInviteAccept",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GroupInviteAcceptResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GroupInviteAcceptRequest"
-            }
-          }
-        ],
-        "tags": [
-          "SyncService"
-        ]
-      }
-    },
-    "/gapi/sync/v1/group_invite_user": {
-      "post": {
-        "summary": "邀请用户加入，加密的密钥由邀请者那边去取被邀请者的公钥加密后存储",
-        "operationId": "SyncService_GroupInviteUser",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GroupInviteUserResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1GroupInviteUserRequest"
-            }
-          }
-        ],
-        "tags": [
-          "SyncService"
-        ]
-      }
-    },
-    "/gapi/sync/v1/sync_config": {
+    "/gapi/sync/v1/config": {
       "get": {
         "summary": "拉取指定时间点之后的配置变动信息",
         "operationId": "SyncService_SyncConfig",
@@ -152,74 +53,7 @@
         "tags": [
           "SyncService"
         ]
-      }
-    },
-    "/gapi/sync/v1/sync_group": {
-      "get": {
-        "summary": "通过UID获取所有组信息",
-        "operationId": "SyncService_SyncGroup",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1SyncGroupResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "after",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "date-time"
-          }
-        ],
-        "tags": [
-          "SyncService"
-        ]
-      }
-    },
-    "/gapi/sync/v1/sync_user_key_wallet": {
-      "get": {
-        "summary": "获取用户密钥对",
-        "operationId": "SyncService_SyncUserKeyWallet",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1SyncUserKeyWalletResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "after",
-            "description": "获取该时间之后的设置变化，若不设置该字段，则拉取全量配置信息",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "date-time"
-          }
-        ],
-        "tags": [
-          "SyncService"
-        ]
-      }
-    },
-    "/gapi/sync/v1/update_config": {
+      },
       "post": {
         "summary": "提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。这里只负责配置内容修改。",
         "operationId": "SyncService_UpdateConfig",
@@ -252,15 +86,15 @@
         ]
       }
     },
-    "/gapi/sync/v1/update_group": {
-      "post": {
-        "summary": "更新组信息,如果服务端密钥为空不允许修改，请先去创建密钥链。",
-        "operationId": "SyncService_UpdateGroup",
+    "/gapi/sync/v1/group": {
+      "get": {
+        "summary": "通过UID获取所有所在组变动信息",
+        "operationId": "SyncService_SyncGroup",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1UpdateGroupResponse"
+              "$ref": "#/definitions/v1SyncGroupResponse"
             }
           },
           "default": {
@@ -272,12 +106,11 @@
         },
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1UpdateGroupRequest"
-            }
+            "name": "after",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
           }
         ],
         "tags": [
@@ -285,7 +118,38 @@
         ]
       }
     },
-    "/gapi/sync/v1/update_user_key_wallet": {
+    "/gapi/sync/v1/key_wallet": {
+      "get": {
+        "summary": "获取用户密钥对",
+        "operationId": "SyncService_SyncUserKeyWallet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SyncUserKeyWalletResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "after",
+            "description": "获取该时间之后的设置变化，若不设置该字段，则拉取全量配置信息",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "tags": [
+          "SyncService"
+        ]
+      },
       "post": {
         "summary": "修改用户密钥对，修改的时候所有相关组的加密密钥均要替换",
         "operationId": "SyncService_UpdateUserKeyWallet",
@@ -345,117 +209,6 @@
             "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
-        }
-      }
-    },
-    "v1Group": {
-      "type": "object",
-      "properties": {
-        "groupBasic": {
-          "$ref": "#/definitions/v1GroupBasic"
-        },
-        "groupKeychain": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1GroupKeyChain"
-          }
-        }
-      }
-    },
-    "v1GroupBasic": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "deletedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "avatar": {
-          "type": "string"
-        },
-        "uid": {
-          "type": "string",
-          "title": "创建者"
-        },
-        "publicKey": {
-          "type": "string",
-          "title": "公钥,公钥存在服务器上，加密的私钥与相关用户关联存储"
-        }
-      }
-    },
-    "v1GroupDeleteUserRequest": {
-      "type": "object",
-      "properties": {
-        "userDeletedUid": {
-          "type": "string"
-        },
-        "gid": {
-          "type": "string"
-        }
-      },
-      "title": "GroupDeleteUser"
-    },
-    "v1GroupDeleteUserResponse": {
-      "type": "object"
-    },
-    "v1GroupInviteAcceptRequest": {
-      "type": "object",
-      "properties": {
-        "gid": {
-          "type": "string"
-        },
-        "isAccept": {
-          "type": "boolean"
-        }
-      },
-      "title": "GroupInviteAccept"
-    },
-    "v1GroupInviteAcceptResponse": {
-      "type": "object"
-    },
-    "v1GroupInviteUserRequest": {
-      "type": "object",
-      "properties": {
-        "gid": {
-          "type": "string"
-        },
-        "inviteeUid": {
-          "type": "string"
-        },
-        "encryptedGroupPrivateKey": {
-          "type": "string"
-        }
-      },
-      "title": "GroupInviteUser"
-    },
-    "v1GroupInviteUserResponse": {
-      "type": "object"
-    },
-    "v1GroupKeyChain": {
-      "type": "object",
-      "properties": {
-        "memberId": {
-          "type": "string"
-        },
-        "privateKey": {
-          "type": "string"
         }
       }
     },
@@ -682,7 +435,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/v1Group"
+            "$ref": "#/definitions/v1Team"
           }
         }
       }
@@ -707,6 +460,43 @@
             "type": "object",
             "$ref": "#/definitions/v1UserKeyWallet"
           }
+        }
+      }
+    },
+    "v1Team": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deletedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "uid": {
+          "type": "string",
+          "title": "创建者"
+        },
+        "publicKey": {
+          "type": "string",
+          "title": "公钥，公钥存在服务器上，加密的私钥与相关用户关联存储"
         }
       }
     },
@@ -747,18 +537,6 @@
           "$ref": "#/definitions/v1Identity"
         }
       }
-    },
-    "v1UpdateGroupRequest": {
-      "type": "object",
-      "properties": {
-        "group": {
-          "$ref": "#/definitions/v1Group"
-        }
-      },
-      "title": "UpdateGroup"
-    },
-    "v1UpdateGroupResponse": {
-      "type": "object"
     },
     "v1UpdateUserKeyWalletRequest": {
       "type": "object",

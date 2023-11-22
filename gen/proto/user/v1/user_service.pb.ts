@@ -28,6 +28,14 @@ export type CheckEmailVerifyCodeRequest = {
 export type CheckEmailVerifyCodeResponse = {
 }
 
+export type GetUserPublicKeyRequest = {
+  id?: string
+}
+
+export type GetUserPublicKeyResponse = {
+  publicKey?: string
+}
+
 export class UserService {
   static GetInfo(req: GetInfoRequest, initReq?: fm.InitReq): Promise<GetInfoResponse> {
     return fm.fetchReq<GetInfoRequest, GetInfoResponse>(`/gapi/user/v1/info?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
@@ -37,5 +45,8 @@ export class UserService {
   }
   static CheckEmailVerifyCode(req: CheckEmailVerifyCodeRequest, initReq?: fm.InitReq): Promise<CheckEmailVerifyCodeResponse> {
     return fm.fetchReq<CheckEmailVerifyCodeRequest, CheckEmailVerifyCodeResponse>(`/gapi/user/v1/verify/email/check`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  }
+  static GetUserPublicKey(req: GetUserPublicKeyRequest, initReq?: fm.InitReq): Promise<GetUserPublicKeyResponse> {
+    return fm.fetchReq<GetUserPublicKeyRequest, GetUserPublicKeyResponse>(`/gapi/user/v1/public_key?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
   }
 }

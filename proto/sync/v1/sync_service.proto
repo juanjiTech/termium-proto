@@ -3,65 +3,38 @@ package sync.v1;
 
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "team/v1/team.proto";
 import "sync/v1/host.proto";
 import "sync/v1/keychain.proto";
+import "sync/v1/key_wallet.proto";
 import "sync/v1/known_hosts.proto";
-import "sync/v1/group.proto";
 
 option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/sync/v1;syncV1";
 
 service SyncService {
   // 拉取指定时间点之后的配置变动信息
   rpc SyncConfig(SyncConfigRequest) returns (SyncConfigResponse) {
-    option (google.api.http) = {get: "/gapi/sync/v1/sync_config"};
+    option (google.api.http) = {get: "/gapi/sync/v1/config"};
   }
   // 提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。这里只负责配置内容修改。
   rpc UpdateConfig(UpdateConfigRequest) returns (UpdateConfigResponse) {
     option (google.api.http) = {
-      post:"/gapi/sync/v1/update_config"
+      post:"/gapi/sync/v1/config"
       body: "*"
     };
   }
-  // 更新组信息,如果服务端密钥为空不允许修改，请先去创建密钥链。
-  rpc UpdateGroup(UpdateGroupRequest) returns (UpdateGroupResponse) {
-    option (google.api.http) = {
-      post:"/gapi/sync/v1/update_group"
-      body: "*"
-    };
-  }
-  // 通过UID获取所有组信息
+  // 通过UID获取所有所在组变动信息
   rpc SyncGroup(SyncGroupRequest) returns (SyncGroupResponse) {
-    option (google.api.http) = {get:"/gapi/sync/v1/sync_group"};
+    option (google.api.http) = {get:"/gapi/sync/v1/group"};
   }
   // 获取用户密钥对
   rpc SyncUserKeyWallet(SyncUserKeyWalletRequest) returns (SyncUserKeyWalletResponse) {
-    option (google.api.http) = {get:"/gapi/sync/v1/sync_user_key_wallet"};
+    option (google.api.http) = {get:"/gapi/sync/v1/key_wallet"};
   }
   // 修改用户密钥对，修改的时候所有相关组的加密密钥均要替换
   rpc UpdateUserKeyWallet(UpdateUserKeyWalletRequest) returns (UpdateUserKeyWalletResponse) {
     option (google.api.http) = {
-      post:"/gapi/sync/v1/update_user_key_wallet"
-      body: "*"
-    };
-  }
-  // 邀请用户加入，加密的密钥由邀请者那边去取被邀请者的公钥加密后存储
-  rpc GroupInviteUser(GroupInviteUserRequest) returns (GroupInviteUserResponse){
-    option (google.api.http) = {
-      post:"/gapi/sync/v1/group_invite_user"
-      body: "*"
-    };
-  }
-  // 邀请用户加入
-  rpc GroupInviteAccept(GroupInviteAcceptRequest) returns (GroupInviteAcceptResponse){
-    option (google.api.http) = {
-      post:"/gapi/sync/v1/group_invite_accept"
-      body: "*"
-    };
-  }
-  // 删除用户
-  rpc GroupDeleteUser(GroupDeleteUserRequest) returns (GroupDeleteUserResponse){
-    option (google.api.http) = {
-      post:"/gapi/sync/v1/group_delete_user"
+      post:"/gapi/sync/v1/key_wallet"
       body: "*"
     };
   }
@@ -100,13 +73,6 @@ message UpdateConfigResponse {
   }
 }
 
-// UpdateGroup
-message UpdateGroupRequest {
-  Group group = 1;
-}
-
-message UpdateGroupResponse {}
-
 // SyncGroup
 message SyncGroupRequest {
   google.protobuf.Timestamp after = 1;
@@ -114,7 +80,7 @@ message SyncGroupRequest {
 
 message SyncGroupResponse {
   google.protobuf.Timestamp serverTime = 1;
-  repeated Group groups = 11;
+  repeated team.v1.Team groups = 11;
 }
 
 // SyncUserKeyWallet
@@ -141,37 +107,3 @@ message UpdateUserKeyWalletResponse {
   string encryptedPrivateKey = 2;
   repeated UserKeyWallet userKeyWalletSet = 4;
 }
-
-message UserKeyWallet {
-  string uid = 1;
-  string gid = 2;
-  string encryptedGroupPrivateKey = 3;
-  google.protobuf.Timestamp createdAt = 4;
-  google.protobuf.Timestamp updatedAt = 5;
-  google.protobuf.Timestamp deletedAt = 6;
-}
-
-// GroupInviteUser
-message GroupInviteUserRequest {
-  string gid = 1;
-  string inviteeUid = 2;
-  string encryptedGroupPrivateKey = 4;
-}
-
-message GroupInviteUserResponse{}
-
-// GroupInviteAccept
-message GroupInviteAcceptRequest {
-  string gid = 1;
-  bool isAccept = 2;
-}
-
-message GroupInviteAcceptResponse {}
-
-// GroupDeleteUser
-message GroupDeleteUserRequest {
-  string userDeletedUid = 1;
-  string gid = 2;
-}
-
-message GroupDeleteUserResponse {}

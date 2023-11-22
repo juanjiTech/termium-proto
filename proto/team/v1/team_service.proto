@@ -1,0 +1,97 @@
+syntax = "proto3";
+package team.v1;
+
+import "google/api/annotations.proto";
+import "team/v1/team.proto";
+
+option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/team/v1;teamV1";
+
+service TeamService {
+  // 获取团队信息
+  rpc GetTeam(GetTeamRequest) returns (GetTeamResponse) {
+    option (google.api.http) = {
+      get: "/gapi/team/v1/team"
+    };
+  }
+  // 创建团队
+  rpc CreateTeam(CreateTeamRequest) returns (CreateTeamResponse) {
+    option (google.api.http) = {
+      post: "/gapi/team/v1/team"
+      body: "*"
+    };
+  }
+  // 更新团队信息
+  rpc UpdateTeam(UpdateTeamRequest) returns (UpdateTeamResponse) {
+    option (google.api.http) = {
+      put: "/gapi/team/v1/team"
+      body: "*"
+    };
+  }
+  // 删除团队
+  rpc DeleteTeam(DeleteTeamRequest) returns (DeleteTeamResponse) {
+    option (google.api.http) = {
+      post: "/gapi/team/v1/team/remove"
+      body: "*"
+    };
+  }
+  // 邀请成员加入团队
+  rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {
+    option (google.api.http) = {
+      post: "/gapi/team/v1/team/member/invite"
+      body: "*"
+    };
+  }
+  // 从团队中移除成员
+  rpc RemoveMember(RemoveMemberRequest) returns (RemoveMemberResponse) {
+    option (google.api.http) = {
+      post: "/gapi/team/v1/team/member/remove"
+      body: "*"
+    };
+  }
+}
+
+message GetTeamRequest {
+  string id = 1;
+}
+
+message GetTeamResponse {
+  Team team = 1;
+}
+
+message CreateTeamRequest {
+  Team team = 1;
+}
+
+message CreateTeamResponse {
+  Team team = 1;
+}
+
+message UpdateTeamRequest {
+  Team team = 1;
+}
+
+message UpdateTeamResponse {
+  Team team = 1;
+}
+
+message DeleteTeamRequest {
+  string id = 1;
+}
+
+message DeleteTeamResponse {}
+
+message InviteMemberRequest {
+  string teamId = 1;
+  string userId = 2;
+  string encryptedGroupPrivateKey = 3; // 使用受邀请用户的公钥加密后的团队私钥
+}
+
+message InviteMemberResponse {}
+
+message RemoveMemberRequest {
+  string teamId = 1;
+  string userId = 2;
+}
+
+message RemoveMemberResponse {}
+

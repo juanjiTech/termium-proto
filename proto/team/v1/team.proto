@@ -1,0 +1,18 @@
+syntax = "proto3";
+package team.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/team/v1;teamV1";
+
+message Team {
+  string id = 1;
+  google.protobuf.Timestamp createdAt = 2;
+  google.protobuf.Timestamp updatedAt = 3;
+  google.protobuf.Timestamp deletedAt = 4;
+  string name = 5;
+  string description = 6;
+  string avatar = 7;
+  string uid = 8;         // 创建者
+  string publicKey = 9;   // 公钥，公钥存在服务器上，加密的私钥与相关用户关联存储
+}

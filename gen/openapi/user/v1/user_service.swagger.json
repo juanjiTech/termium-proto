@@ -38,6 +38,38 @@
         ]
       }
     },
+    "/gapi/user/v1/public_key": {
+      "get": {
+        "summary": "获取用户公钥 用于给用户发送端对端信息用（包括但不限于邀请用户加入组织时加密组织私钥）",
+        "operationId": "UserService_GetUserPublicKey",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetUserPublicKeyResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "user id 留空则为默认id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
     "/gapi/user/v1/verify/email/check": {
       "post": {
         "operationId": "UserService_CheckEmailVerifyCode",
@@ -151,6 +183,14 @@
       "properties": {
         "info": {
           "$ref": "#/definitions/v1User"
+        }
+      }
+    },
+    "v1GetUserPublicKeyResponse": {
+      "type": "object",
+      "properties": {
+        "publicKey": {
+          "type": "string"
         }
       }
     },

@@ -23,6 +23,12 @@ service UserService {
       body: "*"
     };
   }
+  // 获取用户公钥 用于给用户发送端对端信息用（包括但不限于邀请用户加入组织时加密组织私钥）
+  rpc GetUserPublicKey(GetUserPublicKeyRequest) returns (GetUserPublicKeyResponse) {
+    option (google.api.http) = {
+      get: "/gapi/user/v1/public_key"
+    };
+  }
 }
 
 message GetInfoRequest {}
@@ -43,3 +49,11 @@ message CheckEmailVerifyCodeRequest {
 }
 
 message CheckEmailVerifyCodeResponse {}
+
+message GetUserPublicKeyRequest {
+  string id = 1; // user id 留空则为默认id
+}
+
+message GetUserPublicKeyResponse {
+  string publicKey = 1;
+}
