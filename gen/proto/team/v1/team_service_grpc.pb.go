@@ -19,13 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	TeamService_GetTeam_FullMethodName      = "/team.v1.TeamService/GetTeam"
-	TeamService_CreateTeam_FullMethodName   = "/team.v1.TeamService/CreateTeam"
-	TeamService_UpdateTeam_FullMethodName   = "/team.v1.TeamService/UpdateTeam"
-	TeamService_DeleteTeam_FullMethodName   = "/team.v1.TeamService/DeleteTeam"
-	TeamService_InviteMember_FullMethodName = "/team.v1.TeamService/InviteMember"
-	TeamService_RemoveMember_FullMethodName = "/team.v1.TeamService/RemoveMember"
-	TeamService_AcceptInvite_FullMethodName = "/team.v1.TeamService/AcceptInvite"
+	TeamService_GetTeam_FullMethodName            = "/team.v1.TeamService/GetTeam"
+	TeamService_CreateTeam_FullMethodName         = "/team.v1.TeamService/CreateTeam"
+	TeamService_UpdateTeam_FullMethodName         = "/team.v1.TeamService/UpdateTeam"
+	TeamService_DeleteTeam_FullMethodName         = "/team.v1.TeamService/DeleteTeam"
+	TeamService_InviteMember_FullMethodName       = "/team.v1.TeamService/InviteMember"
+	TeamService_ListInvitingMember_FullMethodName = "/team.v1.TeamService/ListInvitingMember"
+	TeamService_RevokeInviteMember_FullMethodName = "/team.v1.TeamService/RevokeInviteMember"
+	TeamService_RemoveMember_FullMethodName       = "/team.v1.TeamService/RemoveMember"
+	TeamService_AcceptInvite_FullMethodName       = "/team.v1.TeamService/AcceptInvite"
 )
 
 // TeamServiceClient is the client API for TeamService service.
@@ -42,6 +44,10 @@ type TeamServiceClient interface {
 	DeleteTeam(ctx context.Context, in *DeleteTeamRequest, opts ...grpc.CallOption) (*DeleteTeamResponse, error)
 	// 邀请成员加入团队
 	InviteMember(ctx context.Context, in *InviteMemberRequest, opts ...grpc.CallOption) (*InviteMemberResponse, error)
+	// 列出邀请中列表
+	ListInvitingMember(ctx context.Context, in *ListInvitingMemberRequest, opts ...grpc.CallOption) (*ListInvitingMemberResponse, error)
+	// 撤回邀请
+	RevokeInviteMember(ctx context.Context, in *RevokeInviteMemberRequest, opts ...grpc.CallOption) (*RevokeInviteMemberResponse, error)
 	// 从团队中移除成员
 	RemoveMember(ctx context.Context, in *RemoveMemberRequest, opts ...grpc.CallOption) (*RemoveMemberResponse, error)
 	// 接受邀请加入团队
@@ -101,6 +107,24 @@ func (c *teamServiceClient) InviteMember(ctx context.Context, in *InviteMemberRe
 	return out, nil
 }
 
+func (c *teamServiceClient) ListInvitingMember(ctx context.Context, in *ListInvitingMemberRequest, opts ...grpc.CallOption) (*ListInvitingMemberResponse, error) {
+	out := new(ListInvitingMemberResponse)
+	err := c.cc.Invoke(ctx, TeamService_ListInvitingMember_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *teamServiceClient) RevokeInviteMember(ctx context.Context, in *RevokeInviteMemberRequest, opts ...grpc.CallOption) (*RevokeInviteMemberResponse, error) {
+	out := new(RevokeInviteMemberResponse)
+	err := c.cc.Invoke(ctx, TeamService_RevokeInviteMember_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *teamServiceClient) RemoveMember(ctx context.Context, in *RemoveMemberRequest, opts ...grpc.CallOption) (*RemoveMemberResponse, error) {
 	out := new(RemoveMemberResponse)
 	err := c.cc.Invoke(ctx, TeamService_RemoveMember_FullMethodName, in, out, opts...)
@@ -133,6 +157,10 @@ type TeamServiceServer interface {
 	DeleteTeam(context.Context, *DeleteTeamRequest) (*DeleteTeamResponse, error)
 	// 邀请成员加入团队
 	InviteMember(context.Context, *InviteMemberRequest) (*InviteMemberResponse, error)
+	// 列出邀请中列表
+	ListInvitingMember(context.Context, *ListInvitingMemberRequest) (*ListInvitingMemberResponse, error)
+	// 撤回邀请
+	RevokeInviteMember(context.Context, *RevokeInviteMemberRequest) (*RevokeInviteMemberResponse, error)
 	// 从团队中移除成员
 	RemoveMember(context.Context, *RemoveMemberRequest) (*RemoveMemberResponse, error)
 	// 接受邀请加入团队
@@ -158,6 +186,12 @@ func (UnimplementedTeamServiceServer) DeleteTeam(context.Context, *DeleteTeamReq
 }
 func (UnimplementedTeamServiceServer) InviteMember(context.Context, *InviteMemberRequest) (*InviteMemberResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InviteMember not implemented")
+}
+func (UnimplementedTeamServiceServer) ListInvitingMember(context.Context, *ListInvitingMemberRequest) (*ListInvitingMemberResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListInvitingMember not implemented")
+}
+func (UnimplementedTeamServiceServer) RevokeInviteMember(context.Context, *RevokeInviteMemberRequest) (*RevokeInviteMemberResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RevokeInviteMember not implemented")
 }
 func (UnimplementedTeamServiceServer) RemoveMember(context.Context, *RemoveMemberRequest) (*RemoveMemberResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveMember not implemented")
@@ -268,6 +302,42 @@ func _TeamService_InviteMember_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TeamService_ListInvitingMember_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListInvitingMemberRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TeamServiceServer).ListInvitingMember(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TeamService_ListInvitingMember_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TeamServiceServer).ListInvitingMember(ctx, req.(*ListInvitingMemberRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TeamService_RevokeInviteMember_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevokeInviteMemberRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TeamServiceServer).RevokeInviteMember(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TeamService_RevokeInviteMember_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TeamServiceServer).RevokeInviteMember(ctx, req.(*RevokeInviteMemberRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _TeamService_RemoveMember_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RemoveMemberRequest)
 	if err := dec(in); err != nil {
@@ -330,6 +400,14 @@ var TeamService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "InviteMember",
 			Handler:    _TeamService_InviteMember_Handler,
+		},
+		{
+			MethodName: "ListInvitingMember",
+			Handler:    _TeamService_ListInvitingMember_Handler,
+		},
+		{
+			MethodName: "RevokeInviteMember",
+			Handler:    _TeamService_RevokeInviteMember_Handler,
 		},
 		{
 			MethodName: "RemoveMember",

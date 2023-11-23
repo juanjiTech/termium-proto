@@ -49,6 +49,23 @@ export type InviteMemberRequest = {
 }
 
 export type InviteMemberResponse = {
+  inviteId?: string
+}
+
+export type ListInvitingMemberRequest = {
+  teamId?: string
+  cursor?: string
+}
+
+export type ListInvitingMemberResponse = {
+  inviteMembers?: TeamV1Team.InviteInfo[]
+}
+
+export type RevokeInviteMemberRequest = {
+  inviteId?: string
+}
+
+export type RevokeInviteMemberResponse = {
 }
 
 export type RemoveMemberRequest = {
@@ -81,6 +98,12 @@ export class TeamService {
   }
   static InviteMember(req: InviteMemberRequest, initReq?: fm.InitReq): Promise<InviteMemberResponse> {
     return fm.fetchReq<InviteMemberRequest, InviteMemberResponse>(`/gapi/team/v1/team/member/invite`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  }
+  static ListInvitingMember(req: ListInvitingMemberRequest, initReq?: fm.InitReq): Promise<ListInvitingMemberResponse> {
+    return fm.fetchReq<ListInvitingMemberRequest, ListInvitingMemberResponse>(`/gapi/team/v1/team/member/invite/list?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
+  }
+  static RevokeInviteMember(req: RevokeInviteMemberRequest, initReq?: fm.InitReq): Promise<RevokeInviteMemberResponse> {
+    return fm.fetchReq<RevokeInviteMemberRequest, RevokeInviteMemberResponse>(`/gapi/team/v1/team/member/invite/revoke`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
   static RemoveMember(req: RemoveMemberRequest, initReq?: fm.InitReq): Promise<RemoveMemberResponse> {
     return fm.fetchReq<RemoveMemberRequest, RemoveMemberResponse>(`/gapi/team/v1/team/member/remove`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})

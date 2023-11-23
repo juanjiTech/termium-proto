@@ -41,6 +41,19 @@ service TeamService {
       body: "*"
     };
   }
+  // 列出邀请中列表
+  rpc ListInvitingMember(ListInvitingMemberRequest) returns (ListInvitingMemberResponse) {
+    option (google.api.http) = {
+      get: "/gapi/team/v1/team/member/invite/list"
+    };
+  }
+  // 撤回邀请
+  rpc RevokeInviteMember(RevokeInviteMemberRequest) returns (RevokeInviteMemberResponse) {
+    option (google.api.http) = {
+      post: "/gapi/team/v1/team/member/invite/revoke"
+      body: "*"
+    };
+  }
   // 从团队中移除成员
   rpc RemoveMember(RemoveMemberRequest) returns (RemoveMemberResponse) {
     option (google.api.http) = {
@@ -98,7 +111,24 @@ message InviteMemberRequest {
   string encryptedTeamPrivateKey = 3; // 使用受邀请用户的公钥加密后的团队私钥
 }
 
-message InviteMemberResponse {}
+message InviteMemberResponse {
+  string inviteId = 1;
+}
+
+message ListInvitingMemberRequest {
+  string teamId = 1;
+  string cursor = 2; // 分页游标
+}
+
+message ListInvitingMemberResponse {
+  repeated InviteInfo inviteMembers = 1;
+}
+
+message RevokeInviteMemberRequest {
+  string inviteId = 1;
+}
+
+message RevokeInviteMemberResponse {}
 
 message RemoveMemberRequest {
   string teamId = 1;

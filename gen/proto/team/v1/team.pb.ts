@@ -16,3 +16,13 @@ export type Team = {
   uid?: string
   publicKey?: string
 }
+
+export type InviteInfo = {
+  id?: string
+  createdAt?: GoogleProtobufTimestamp.Timestamp
+  updatedAt?: GoogleProtobufTimestamp.Timestamp
+  deletedAt?: GoogleProtobufTimestamp.Timestamp
+  teamId?: string
+  uid?: string
+  username?: string
+}

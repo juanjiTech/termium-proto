@@ -175,6 +175,77 @@
         ]
       }
     },
+    "/gapi/team/v1/team/member/invite/list": {
+      "get": {
+        "summary": "列出邀请中列表",
+        "operationId": "TeamService_ListInvitingMember",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListInvitingMemberResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "cursor",
+            "description": "分页游标",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "TeamService"
+        ]
+      }
+    },
+    "/gapi/team/v1/team/member/invite/revoke": {
+      "post": {
+        "summary": "撤回邀请",
+        "operationId": "TeamService_RevokeInviteMember",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RevokeInviteMemberResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RevokeInviteMemberRequest"
+            }
+          }
+        ],
+        "tags": [
+          "TeamService"
+        ]
+      }
+    },
     "/gapi/team/v1/team/member/remove": {
       "post": {
         "summary": "从团队中移除成员",
@@ -335,6 +406,35 @@
         }
       }
     },
+    "v1InviteInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deletedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "teamId": {
+          "type": "string"
+        },
+        "uid": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    },
     "v1InviteMemberRequest": {
       "type": "object",
       "properties": {
@@ -351,7 +451,24 @@
       }
     },
     "v1InviteMemberResponse": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "inviteId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1ListInvitingMemberResponse": {
+      "type": "object",
+      "properties": {
+        "inviteMembers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1InviteInfo"
+          }
+        }
+      }
     },
     "v1RemoveMemberRequest": {
       "type": "object",
@@ -365,6 +482,17 @@
       }
     },
     "v1RemoveMemberResponse": {
+      "type": "object"
+    },
+    "v1RevokeInviteMemberRequest": {
+      "type": "object",
+      "properties": {
+        "inviteId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RevokeInviteMemberResponse": {
       "type": "object"
     },
     "v1Team": {
