@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "sync/v1/group.proto",
+    "title": "user/v1/key_wallet.proto",
     "version": "version not set"
   },
   "consumes": [

@@ -16,15 +16,15 @@
     "application/json"
   ],
   "paths": {
-    "/gapi/sync/v1/sync": {
+    "/gapi/sync/v1/config": {
       "get": {
         "summary": "拉取指定时间点之后的配置变动信息",
-        "operationId": "SyncService_Sync",
+        "operationId": "SyncService_SyncConfig",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1SyncResponse"
+              "$ref": "#/definitions/v1SyncConfigResponse"
             }
           },
           "default": {
@@ -44,7 +44,7 @@
             "format": "date-time"
           },
           {
-            "name": "groupId",
+            "name": "teamId",
             "in": "query",
             "required": false,
             "type": "string"
@@ -53,17 +53,112 @@
         "tags": [
           "SyncService"
         ]
-      }
-    },
-    "/gapi/sync/v1/sync_group": {
-      "get": {
-        "summary": "通过UID获取所有组信息",
-        "operationId": "SyncService_SyncGroup",
+      },
+      "post": {
+        "summary": "提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。这里只负责配置内容修改。",
+        "operationId": "SyncService_UpdateConfig",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1SyncGroupResponse"
+              "$ref": "#/definitions/v1UpdateConfigResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateConfigRequest"
+            }
+          }
+        ],
+        "tags": [
+          "SyncService"
+        ]
+      }
+    },
+    "/gapi/sync/v1/key_wallet": {
+      "get": {
+        "summary": "获取用户密钥对",
+        "operationId": "SyncService_SyncUserKeyWallet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SyncUserKeyWalletResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "after",
+            "description": "获取该时间之后的设置变化，若不设置该字段，则拉取全量配置信息",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "tags": [
+          "SyncService"
+        ]
+      },
+      "post": {
+        "summary": "修改用户密钥对，修改的时候所有相关组的加密密钥均要替换",
+        "operationId": "SyncService_UpdateUserKeyWallet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserKeyWalletResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateUserKeyWalletRequest"
+            }
+          }
+        ],
+        "tags": [
+          "SyncService"
+        ]
+      }
+    },
+    "/gapi/sync/v1/team": {
+      "get": {
+        "summary": "通过UID获取所有所在组变动信息",
+        "operationId": "SyncService_SyncTeam",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SyncTeamResponse"
             }
           },
           "default": {
@@ -80,72 +175,6 @@
             "required": false,
             "type": "string",
             "format": "date-time"
-          }
-        ],
-        "tags": [
-          "SyncService"
-        ]
-      }
-    },
-    "/gapi/sync/v1/update": {
-      "post": {
-        "summary": "提交最新配置 若配置的ID为空，则创建新配置。若配置的删除时间不为空，则代表该配置已被删除。",
-        "operationId": "SyncService_Update",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1UpdateResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1UpdateRequest"
-            }
-          }
-        ],
-        "tags": [
-          "SyncService"
-        ]
-      }
-    },
-    "/gapi/sync/v1/update_group": {
-      "post": {
-        "summary": "更新组信息",
-        "operationId": "SyncService_UpdateGroup",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1UpdateGroupResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1UpdateGroupRequest"
-            }
           }
         ],
         "tags": [
@@ -180,53 +209,6 @@
             "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
-        }
-      }
-    },
-    "v1Group": {
-      "type": "object",
-      "properties": {
-        "groupBasic": {
-          "$ref": "#/definitions/v1GroupBasic"
-        },
-        "memberId": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "v1GroupBasic": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "deletedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "avatar": {
-          "type": "string"
-        },
-        "uid": {
-          "type": "string",
-          "title": "创建者"
         }
       }
     },
@@ -404,23 +386,7 @@
       },
       "title": "SSH 密钥"
     },
-    "v1SyncGroupResponse": {
-      "type": "object",
-      "properties": {
-        "serverTime": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "groups": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Group"
-          }
-        }
-      }
-    },
-    "v1SyncResponse": {
+    "v1SyncConfigResponse": {
       "type": "object",
       "properties": {
         "serverTime": {
@@ -458,21 +424,86 @@
         }
       }
     },
-    "v1UpdateGroupRequest": {
+    "v1SyncTeamResponse": {
       "type": "object",
       "properties": {
-        "group": {
-          "$ref": "#/definitions/v1Group"
+        "serverTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "teams": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Team"
+          }
         }
       }
     },
-    "v1UpdateGroupResponse": {
-      "type": "object"
-    },
-    "v1UpdateRequest": {
+    "v1SyncUserKeyWalletResponse": {
       "type": "object",
       "properties": {
-        "groupId": {
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "title": "当前服务器时间，用于给客户端下一次拉取变动时做一个参照，避免因客户端时间偏差导致同步混乱"
+        },
+        "publicKey": {
+          "type": "string"
+        },
+        "encryptedPrivateKey": {
+          "type": "string"
+        },
+        "userKeyWalletSet": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1UserKeyWallet"
+          }
+        }
+      }
+    },
+    "v1Team": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deletedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "uid": {
+          "type": "string",
+          "title": "创建者"
+        },
+        "publicKey": {
+          "type": "string",
+          "title": "公钥，公钥存在服务器上，加密的私钥与相关用户关联存储"
+        }
+      }
+    },
+    "v1UpdateConfigRequest": {
+      "type": "object",
+      "properties": {
+        "teamId": {
           "type": "string"
         },
         "host": {
@@ -487,9 +518,10 @@
         "identity": {
           "$ref": "#/definitions/v1Identity"
         }
-      }
+      },
+      "title": "UpdateConfig"
     },
-    "v1UpdateResponse": {
+    "v1UpdateConfigResponse": {
       "type": "object",
       "properties": {
         "host": {
@@ -503,6 +535,69 @@
         },
         "identity": {
           "$ref": "#/definitions/v1Identity"
+        }
+      }
+    },
+    "v1UpdateUserKeyWalletRequest": {
+      "type": "object",
+      "properties": {
+        "publicKey": {
+          "type": "string"
+        },
+        "encryptedPrivateKey": {
+          "type": "string"
+        },
+        "userKeyWalletSet": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1UserKeyWallet"
+          }
+        }
+      },
+      "title": "UpdateUserKeyWallet"
+    },
+    "v1UpdateUserKeyWalletResponse": {
+      "type": "object",
+      "properties": {
+        "publicKey": {
+          "type": "string"
+        },
+        "encryptedPrivateKey": {
+          "type": "string"
+        },
+        "userKeyWalletSet": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1UserKeyWallet"
+          }
+        }
+      }
+    },
+    "v1UserKeyWallet": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string"
+        },
+        "tid": {
+          "type": "string"
+        },
+        "encryptedTeamPrivateKey": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deletedAt": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     }

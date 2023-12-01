@@ -8,13 +8,13 @@ option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/sync/v1;syncV1"
 // SSH 密钥
 message SshKey {
   string id = 1; // 内部唯一ID ulid
-  google.protobuf.Timestamp created_at = 2; // 创建时间
-  google.protobuf.Timestamp updated_at = 3; // 更新时间
-  google.protobuf.Timestamp deleted_at = 4; // 删除时间
+  google.protobuf.Timestamp createdAt = 2; // 创建时间
+  google.protobuf.Timestamp updatedAt = 3; // 更新时间
+  google.protobuf.Timestamp deletedAt = 4; // 删除时间
 
   string label = 11; // 标签
-  string private_key = 12; // 私钥
-  string public_key = 13; // 公钥
+  string privateKey = 12; // 私钥
+  string publicKey = 13; // 公钥
   string certificate = 14; // 证书
 }
 
@@ -22,14 +22,14 @@ message SshKey {
 // 这些凭据可以快速添加为身份并与主机条目链接。当凭据发生更改时，不必更新每台主机而只需更新身份即可。
 message Identity {
   string id = 1; // 内部唯一ID ulid
-  google.protobuf.Timestamp created_at = 2; // 创建时间
-  google.protobuf.Timestamp updated_at = 3; // 更新时间
-  google.protobuf.Timestamp deleted_at = 4; // 删除时间
+  google.protobuf.Timestamp createdAt = 2; // 创建时间
+  google.protobuf.Timestamp updatedAt = 3; // 更新时间
+  google.protobuf.Timestamp deletedAt = 4; // 删除时间
 
   string label = 11; // 标签
   string username = 12;
   string password = 13;
-  string key_id = 14; // 密钥ID
+  string keyId = 14; // 密钥ID
 }
 
 // TODO: FIDO2,Certificate,BiometricKey

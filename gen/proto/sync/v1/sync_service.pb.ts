@@ -6,7 +6,8 @@
 
 import * as fm from "../../fetch.pb"
 import * as GoogleProtobufTimestamp from "../../google/protobuf/timestamp.pb"
-import * as SyncV1Group from "./group.pb"
+import * as TeamV1Team from "../../team/v1/team.pb"
+import * as UserV1Key_wallet from "../../user/v1/key_wallet.pb"
 import * as SyncV1Host from "./host.pb"
 import * as SyncV1Keychain from "./keychain.pb"
 import * as SyncV1Known_hosts from "./known_hosts.pb"
@@ -19,12 +20,12 @@ type OneOf<T> =
       (K extends string & keyof T ? { [k in K]: T[K] } & Absent<T, K>
         : never)
     : never);
-export type SyncRequest = {
+export type SyncConfigRequest = {
   after?: GoogleProtobufTimestamp.Timestamp
-  groupId?: string
+  teamId?: string
 }
 
-export type SyncResponse = {
+export type SyncConfigResponse = {
   serverTime?: GoogleProtobufTimestamp.Timestamp
   hostSet?: SyncV1Host.Host[]
   knownHostSet?: SyncV1Known_hosts.KnownHost[]
@@ -33,47 +34,66 @@ export type SyncResponse = {
 }
 
 
-type BaseUpdateRequest = {
-  groupId?: string
+type BaseUpdateConfigRequest = {
+  teamId?: string
 }
 
-export type UpdateRequest = BaseUpdateRequest
+export type UpdateConfigRequest = BaseUpdateConfigRequest
   & OneOf<{ host: SyncV1Host.Host; knownHost: SyncV1Known_hosts.KnownHost; sshKey: SyncV1Keychain.SshKey; identity: SyncV1Keychain.Identity }>
 
 
-type BaseUpdateResponse = {
+type BaseUpdateConfigResponse = {
 }
 
-export type UpdateResponse = BaseUpdateResponse
+export type UpdateConfigResponse = BaseUpdateConfigResponse
   & OneOf<{ host: SyncV1Host.Host; knownHost: SyncV1Known_hosts.KnownHost; sshKey: SyncV1Keychain.SshKey; identity: SyncV1Keychain.Identity }>
 
-export type UpdateGroupRequest = {
-  group?: SyncV1Group.Group
-}
-
-export type UpdateGroupResponse = {
-}
-
-export type SyncGroupRequest = {
+export type SyncTeamRequest = {
   after?: GoogleProtobufTimestamp.Timestamp
 }
 
-export type SyncGroupResponse = {
+export type SyncTeamResponse = {
   serverTime?: GoogleProtobufTimestamp.Timestamp
-  groups?: SyncV1Group.Group[]
+  teams?: TeamV1Team.Team[]
+}
+
+export type SyncUserKeyWalletRequest = {
+  after?: GoogleProtobufTimestamp.Timestamp
+}
+
+export type SyncUserKeyWalletResponse = {
+  serverTime?: GoogleProtobufTimestamp.Timestamp
+  publicKey?: string
+  encryptedPrivateKey?: string
+  userKeyWalletSet?: UserV1Key_wallet.UserKeyWallet[]
+}
+
+export type UpdateUserKeyWalletRequest = {
+  publicKey?: string
+  encryptedPrivateKey?: string
+  userKeyWalletSet?: UserV1Key_wallet.UserKeyWallet[]
+}
+
+export type UpdateUserKeyWalletResponse = {
+  publicKey?: string
+  encryptedPrivateKey?: string
+  userKeyWalletSet?: UserV1Key_wallet.UserKeyWallet[]
 }
 
 export class SyncService {
-  static Sync(req: SyncRequest, initReq?: fm.InitReq): Promise<SyncResponse> {
-    return fm.fetchReq<SyncRequest, SyncResponse>(`/gapi/sync/v1/sync?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
+  static SyncConfig(req: SyncConfigRequest, initReq?: fm.InitReq): Promise<SyncConfigResponse> {
+    return fm.fetchReq<SyncConfigRequest, SyncConfigResponse>(`/gapi/sync/v1/config?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
   }
-  static Update(req: UpdateRequest, initReq?: fm.InitReq): Promise<UpdateResponse> {
-    return fm.fetchReq<UpdateRequest, UpdateResponse>(`/gapi/sync/v1/update`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  static UpdateConfig(req: UpdateConfigRequest, initReq?: fm.InitReq): Promise<UpdateConfigResponse> {
+    return fm.fetchReq<UpdateConfigRequest, UpdateConfigResponse>(`/gapi/sync/v1/config`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
-  static UpdateGroup(req: UpdateGroupRequest, initReq?: fm.InitReq): Promise<UpdateGroupResponse> {
-    return fm.fetchReq<UpdateGroupRequest, UpdateGroupResponse>(`/gapi/sync/v1/update_group`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  static SyncTeam(req: SyncTeamRequest, initReq?: fm.InitReq): Promise<SyncTeamResponse> {
+    return fm.fetchReq<SyncTeamRequest, SyncTeamResponse>(`/gapi/sync/v1/team?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
   }
-  static SyncGroup(req: SyncGroupRequest, initReq?: fm.InitReq): Promise<SyncGroupResponse> {
-    return fm.fetchReq<SyncGroupRequest, SyncGroupResponse>(`/gapi/sync/v1/sync_group?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
+  static SyncUserKeyWallet(req: SyncUserKeyWalletRequest, initReq?: fm.InitReq): Promise<SyncUserKeyWalletResponse> {
+    return fm.fetchReq<SyncUserKeyWalletRequest, SyncUserKeyWalletResponse>(`/gapi/sync/v1/key_wallet?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
+  }
+  static UpdateUserKeyWallet(req: UpdateUserKeyWalletRequest, initReq?: fm.InitReq): Promise<UpdateUserKeyWalletResponse> {
+    return fm.fetchReq<UpdateUserKeyWalletRequest, UpdateUserKeyWalletResponse>(`/gapi/sync/v1/key_wallet`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
 }

@@ -7,9 +7,9 @@ option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/sync/v1;syncV1"
 
 message Host {
   string id = 1; // 内部唯一ID ulid
-  google.protobuf.Timestamp created_at = 2; // 创建时间
-  google.protobuf.Timestamp updated_at = 3; // 更新时间
-  google.protobuf.Timestamp deleted_at = 4; // 删除时间
+  google.protobuf.Timestamp createdAt = 2; // 创建时间
+  google.protobuf.Timestamp updatedAt = 3; // 更新时间
+  google.protobuf.Timestamp deletedAt = 4; // 删除时间
 
   string label = 11; // 标签
   repeated string tags = 12;
@@ -20,6 +20,6 @@ message Host {
 
   string username = 21; // 用户名
   string password = 22; // 密码
-  string key_id = 23; // 密钥ID
-  string identity_id = 24; // 身份ID 若身份ID不为空，则覆盖手动配置
+  string keyId = 23; // 密钥ID
+  string identityId = 24; // 身份ID 若身份ID不为空，则覆盖手动配置
 }

@@ -22,6 +22,7 @@ const (
 	UserService_GetInfo_FullMethodName              = "/user.v1.UserService/GetInfo"
 	UserService_SendEmailVerifyCode_FullMethodName  = "/user.v1.UserService/SendEmailVerifyCode"
 	UserService_CheckEmailVerifyCode_FullMethodName = "/user.v1.UserService/CheckEmailVerifyCode"
+	UserService_GetUserPublicKey_FullMethodName     = "/user.v1.UserService/GetUserPublicKey"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -31,6 +32,8 @@ type UserServiceClient interface {
 	GetInfo(ctx context.Context, in *GetInfoRequest, opts ...grpc.CallOption) (*GetInfoResponse, error)
 	SendEmailVerifyCode(ctx context.Context, in *SendEmailVerifyCodeRequest, opts ...grpc.CallOption) (*SendEmailVerifyCodeResponse, error)
 	CheckEmailVerifyCode(ctx context.Context, in *CheckEmailVerifyCodeRequest, opts ...grpc.CallOption) (*CheckEmailVerifyCodeResponse, error)
+	// 获取用户公钥 用于给用户发送端对端信息用（包括但不限于邀请用户加入组织时加密组织私钥）
+	GetUserPublicKey(ctx context.Context, in *GetUserPublicKeyRequest, opts ...grpc.CallOption) (*GetUserPublicKeyResponse, error)
 }
 
 type userServiceClient struct {
@@ -68,6 +71,15 @@ func (c *userServiceClient) CheckEmailVerifyCode(ctx context.Context, in *CheckE
 	return out, nil
 }
 
+func (c *userServiceClient) GetUserPublicKey(ctx context.Context, in *GetUserPublicKeyRequest, opts ...grpc.CallOption) (*GetUserPublicKeyResponse, error) {
+	out := new(GetUserPublicKeyResponse)
+	err := c.cc.Invoke(ctx, UserService_GetUserPublicKey_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
@@ -75,6 +87,8 @@ type UserServiceServer interface {
 	GetInfo(context.Context, *GetInfoRequest) (*GetInfoResponse, error)
 	SendEmailVerifyCode(context.Context, *SendEmailVerifyCodeRequest) (*SendEmailVerifyCodeResponse, error)
 	CheckEmailVerifyCode(context.Context, *CheckEmailVerifyCodeRequest) (*CheckEmailVerifyCodeResponse, error)
+	// 获取用户公钥 用于给用户发送端对端信息用（包括但不限于邀请用户加入组织时加密组织私钥）
+	GetUserPublicKey(context.Context, *GetUserPublicKeyRequest) (*GetUserPublicKeyResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -90,6 +104,9 @@ func (UnimplementedUserServiceServer) SendEmailVerifyCode(context.Context, *Send
 }
 func (UnimplementedUserServiceServer) CheckEmailVerifyCode(context.Context, *CheckEmailVerifyCodeRequest) (*CheckEmailVerifyCodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckEmailVerifyCode not implemented")
+}
+func (UnimplementedUserServiceServer) GetUserPublicKey(context.Context, *GetUserPublicKeyRequest) (*GetUserPublicKeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserPublicKey not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -158,6 +175,24 @@ func _UserService_CheckEmailVerifyCode_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_GetUserPublicKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserPublicKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetUserPublicKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_GetUserPublicKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetUserPublicKey(ctx, req.(*GetUserPublicKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -176,6 +211,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CheckEmailVerifyCode",
 			Handler:    _UserService_CheckEmailVerifyCode_Handler,
+		},
+		{
+			MethodName: "GetUserPublicKey",
+			Handler:    _UserService_GetUserPublicKey_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
