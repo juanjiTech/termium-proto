@@ -1,4 +1,4 @@
-module github.com/juanjiTech/jTerm-proto
+module github.com/juanjiTech/termium-proto
 
 go 1.21.1
 
