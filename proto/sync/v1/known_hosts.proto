@@ -3,7 +3,7 @@ package sync.v1;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/sync/v1;syncV1";
+option go_package = "github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1";
 
 message KnownHost {
   string id = 1; // 内部唯一ID ulid

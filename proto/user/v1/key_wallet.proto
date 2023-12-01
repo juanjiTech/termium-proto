@@ -3,7 +3,7 @@ package user.v1;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/user/v1;userV1";
+option go_package = "github.com/juanjiTech/termium-proto/gen/proto/user/v1;userV1";
 
 message UserKeyWallet {
   string uid = 1;

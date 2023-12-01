@@ -4,7 +4,7 @@ package team.v1;
 import "google/api/annotations.proto";
 import "team/v1/team.proto";
 
-option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/team/v1;teamV1";
+option go_package = "github.com/juanjiTech/termium-proto/gen/proto/team/v1;teamV1";
 
 service TeamService {
   // 获取团队信息

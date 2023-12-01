@@ -1,7 +1,7 @@
 syntax = "proto3";
 package user.v1;
 
-option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/user/v1;userV1";
+option go_package = "github.com/juanjiTech/termium-proto/gen/proto/user/v1;userV1";
 
 enum UserStatus {
   USER_STATUS_UNSPECIFIED = 0;

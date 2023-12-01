@@ -9,7 +9,7 @@ import "sync/v1/keychain.proto";
 import "sync/v1/known_hosts.proto";
 import "user/v1/key_wallet.proto";
 
-option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/sync/v1;syncV1";
+option go_package = "github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1";
 
 service SyncService {
   // 拉取指定时间点之后的配置变动信息

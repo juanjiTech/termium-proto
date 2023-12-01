@@ -3,7 +3,7 @@ package auth.v1;
 
 import "google/api/annotations.proto";
 
-option go_package = "github.com/juanjiTech/jTerm-proto/gen/proto/auth/v1;authV1";
+option go_package = "github.com/juanjiTech/termium-proto/gen/proto/auth/v1;authV1";
 
 service AuthService {
   // 用户注册
