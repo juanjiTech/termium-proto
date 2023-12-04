@@ -18,7 +18,6 @@ export type CreateTeamRequest = {
   name?: string
   description?: string
   avatar?: string
-  uid?: string
   publicKey?: string
   encryptedPrivateKey?: string
 }

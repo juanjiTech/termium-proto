@@ -365,10 +365,6 @@
         "avatar": {
           "type": "string"
         },
-        "uid": {
-          "type": "string",
-          "title": "创建者"
-        },
         "publicKey": {
           "type": "string",
           "title": "公钥，公钥存在服务器上，加密的私钥与相关用户关联存储"
