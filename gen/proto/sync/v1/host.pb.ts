@@ -10,6 +10,7 @@ export type Host = {
   createdAt?: GoogleProtobufTimestamp.Timestamp
   updatedAt?: GoogleProtobufTimestamp.Timestamp
   deletedAt?: GoogleProtobufTimestamp.Timestamp
+  innerId?: string
   label?: string
   tags?: string[]
   address?: string

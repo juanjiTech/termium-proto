@@ -234,6 +234,10 @@
           "format": "date-time",
           "title": "删除时间"
         },
+        "innerId": {
+          "type": "string",
+          "title": "内部ID 资源id"
+        },
         "label": {
           "type": "string",
           "title": "标签"
@@ -296,6 +300,10 @@
           "format": "date-time",
           "title": "删除时间"
         },
+        "innerId": {
+          "type": "string",
+          "title": "内部ID 资源id"
+        },
         "label": {
           "type": "string",
           "title": "标签"
@@ -335,6 +343,10 @@
           "format": "date-time",
           "title": "删除时间"
         },
+        "innerId": {
+          "type": "string",
+          "title": "内部ID 资源id"
+        },
         "address": {
           "type": "string",
           "title": "ip或host"
@@ -366,6 +378,10 @@
           "type": "string",
           "format": "date-time",
           "title": "删除时间"
+        },
+        "innerId": {
+          "type": "string",
+          "title": "内部ID 资源id"
         },
         "label": {
           "type": "string",

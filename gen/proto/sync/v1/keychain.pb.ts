@@ -10,6 +10,7 @@ export type SshKey = {
   createdAt?: GoogleProtobufTimestamp.Timestamp
   updatedAt?: GoogleProtobufTimestamp.Timestamp
   deletedAt?: GoogleProtobufTimestamp.Timestamp
+  innerId?: string
   label?: string
   privateKey?: string
   publicKey?: string
@@ -21,6 +22,7 @@ export type Identity = {
   createdAt?: GoogleProtobufTimestamp.Timestamp
   updatedAt?: GoogleProtobufTimestamp.Timestamp
   deletedAt?: GoogleProtobufTimestamp.Timestamp
+  innerId?: string
   label?: string
   username?: string
   password?: string
