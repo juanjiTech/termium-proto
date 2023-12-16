@@ -11,6 +11,7 @@ message SshKey {
   google.protobuf.Timestamp createdAt = 2; // 创建时间
   google.protobuf.Timestamp updatedAt = 3; // 更新时间
   google.protobuf.Timestamp deletedAt = 4; // 删除时间
+  string innerId = 5; // 内部ID 资源id
 
   string label = 11; // 标签
   string privateKey = 12; // 私钥
@@ -25,6 +26,7 @@ message Identity {
   google.protobuf.Timestamp createdAt = 2; // 创建时间
   google.protobuf.Timestamp updatedAt = 3; // 更新时间
   google.protobuf.Timestamp deletedAt = 4; // 删除时间
+  string innerId = 5; // 内部ID 资源id
 
   string label = 11; // 标签
   string username = 12;

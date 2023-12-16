@@ -10,6 +10,7 @@ message KnownHost {
   google.protobuf.Timestamp createdAt = 2; // 创建时间
   google.protobuf.Timestamp updatedAt = 3; // 更新时间
   google.protobuf.Timestamp deletedAt = 4; // 删除时间
+  string innerId = 5; // 内部ID 资源id
 
   string address = 11; // ip或host
   string publicKey = 12; // 公钥
