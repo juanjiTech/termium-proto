@@ -65,6 +65,7 @@ message UpdateConfigRequest {
 }
 
 message UpdateConfigResponse {
+  google.protobuf.Timestamp server_time = 1; // 当前服务器时间，用于给客户端下一次拉取变动时做一个参照，避免因客户端时间偏差导致同步混乱
   oneof data { // 返回更新数据的服务端版本，因为新建的数据会加上ID和时间
     Host host = 11;
     KnownHost knownHost = 12;
@@ -106,4 +107,5 @@ message UpdateUserKeyWalletResponse {
   string publicKey = 1;
   string encryptedPrivateKey = 2;
   repeated user.v1.UserKeyWallet userKeyWalletSet = 4;
+  google.protobuf.Timestamp server_time = 5; // 当前服务器时间，用于给客户端下一次拉取变动时做一个参照，避免因客户端时间偏差导致同步混乱
 }

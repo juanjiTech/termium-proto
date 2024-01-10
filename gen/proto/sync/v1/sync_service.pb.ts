@@ -43,6 +43,7 @@ export type UpdateConfigRequest = BaseUpdateConfigRequest
 
 
 type BaseUpdateConfigResponse = {
+  serverTime?: GoogleProtobufTimestamp.Timestamp
 }
 
 export type UpdateConfigResponse = BaseUpdateConfigResponse
@@ -78,6 +79,7 @@ export type UpdateUserKeyWalletResponse = {
   publicKey?: string
   encryptedPrivateKey?: string
   userKeyWalletSet?: UserV1Key_wallet.UserKeyWallet[]
+  serverTime?: GoogleProtobufTimestamp.Timestamp
 }
 
 export class SyncService {
