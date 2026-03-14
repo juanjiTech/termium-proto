@@ -300,6 +300,10 @@
           "format": "date-time",
           "title": "删除时间"
         },
+        "clientId": {
+          "type": "string",
+          "title": "客户端那一侧的唯一ID 用于同步的时候告诉客户端这是对应客户端侧的哪个配置"
+        },
         "label": {
           "type": "string",
           "title": "标签"
@@ -339,6 +343,10 @@
           "format": "date-time",
           "title": "删除时间"
         },
+        "clientId": {
+          "type": "string",
+          "title": "客户端那一侧的唯一ID 用于同步的时候告诉客户端这是对应客户端侧的哪个配置"
+        },
         "address": {
           "type": "string",
           "title": "ip或host"
@@ -370,6 +378,10 @@
           "type": "string",
           "format": "date-time",
           "title": "删除时间"
+        },
+        "clientId": {
+          "type": "string",
+          "title": "客户端那一侧的唯一ID 用于同步的时候告诉客户端这是对应客户端侧的哪个配置"
         },
         "label": {
           "type": "string",

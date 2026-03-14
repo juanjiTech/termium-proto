@@ -4,11 +4,12 @@
 * This file is a generated Typescript file for GRPC Gateway, DO NOT MODIFY
 */
 
+import * as GoogleProtobufTimestamp from "../../google/protobuf/timestamp.pb"
 export type UserKeyWallet = {
   uid?: string
   tid?: string
   encryptedTeamPrivateKey?: string
-  createdAt?: Date
-  updatedAt?: Date
-  deletedAt?: Date
+  createdAt?: GoogleProtobufTimestamp.Timestamp
+  updatedAt?: GoogleProtobufTimestamp.Timestamp
+  deletedAt?: GoogleProtobufTimestamp.Timestamp
 }

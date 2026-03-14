@@ -28,6 +28,7 @@ type KnownHost struct {
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=createdAt,proto3" json:"createdAt,omitempty"`  // 创建时间
 	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`  // 更新时间
 	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=deletedAt,proto3" json:"deletedAt,omitempty"`  // 删除时间
+	ClientId      string                 `protobuf:"bytes,5,opt,name=clientId,proto3" json:"clientId,omitempty"`    // 客户端那一侧的唯一ID 用于同步的时候告诉客户端这是对应客户端侧的哪个配置
 	Address       string                 `protobuf:"bytes,11,opt,name=address,proto3" json:"address,omitempty"`     // ip或host
 	PublicKey     string                 `protobuf:"bytes,12,opt,name=publicKey,proto3" json:"publicKey,omitempty"` // 公钥
 	unknownFields protoimpl.UnknownFields
@@ -92,6 +93,13 @@ func (x *KnownHost) GetDeletedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+func (x *KnownHost) GetClientId() string {
+	if x != nil {
+		return x.ClientId
+	}
+	return ""
+}
+
 func (x *KnownHost) GetAddress() string {
 	if x != nil {
 		return x.Address
@@ -110,12 +118,13 @@ var File_sync_v1_known_hosts_proto protoreflect.FileDescriptor
 
 const file_sync_v1_known_hosts_proto_rawDesc = "" +
 	"\n" +
-	"\x19sync/v1/known_hosts.proto\x12\async.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\x81\x02\n" +
+	"\x19sync/v1/known_hosts.proto\x12\async.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\x9d\x02\n" +
 	"\tKnownHost\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x128\n" +
 	"\tcreatedAt\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x128\n" +
 	"\tupdatedAt\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x128\n" +
-	"\tdeletedAt\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12\x18\n" +
+	"\tdeletedAt\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12\x1a\n" +
+	"\bclientId\x18\x05 \x01(\tR\bclientId\x12\x18\n" +
 	"\aaddress\x18\v \x01(\tR\aaddress\x12\x1c\n" +
 	"\tpublicKey\x18\f \x01(\tR\tpublicKeyB>Z<github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1b\x06proto3"
 

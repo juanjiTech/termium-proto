@@ -29,6 +29,7 @@ type SshKey struct {
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=createdAt,proto3" json:"createdAt,omitempty"`      // 创建时间
 	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`      // 更新时间
 	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=deletedAt,proto3" json:"deletedAt,omitempty"`      // 删除时间
+	ClientId      string                 `protobuf:"bytes,5,opt,name=clientId,proto3" json:"clientId,omitempty"`        // 客户端那一侧的唯一ID 用于同步的时候告诉客户端这是对应客户端侧的哪个配置
 	Label         string                 `protobuf:"bytes,11,opt,name=label,proto3" json:"label,omitempty"`             // 标签
 	PrivateKey    string                 `protobuf:"bytes,12,opt,name=privateKey,proto3" json:"privateKey,omitempty"`   // 私钥
 	PublicKey     string                 `protobuf:"bytes,13,opt,name=publicKey,proto3" json:"publicKey,omitempty"`     // 公钥
@@ -95,6 +96,13 @@ func (x *SshKey) GetDeletedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+func (x *SshKey) GetClientId() string {
+	if x != nil {
+		return x.ClientId
+	}
+	return ""
+}
+
 func (x *SshKey) GetLabel() string {
 	if x != nil {
 		return x.Label
@@ -131,6 +139,7 @@ type Identity struct {
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=createdAt,proto3" json:"createdAt,omitempty"` // 创建时间
 	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"` // 更新时间
 	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=deletedAt,proto3" json:"deletedAt,omitempty"` // 删除时间
+	ClientId      string                 `protobuf:"bytes,5,opt,name=clientId,proto3" json:"clientId,omitempty"`   // 客户端那一侧的唯一ID 用于同步的时候告诉客户端这是对应客户端侧的哪个配置
 	Label         string                 `protobuf:"bytes,11,opt,name=label,proto3" json:"label,omitempty"`        // 标签
 	Username      string                 `protobuf:"bytes,12,opt,name=username,proto3" json:"username,omitempty"`
 	Password      string                 `protobuf:"bytes,13,opt,name=password,proto3" json:"password,omitempty"`
@@ -197,6 +206,13 @@ func (x *Identity) GetDeletedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+func (x *Identity) GetClientId() string {
+	if x != nil {
+		return x.ClientId
+	}
+	return ""
+}
+
 func (x *Identity) GetLabel() string {
 	if x != nil {
 		return x.Label
@@ -229,23 +245,25 @@ var File_sync_v1_keychain_proto protoreflect.FileDescriptor
 
 const file_sync_v1_keychain_proto_rawDesc = "" +
 	"\n" +
-	"\x16sync/v1/keychain.proto\x12\async.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\xbc\x02\n" +
+	"\x16sync/v1/keychain.proto\x12\async.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd8\x02\n" +
 	"\x06SshKey\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x128\n" +
 	"\tcreatedAt\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x128\n" +
 	"\tupdatedAt\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x128\n" +
-	"\tdeletedAt\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12\x14\n" +
+	"\tdeletedAt\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12\x1a\n" +
+	"\bclientId\x18\x05 \x01(\tR\bclientId\x12\x14\n" +
 	"\x05label\x18\v \x01(\tR\x05label\x12\x1e\n" +
 	"\n" +
 	"privateKey\x18\f \x01(\tR\n" +
 	"privateKey\x12\x1c\n" +
 	"\tpublicKey\x18\r \x01(\tR\tpublicKey\x12 \n" +
-	"\vcertificate\x18\x0e \x01(\tR\vcertificate\"\xac\x02\n" +
+	"\vcertificate\x18\x0e \x01(\tR\vcertificate\"\xc8\x02\n" +
 	"\bIdentity\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x128\n" +
 	"\tcreatedAt\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x128\n" +
 	"\tupdatedAt\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x128\n" +
-	"\tdeletedAt\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12\x14\n" +
+	"\tdeletedAt\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12\x1a\n" +
+	"\bclientId\x18\x05 \x01(\tR\bclientId\x12\x14\n" +
 	"\x05label\x18\v \x01(\tR\x05label\x12\x1a\n" +
 	"\busername\x18\f \x01(\tR\busername\x12\x1a\n" +
 	"\bpassword\x18\r \x01(\tR\bpassword\x12\x14\n" +
