@@ -5,7 +5,6 @@
 */
 
 import * as fm from "../../fetch.pb"
-import * as GoogleProtobufTimestamp from "../../google/protobuf/timestamp.pb"
 import * as TeamV1Team from "../../team/v1/team.pb"
 import * as UserV1Key_wallet from "../../user/v1/key_wallet.pb"
 import * as SyncV1Host from "./host.pb"
@@ -21,12 +20,12 @@ type OneOf<T> =
         : never)
     : never);
 export type SyncConfigRequest = {
-  after?: GoogleProtobufTimestamp.Timestamp
+  after?: Date
   teamId?: string
 }
 
 export type SyncConfigResponse = {
-  serverTime?: GoogleProtobufTimestamp.Timestamp
+  serverTime?: Date
   hostSet?: SyncV1Host.Host[]
   knownHostSet?: SyncV1Known_hosts.KnownHost[]
   sshKeySet?: SyncV1Keychain.SshKey[]
@@ -43,27 +42,27 @@ export type UpdateConfigRequest = BaseUpdateConfigRequest
 
 
 type BaseUpdateConfigResponse = {
-  serverTime?: GoogleProtobufTimestamp.Timestamp
+  serverTime?: Date
 }
 
 export type UpdateConfigResponse = BaseUpdateConfigResponse
   & OneOf<{ host: SyncV1Host.Host; knownHost: SyncV1Known_hosts.KnownHost; sshKey: SyncV1Keychain.SshKey; identity: SyncV1Keychain.Identity }>
 
 export type SyncTeamRequest = {
-  after?: GoogleProtobufTimestamp.Timestamp
+  after?: Date
 }
 
 export type SyncTeamResponse = {
-  serverTime?: GoogleProtobufTimestamp.Timestamp
+  serverTime?: Date
   teams?: TeamV1Team.Team[]
 }
 
 export type SyncUserKeyWalletRequest = {
-  after?: GoogleProtobufTimestamp.Timestamp
+  after?: Date
 }
 
 export type SyncUserKeyWalletResponse = {
-  serverTime?: GoogleProtobufTimestamp.Timestamp
+  serverTime?: Date
   publicKey?: string
   encryptedPrivateKey?: string
   userKeyWalletSet?: UserV1Key_wallet.UserKeyWallet[]
@@ -79,7 +78,7 @@ export type UpdateUserKeyWalletResponse = {
   publicKey?: string
   encryptedPrivateKey?: string
   userKeyWalletSet?: UserV1Key_wallet.UserKeyWallet[]
-  serverTime?: GoogleProtobufTimestamp.Timestamp
+  serverTime?: Date
 }
 
 export class SyncService {

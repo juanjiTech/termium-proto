@@ -4,12 +4,11 @@
 * This file is a generated Typescript file for GRPC Gateway, DO NOT MODIFY
 */
 
-import * as GoogleProtobufTimestamp from "../../google/protobuf/timestamp.pb"
 export type SshKey = {
   id?: string
-  createdAt?: GoogleProtobufTimestamp.Timestamp
-  updatedAt?: GoogleProtobufTimestamp.Timestamp
-  deletedAt?: GoogleProtobufTimestamp.Timestamp
+  createdAt?: Date
+  updatedAt?: Date
+  deletedAt?: Date
   label?: string
   privateKey?: string
   publicKey?: string
@@ -18,9 +17,9 @@ export type SshKey = {
 
 export type Identity = {
   id?: string
-  createdAt?: GoogleProtobufTimestamp.Timestamp
-  updatedAt?: GoogleProtobufTimestamp.Timestamp
-  deletedAt?: GoogleProtobufTimestamp.Timestamp
+  createdAt?: Date
+  updatedAt?: Date
+  deletedAt?: Date
   label?: string
   username?: string
   password?: string
