@@ -1,0 +1,35 @@
+syntax = "proto3";
+package sync.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1";
+
+enum PortForwardType {
+  PORT_FORWARD_TYPE_UNSPECIFIED = 0;
+  PORT_FORWARD_TYPE_LOCAL = 1;
+  PORT_FORWARD_TYPE_REMOTE = 2;
+  PORT_FORWARD_TYPE_DYNAMIC = 3;
+}
+
+message PortForward {
+  string id = 1; // 内部唯一ID ulid
+  google.protobuf.Timestamp createdAt = 2; // 创建时间
+  google.protobuf.Timestamp updatedAt = 3; // 更新时间
+  google.protobuf.Timestamp deletedAt = 4; // 删除时间
+  string clientId = 5; // 客户端那一侧的唯一ID 用于同步的时候告诉客户端这是对应客户端侧的哪个配置
+
+  string label = 11;
+  PortForwardType type = 12;
+
+  string bindAddress = 13;
+  int32 bindPort = 14;
+
+  string targetHost = 15;
+  int32 targetPort = 16;
+
+  // 有序 Host InnerID 列表，至少 1 个
+  repeated string chainHostIds = 17;
+
+  bool autoStart = 18;
+}

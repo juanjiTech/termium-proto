@@ -79,14 +79,15 @@ func (x *SyncConfigRequest) GetTeamId() string {
 }
 
 type SyncConfigResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ServerTime    *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=server_time,json=serverTime,proto3" json:"server_time,omitempty"` // 当前服务器时间，用于给客户端下一次拉取变动时做一个参照，避免因客户端时间偏差导致同步混乱
-	HostSet       []*Host                `protobuf:"bytes,11,rep,name=hostSet,proto3" json:"hostSet,omitempty"`
-	KnownHostSet  []*KnownHost           `protobuf:"bytes,12,rep,name=knownHostSet,proto3" json:"knownHostSet,omitempty"`
-	SshKeySet     []*SshKey              `protobuf:"bytes,13,rep,name=sshKeySet,proto3" json:"sshKeySet,omitempty"`
-	IdentitySet   []*Identity            `protobuf:"bytes,14,rep,name=identitySet,proto3" json:"identitySet,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	ServerTime     *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=server_time,json=serverTime,proto3" json:"server_time,omitempty"` // 当前服务器时间，用于给客户端下一次拉取变动时做一个参照，避免因客户端时间偏差导致同步混乱
+	HostSet        []*Host                `protobuf:"bytes,11,rep,name=hostSet,proto3" json:"hostSet,omitempty"`
+	KnownHostSet   []*KnownHost           `protobuf:"bytes,12,rep,name=knownHostSet,proto3" json:"knownHostSet,omitempty"`
+	SshKeySet      []*SshKey              `protobuf:"bytes,13,rep,name=sshKeySet,proto3" json:"sshKeySet,omitempty"`
+	IdentitySet    []*Identity            `protobuf:"bytes,14,rep,name=identitySet,proto3" json:"identitySet,omitempty"`
+	PortForwardSet []*PortForward         `protobuf:"bytes,15,rep,name=portForwardSet,proto3" json:"portForwardSet,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *SyncConfigResponse) Reset() {
@@ -154,6 +155,13 @@ func (x *SyncConfigResponse) GetIdentitySet() []*Identity {
 	return nil
 }
 
+func (x *SyncConfigResponse) GetPortForwardSet() []*PortForward {
+	if x != nil {
+		return x.PortForwardSet
+	}
+	return nil
+}
+
 // UpdateConfig
 type UpdateConfigRequest struct {
 	state  protoimpl.MessageState `protogen:"open.v1"`
@@ -164,6 +172,7 @@ type UpdateConfigRequest struct {
 	//	*UpdateConfigRequest_KnownHost
 	//	*UpdateConfigRequest_SshKey
 	//	*UpdateConfigRequest_Identity
+	//	*UpdateConfigRequest_PortForward
 	Data          isUpdateConfigRequest_Data `protobuf_oneof:"data"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -249,6 +258,15 @@ func (x *UpdateConfigRequest) GetIdentity() *Identity {
 	return nil
 }
 
+func (x *UpdateConfigRequest) GetPortForward() *PortForward {
+	if x != nil {
+		if x, ok := x.Data.(*UpdateConfigRequest_PortForward); ok {
+			return x.PortForward
+		}
+	}
+	return nil
+}
+
 type isUpdateConfigRequest_Data interface {
 	isUpdateConfigRequest_Data()
 }
@@ -269,6 +287,10 @@ type UpdateConfigRequest_Identity struct {
 	Identity *Identity `protobuf:"bytes,14,opt,name=identity,proto3,oneof"`
 }
 
+type UpdateConfigRequest_PortForward struct {
+	PortForward *PortForward `protobuf:"bytes,15,opt,name=portForward,proto3,oneof"`
+}
+
 func (*UpdateConfigRequest_Host) isUpdateConfigRequest_Data() {}
 
 func (*UpdateConfigRequest_KnownHost) isUpdateConfigRequest_Data() {}
@@ -276,6 +298,8 @@ func (*UpdateConfigRequest_KnownHost) isUpdateConfigRequest_Data() {}
 func (*UpdateConfigRequest_SshKey) isUpdateConfigRequest_Data() {}
 
 func (*UpdateConfigRequest_Identity) isUpdateConfigRequest_Data() {}
+
+func (*UpdateConfigRequest_PortForward) isUpdateConfigRequest_Data() {}
 
 type UpdateConfigResponse struct {
 	state      protoimpl.MessageState `protogen:"open.v1"`
@@ -286,6 +310,7 @@ type UpdateConfigResponse struct {
 	//	*UpdateConfigResponse_KnownHost
 	//	*UpdateConfigResponse_SshKey
 	//	*UpdateConfigResponse_Identity
+	//	*UpdateConfigResponse_PortForward
 	Data          isUpdateConfigResponse_Data `protobuf_oneof:"data"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -371,6 +396,15 @@ func (x *UpdateConfigResponse) GetIdentity() *Identity {
 	return nil
 }
 
+func (x *UpdateConfigResponse) GetPortForward() *PortForward {
+	if x != nil {
+		if x, ok := x.Data.(*UpdateConfigResponse_PortForward); ok {
+			return x.PortForward
+		}
+	}
+	return nil
+}
+
 type isUpdateConfigResponse_Data interface {
 	isUpdateConfigResponse_Data()
 }
@@ -391,6 +425,10 @@ type UpdateConfigResponse_Identity struct {
 	Identity *Identity `protobuf:"bytes,14,opt,name=identity,proto3,oneof"`
 }
 
+type UpdateConfigResponse_PortForward struct {
+	PortForward *PortForward `protobuf:"bytes,15,opt,name=portForward,proto3,oneof"`
+}
+
 func (*UpdateConfigResponse_Host) isUpdateConfigResponse_Data() {}
 
 func (*UpdateConfigResponse_KnownHost) isUpdateConfigResponse_Data() {}
@@ -398,6 +436,8 @@ func (*UpdateConfigResponse_KnownHost) isUpdateConfigResponse_Data() {}
 func (*UpdateConfigResponse_SshKey) isUpdateConfigResponse_Data() {}
 
 func (*UpdateConfigResponse_Identity) isUpdateConfigResponse_Data() {}
+
+func (*UpdateConfigResponse_PortForward) isUpdateConfigResponse_Data() {}
 
 // SyncTeam
 type SyncTeamRequest struct {
@@ -742,31 +782,34 @@ var File_sync_v1_sync_service_proto protoreflect.FileDescriptor
 
 const file_sync_v1_sync_service_proto_rawDesc = "" +
 	"\n" +
-	"\x1async/v1/sync_service.proto\x12\async.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x12team/v1/team.proto\x1a\x12sync/v1/host.proto\x1a\x16sync/v1/keychain.proto\x1a\x19sync/v1/known_hosts.proto\x1a\x18user/v1/key_wallet.proto\"]\n" +
+	"\x1async/v1/sync_service.proto\x12\async.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x12team/v1/team.proto\x1a\x12sync/v1/host.proto\x1a\x16sync/v1/keychain.proto\x1a\x19sync/v1/known_hosts.proto\x1a\x1async/v1/port_forward.proto\x1a\x18user/v1/key_wallet.proto\"]\n" +
 	"\x11SyncConfigRequest\x120\n" +
 	"\x05after\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\x05after\x12\x16\n" +
-	"\x06teamId\x18\x02 \x01(\tR\x06teamId\"\x96\x02\n" +
+	"\x06teamId\x18\x02 \x01(\tR\x06teamId\"\xd4\x02\n" +
 	"\x12SyncConfigResponse\x12;\n" +
 	"\vserver_time\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
 	"serverTime\x12'\n" +
 	"\ahostSet\x18\v \x03(\v2\r.sync.v1.HostR\ahostSet\x126\n" +
 	"\fknownHostSet\x18\f \x03(\v2\x12.sync.v1.KnownHostR\fknownHostSet\x12-\n" +
 	"\tsshKeySet\x18\r \x03(\v2\x0f.sync.v1.SshKeyR\tsshKeySet\x123\n" +
-	"\videntitySet\x18\x0e \x03(\v2\x11.sync.v1.IdentityR\videntitySet\"\xea\x01\n" +
+	"\videntitySet\x18\x0e \x03(\v2\x11.sync.v1.IdentityR\videntitySet\x12<\n" +
+	"\x0eportForwardSet\x18\x0f \x03(\v2\x14.sync.v1.PortForwardR\x0eportForwardSet\"\xa4\x02\n" +
 	"\x13UpdateConfigRequest\x12\x16\n" +
 	"\x06teamId\x18\x02 \x01(\tR\x06teamId\x12#\n" +
 	"\x04host\x18\v \x01(\v2\r.sync.v1.HostH\x00R\x04host\x122\n" +
 	"\tknownHost\x18\f \x01(\v2\x12.sync.v1.KnownHostH\x00R\tknownHost\x12)\n" +
 	"\x06sshKey\x18\r \x01(\v2\x0f.sync.v1.SshKeyH\x00R\x06sshKey\x12/\n" +
-	"\bidentity\x18\x0e \x01(\v2\x11.sync.v1.IdentityH\x00R\bidentityB\x06\n" +
-	"\x04data\"\x90\x02\n" +
+	"\bidentity\x18\x0e \x01(\v2\x11.sync.v1.IdentityH\x00R\bidentity\x128\n" +
+	"\vportForward\x18\x0f \x01(\v2\x14.sync.v1.PortForwardH\x00R\vportForwardB\x06\n" +
+	"\x04data\"\xca\x02\n" +
 	"\x14UpdateConfigResponse\x12;\n" +
 	"\vserver_time\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
 	"serverTime\x12#\n" +
 	"\x04host\x18\v \x01(\v2\r.sync.v1.HostH\x00R\x04host\x122\n" +
 	"\tknownHost\x18\f \x01(\v2\x12.sync.v1.KnownHostH\x00R\tknownHost\x12)\n" +
 	"\x06sshKey\x18\r \x01(\v2\x0f.sync.v1.SshKeyH\x00R\x06sshKey\x12/\n" +
-	"\bidentity\x18\x0e \x01(\v2\x11.sync.v1.IdentityH\x00R\bidentityB\x06\n" +
+	"\bidentity\x18\x0e \x01(\v2\x11.sync.v1.IdentityH\x00R\bidentity\x128\n" +
+	"\vportForward\x18\x0f \x01(\v2\x14.sync.v1.PortForwardH\x00R\vportForwardB\x06\n" +
 	"\x04data\"C\n" +
 	"\x0fSyncTeamRequest\x120\n" +
 	"\x05after\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\x05after\"s\n" +
@@ -831,8 +874,9 @@ var file_sync_v1_sync_service_proto_goTypes = []any{
 	(*KnownHost)(nil),                   // 12: sync.v1.KnownHost
 	(*SshKey)(nil),                      // 13: sync.v1.SshKey
 	(*Identity)(nil),                    // 14: sync.v1.Identity
-	(*v1.Team)(nil),                     // 15: team.v1.Team
-	(*v11.UserKeyWallet)(nil),           // 16: user.v1.UserKeyWallet
+	(*PortForward)(nil),                 // 15: sync.v1.PortForward
+	(*v1.Team)(nil),                     // 16: team.v1.Team
+	(*v11.UserKeyWallet)(nil),           // 17: user.v1.UserKeyWallet
 }
 var file_sync_v1_sync_service_proto_depIdxs = []int32{
 	10, // 0: sync.v1.SyncConfigRequest.after:type_name -> google.protobuf.Timestamp
@@ -841,39 +885,42 @@ var file_sync_v1_sync_service_proto_depIdxs = []int32{
 	12, // 3: sync.v1.SyncConfigResponse.knownHostSet:type_name -> sync.v1.KnownHost
 	13, // 4: sync.v1.SyncConfigResponse.sshKeySet:type_name -> sync.v1.SshKey
 	14, // 5: sync.v1.SyncConfigResponse.identitySet:type_name -> sync.v1.Identity
-	11, // 6: sync.v1.UpdateConfigRequest.host:type_name -> sync.v1.Host
-	12, // 7: sync.v1.UpdateConfigRequest.knownHost:type_name -> sync.v1.KnownHost
-	13, // 8: sync.v1.UpdateConfigRequest.sshKey:type_name -> sync.v1.SshKey
-	14, // 9: sync.v1.UpdateConfigRequest.identity:type_name -> sync.v1.Identity
-	10, // 10: sync.v1.UpdateConfigResponse.server_time:type_name -> google.protobuf.Timestamp
-	11, // 11: sync.v1.UpdateConfigResponse.host:type_name -> sync.v1.Host
-	12, // 12: sync.v1.UpdateConfigResponse.knownHost:type_name -> sync.v1.KnownHost
-	13, // 13: sync.v1.UpdateConfigResponse.sshKey:type_name -> sync.v1.SshKey
-	14, // 14: sync.v1.UpdateConfigResponse.identity:type_name -> sync.v1.Identity
-	10, // 15: sync.v1.SyncTeamRequest.after:type_name -> google.protobuf.Timestamp
-	10, // 16: sync.v1.SyncTeamResponse.serverTime:type_name -> google.protobuf.Timestamp
-	15, // 17: sync.v1.SyncTeamResponse.teams:type_name -> team.v1.Team
-	10, // 18: sync.v1.SyncUserKeyWalletRequest.after:type_name -> google.protobuf.Timestamp
-	10, // 19: sync.v1.SyncUserKeyWalletResponse.serverTime:type_name -> google.protobuf.Timestamp
-	16, // 20: sync.v1.SyncUserKeyWalletResponse.userKeyWalletSet:type_name -> user.v1.UserKeyWallet
-	16, // 21: sync.v1.UpdateUserKeyWalletRequest.userKeyWalletSet:type_name -> user.v1.UserKeyWallet
-	16, // 22: sync.v1.UpdateUserKeyWalletResponse.userKeyWalletSet:type_name -> user.v1.UserKeyWallet
-	10, // 23: sync.v1.UpdateUserKeyWalletResponse.server_time:type_name -> google.protobuf.Timestamp
-	0,  // 24: sync.v1.SyncService.SyncConfig:input_type -> sync.v1.SyncConfigRequest
-	2,  // 25: sync.v1.SyncService.UpdateConfig:input_type -> sync.v1.UpdateConfigRequest
-	4,  // 26: sync.v1.SyncService.SyncTeam:input_type -> sync.v1.SyncTeamRequest
-	6,  // 27: sync.v1.SyncService.SyncUserKeyWallet:input_type -> sync.v1.SyncUserKeyWalletRequest
-	8,  // 28: sync.v1.SyncService.UpdateUserKeyWallet:input_type -> sync.v1.UpdateUserKeyWalletRequest
-	1,  // 29: sync.v1.SyncService.SyncConfig:output_type -> sync.v1.SyncConfigResponse
-	3,  // 30: sync.v1.SyncService.UpdateConfig:output_type -> sync.v1.UpdateConfigResponse
-	5,  // 31: sync.v1.SyncService.SyncTeam:output_type -> sync.v1.SyncTeamResponse
-	7,  // 32: sync.v1.SyncService.SyncUserKeyWallet:output_type -> sync.v1.SyncUserKeyWalletResponse
-	9,  // 33: sync.v1.SyncService.UpdateUserKeyWallet:output_type -> sync.v1.UpdateUserKeyWalletResponse
-	29, // [29:34] is the sub-list for method output_type
-	24, // [24:29] is the sub-list for method input_type
-	24, // [24:24] is the sub-list for extension type_name
-	24, // [24:24] is the sub-list for extension extendee
-	0,  // [0:24] is the sub-list for field type_name
+	15, // 6: sync.v1.SyncConfigResponse.portForwardSet:type_name -> sync.v1.PortForward
+	11, // 7: sync.v1.UpdateConfigRequest.host:type_name -> sync.v1.Host
+	12, // 8: sync.v1.UpdateConfigRequest.knownHost:type_name -> sync.v1.KnownHost
+	13, // 9: sync.v1.UpdateConfigRequest.sshKey:type_name -> sync.v1.SshKey
+	14, // 10: sync.v1.UpdateConfigRequest.identity:type_name -> sync.v1.Identity
+	15, // 11: sync.v1.UpdateConfigRequest.portForward:type_name -> sync.v1.PortForward
+	10, // 12: sync.v1.UpdateConfigResponse.server_time:type_name -> google.protobuf.Timestamp
+	11, // 13: sync.v1.UpdateConfigResponse.host:type_name -> sync.v1.Host
+	12, // 14: sync.v1.UpdateConfigResponse.knownHost:type_name -> sync.v1.KnownHost
+	13, // 15: sync.v1.UpdateConfigResponse.sshKey:type_name -> sync.v1.SshKey
+	14, // 16: sync.v1.UpdateConfigResponse.identity:type_name -> sync.v1.Identity
+	15, // 17: sync.v1.UpdateConfigResponse.portForward:type_name -> sync.v1.PortForward
+	10, // 18: sync.v1.SyncTeamRequest.after:type_name -> google.protobuf.Timestamp
+	10, // 19: sync.v1.SyncTeamResponse.serverTime:type_name -> google.protobuf.Timestamp
+	16, // 20: sync.v1.SyncTeamResponse.teams:type_name -> team.v1.Team
+	10, // 21: sync.v1.SyncUserKeyWalletRequest.after:type_name -> google.protobuf.Timestamp
+	10, // 22: sync.v1.SyncUserKeyWalletResponse.serverTime:type_name -> google.protobuf.Timestamp
+	17, // 23: sync.v1.SyncUserKeyWalletResponse.userKeyWalletSet:type_name -> user.v1.UserKeyWallet
+	17, // 24: sync.v1.UpdateUserKeyWalletRequest.userKeyWalletSet:type_name -> user.v1.UserKeyWallet
+	17, // 25: sync.v1.UpdateUserKeyWalletResponse.userKeyWalletSet:type_name -> user.v1.UserKeyWallet
+	10, // 26: sync.v1.UpdateUserKeyWalletResponse.server_time:type_name -> google.protobuf.Timestamp
+	0,  // 27: sync.v1.SyncService.SyncConfig:input_type -> sync.v1.SyncConfigRequest
+	2,  // 28: sync.v1.SyncService.UpdateConfig:input_type -> sync.v1.UpdateConfigRequest
+	4,  // 29: sync.v1.SyncService.SyncTeam:input_type -> sync.v1.SyncTeamRequest
+	6,  // 30: sync.v1.SyncService.SyncUserKeyWallet:input_type -> sync.v1.SyncUserKeyWalletRequest
+	8,  // 31: sync.v1.SyncService.UpdateUserKeyWallet:input_type -> sync.v1.UpdateUserKeyWalletRequest
+	1,  // 32: sync.v1.SyncService.SyncConfig:output_type -> sync.v1.SyncConfigResponse
+	3,  // 33: sync.v1.SyncService.UpdateConfig:output_type -> sync.v1.UpdateConfigResponse
+	5,  // 34: sync.v1.SyncService.SyncTeam:output_type -> sync.v1.SyncTeamResponse
+	7,  // 35: sync.v1.SyncService.SyncUserKeyWallet:output_type -> sync.v1.SyncUserKeyWalletResponse
+	9,  // 36: sync.v1.SyncService.UpdateUserKeyWallet:output_type -> sync.v1.UpdateUserKeyWalletResponse
+	32, // [32:37] is the sub-list for method output_type
+	27, // [27:32] is the sub-list for method input_type
+	27, // [27:27] is the sub-list for extension type_name
+	27, // [27:27] is the sub-list for extension extendee
+	0,  // [0:27] is the sub-list for field type_name
 }
 
 func init() { file_sync_v1_sync_service_proto_init() }
@@ -884,17 +931,20 @@ func file_sync_v1_sync_service_proto_init() {
 	file_sync_v1_host_proto_init()
 	file_sync_v1_keychain_proto_init()
 	file_sync_v1_known_hosts_proto_init()
+	file_sync_v1_port_forward_proto_init()
 	file_sync_v1_sync_service_proto_msgTypes[2].OneofWrappers = []any{
 		(*UpdateConfigRequest_Host)(nil),
 		(*UpdateConfigRequest_KnownHost)(nil),
 		(*UpdateConfigRequest_SshKey)(nil),
 		(*UpdateConfigRequest_Identity)(nil),
+		(*UpdateConfigRequest_PortForward)(nil),
 	}
 	file_sync_v1_sync_service_proto_msgTypes[3].OneofWrappers = []any{
 		(*UpdateConfigResponse_Host)(nil),
 		(*UpdateConfigResponse_KnownHost)(nil),
 		(*UpdateConfigResponse_SshKey)(nil),
 		(*UpdateConfigResponse_Identity)(nil),
+		(*UpdateConfigResponse_PortForward)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

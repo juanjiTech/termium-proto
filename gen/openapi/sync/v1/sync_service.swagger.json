@@ -357,6 +357,74 @@
         }
       }
     },
+    "v1PortForward": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "内部唯一ID ulid"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "title": "创建时间"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "title": "更新时间"
+        },
+        "deletedAt": {
+          "type": "string",
+          "format": "date-time",
+          "title": "删除时间"
+        },
+        "clientId": {
+          "type": "string",
+          "title": "客户端那一侧的唯一ID 用于同步的时候告诉客户端这是对应客户端侧的哪个配置"
+        },
+        "label": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/v1PortForwardType"
+        },
+        "bindAddress": {
+          "type": "string"
+        },
+        "bindPort": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "targetHost": {
+          "type": "string"
+        },
+        "targetPort": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "chainHostIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "有序 Host InnerID 列表，至少 1 个"
+        },
+        "autoStart": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1PortForwardType": {
+      "type": "string",
+      "enum": [
+        "PORT_FORWARD_TYPE_UNSPECIFIED",
+        "PORT_FORWARD_TYPE_LOCAL",
+        "PORT_FORWARD_TYPE_REMOTE",
+        "PORT_FORWARD_TYPE_DYNAMIC"
+      ],
+      "default": "PORT_FORWARD_TYPE_UNSPECIFIED"
+    },
     "v1SshKey": {
       "type": "object",
       "properties": {
@@ -436,6 +504,13 @@
           "items": {
             "type": "object",
             "$ref": "#/definitions/v1Identity"
+          }
+        },
+        "portForwardSet": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1PortForward"
           }
         }
       }
@@ -533,6 +608,9 @@
         },
         "identity": {
           "$ref": "#/definitions/v1Identity"
+        },
+        "portForward": {
+          "$ref": "#/definitions/v1PortForward"
         }
       },
       "title": "UpdateConfig"
@@ -556,6 +634,9 @@
         },
         "identity": {
           "$ref": "#/definitions/v1Identity"
+        },
+        "portForward": {
+          "$ref": "#/definitions/v1PortForward"
         }
       }
     },

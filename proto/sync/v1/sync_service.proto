@@ -7,6 +7,7 @@ import "team/v1/team.proto";
 import "sync/v1/host.proto";
 import "sync/v1/keychain.proto";
 import "sync/v1/known_hosts.proto";
+import "sync/v1/port_forward.proto";
 import "user/v1/key_wallet.proto";
 
 option go_package = "github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1";
@@ -51,6 +52,7 @@ message SyncConfigResponse {
   repeated KnownHost knownHostSet = 12;
   repeated SshKey sshKeySet = 13;
   repeated Identity identitySet = 14;
+  repeated PortForward portForwardSet = 15;
 }
 
 // UpdateConfig
@@ -61,6 +63,7 @@ message UpdateConfigRequest {
     KnownHost knownHost = 12;
     SshKey sshKey = 13;
     Identity identity = 14;
+    PortForward portForward = 15;
   }
 }
 
@@ -71,6 +74,7 @@ message UpdateConfigResponse {
     KnownHost knownHost = 12;
     SshKey sshKey = 13;
     Identity identity = 14;
+    PortForward portForward = 15;
   }
 }
 
