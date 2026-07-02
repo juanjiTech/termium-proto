@@ -4,6 +4,7 @@
 * This file is a generated Typescript file for GRPC Gateway, DO NOT MODIFY
 */
 
+import * as GoogleProtobufTimestamp from "../../google/protobuf/timestamp.pb"
 
 export enum TeamConfigKind {
   TEAM_CONFIG_KIND_UNSPECIFIED = "TEAM_CONFIG_KIND_UNSPECIFIED",
@@ -18,7 +19,7 @@ export enum TeamConfigKind {
 export type TeamConfigRecord = {
   innerId?: string
   kind?: TeamConfigKind
-  updatedAt?: Date
-  deletedAt?: Date
+  updatedAt?: GoogleProtobufTimestamp.Timestamp
+  deletedAt?: GoogleProtobufTimestamp.Timestamp
   payloadCiphertext?: Uint8Array
 }
