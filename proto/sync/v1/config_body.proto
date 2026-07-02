@@ -48,3 +48,10 @@ message PortForwardBody {
   repeated string chain_host_ids = 7; // Host inner_id 有序列表
   bool auto_start = 8;
 }
+
+message SnippetBody {
+  string name = 1;
+  string script = 2;
+  repeated string package = 3;
+  int64 sort_order = 4;
+}

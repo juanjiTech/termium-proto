@@ -46,3 +46,10 @@ export type PortForwardBody = {
   chainHostIds?: string[]
   autoStart?: boolean
 }
+
+export type SnippetBody = {
+  name?: string
+  script?: string
+  package?: string[]
+  sortOrder?: string
+}

@@ -417,6 +417,74 @@ func (x *PortForwardBody) GetAutoStart() bool {
 	return false
 }
 
+type SnippetBody struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Script        string                 `protobuf:"bytes,2,opt,name=script,proto3" json:"script,omitempty"`
+	Package       []string               `protobuf:"bytes,3,rep,name=package,proto3" json:"package,omitempty"`
+	SortOrder     int64                  `protobuf:"varint,4,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SnippetBody) Reset() {
+	*x = SnippetBody{}
+	mi := &file_sync_v1_config_body_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SnippetBody) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SnippetBody) ProtoMessage() {}
+
+func (x *SnippetBody) ProtoReflect() protoreflect.Message {
+	mi := &file_sync_v1_config_body_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SnippetBody.ProtoReflect.Descriptor instead.
+func (*SnippetBody) Descriptor() ([]byte, []int) {
+	return file_sync_v1_config_body_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *SnippetBody) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *SnippetBody) GetScript() string {
+	if x != nil {
+		return x.Script
+	}
+	return ""
+}
+
+func (x *SnippetBody) GetPackage() []string {
+	if x != nil {
+		return x.Package
+	}
+	return nil
+}
+
+func (x *SnippetBody) GetSortOrder() int64 {
+	if x != nil {
+		return x.SortOrder
+	}
+	return 0
+}
+
 var File_sync_v1_config_body_proto protoreflect.FileDescriptor
 
 const file_sync_v1_config_body_proto_rawDesc = "" +
@@ -461,7 +529,13 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"targetPort\x12$\n" +
 	"\x0echain_host_ids\x18\a \x03(\tR\fchainHostIds\x12\x1d\n" +
 	"\n" +
-	"auto_start\x18\b \x01(\bR\tautoStartB>Z<github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1b\x06proto3"
+	"auto_start\x18\b \x01(\bR\tautoStart\"r\n" +
+	"\vSnippetBody\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x16\n" +
+	"\x06script\x18\x02 \x01(\tR\x06script\x12\x18\n" +
+	"\apackage\x18\x03 \x03(\tR\apackage\x12\x1d\n" +
+	"\n" +
+	"sort_order\x18\x04 \x01(\x03R\tsortOrderB>Z<github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1b\x06proto3"
 
 var (
 	file_sync_v1_config_body_proto_rawDescOnce sync.Once
@@ -475,17 +549,18 @@ func file_sync_v1_config_body_proto_rawDescGZIP() []byte {
 	return file_sync_v1_config_body_proto_rawDescData
 }
 
-var file_sync_v1_config_body_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_sync_v1_config_body_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_sync_v1_config_body_proto_goTypes = []any{
 	(*SshKeyBody)(nil),      // 0: sync.v1.SshKeyBody
 	(*IdentityBody)(nil),    // 1: sync.v1.IdentityBody
 	(*KnownHostBody)(nil),   // 2: sync.v1.KnownHostBody
 	(*HostBody)(nil),        // 3: sync.v1.HostBody
 	(*PortForwardBody)(nil), // 4: sync.v1.PortForwardBody
-	(PortForwardType)(0),    // 5: sync.v1.PortForwardType
+	(*SnippetBody)(nil),     // 5: sync.v1.SnippetBody
+	(PortForwardType)(0),    // 6: sync.v1.PortForwardType
 }
 var file_sync_v1_config_body_proto_depIdxs = []int32{
-	5, // 0: sync.v1.PortForwardBody.type:type_name -> sync.v1.PortForwardType
+	6, // 0: sync.v1.PortForwardBody.type:type_name -> sync.v1.PortForwardType
 	1, // [1:1] is the sub-list for method output_type
 	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
@@ -505,7 +580,7 @@ func file_sync_v1_config_body_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_sync_v1_config_body_proto_rawDesc), len(file_sync_v1_config_body_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -12,6 +12,7 @@ enum TeamConfigKind {
   TEAM_CONFIG_KIND_KNOWN_HOST = 3;
   TEAM_CONFIG_KIND_HOST = 4;
   TEAM_CONFIG_KIND_PORT_FORWARD = 5;
+  TEAM_CONFIG_KIND_SNIPPET = 6;
 }
 
 // 同步 envelope：opaque payload + 元数据。不含 client_id。
