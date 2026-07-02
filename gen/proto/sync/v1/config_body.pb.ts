@@ -34,6 +34,7 @@ export type HostBody = {
   password?: string
   keyId?: string
   identityId?: string
+  proxyHostIds?: string[]
 }
 
 export type PortForwardBody = {

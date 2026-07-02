@@ -220,6 +220,7 @@ type HostBody struct {
 	Password      string                 `protobuf:"bytes,7,opt,name=password,proto3" json:"password,omitempty"`
 	KeyId         string                 `protobuf:"bytes,8,opt,name=key_id,json=keyId,proto3" json:"key_id,omitempty"` // inner_id
 	IdentityId    string                 `protobuf:"bytes,9,opt,name=identity_id,json=identityId,proto3" json:"identity_id,omitempty"`
+	ProxyHostIds  []string               `protobuf:"bytes,10,rep,name=proxy_host_ids,json=proxyHostIds,proto3" json:"proxy_host_ids,omitempty"` // Host inner_id 有序列表
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -315,6 +316,13 @@ func (x *HostBody) GetIdentityId() string {
 		return x.IdentityId
 	}
 	return ""
+}
+
+func (x *HostBody) GetProxyHostIds() []string {
+	if x != nil {
+		return x.ProxyHostIds
+	}
+	return nil
 }
 
 type PortForwardBody struct {
@@ -506,7 +514,7 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"\rKnownHostBody\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x1d\n" +
 	"\n" +
-	"public_key\x18\x02 \x01(\tR\tpublicKey\"\xec\x01\n" +
+	"public_key\x18\x02 \x01(\tR\tpublicKey\"\x92\x02\n" +
 	"\bHostBody\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12\x12\n" +
 	"\x04tags\x18\x02 \x03(\tR\x04tags\x12\x18\n" +
@@ -517,7 +525,9 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"\bpassword\x18\a \x01(\tR\bpassword\x12\x15\n" +
 	"\x06key_id\x18\b \x01(\tR\x05keyId\x12\x1f\n" +
 	"\videntity_id\x18\t \x01(\tR\n" +
-	"identityId\"\x9c\x02\n" +
+	"identityId\x12$\n" +
+	"\x0eproxy_host_ids\x18\n" +
+	" \x03(\tR\fproxyHostIds\"\x9c\x02\n" +
 	"\x0fPortForwardBody\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12,\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x18.sync.v1.PortForwardTypeR\x04type\x12!\n" +

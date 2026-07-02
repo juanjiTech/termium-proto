@@ -36,6 +36,7 @@ message HostBody {
   string password = 7;
   string key_id = 8; // inner_id
   string identity_id = 9;
+  repeated string proxy_host_ids = 10; // Host inner_id 有序列表
 }
 
 message PortForwardBody {
