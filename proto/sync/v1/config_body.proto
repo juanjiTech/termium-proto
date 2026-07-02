@@ -1,0 +1,50 @@
+syntax = "proto3";
+package sync.v1;
+
+import "sync/v1/port_forward.proto";
+
+option go_package = "github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1";
+
+// 以下 Body 仅用于本地编解码（marshal 后整包加密进 payload_ciphertext），不含 id / 时间戳。
+
+message SshKeyBody {
+  string label = 1;
+  string private_key = 2;
+  string public_key = 3;
+  string certificate = 4;
+}
+
+message IdentityBody {
+  string label = 1;
+  string username = 2;
+  string password = 3;
+  string key_id = 4; // 引用 SshKey inner_id
+}
+
+message KnownHostBody {
+  string address = 1;
+  string public_key = 2;
+}
+
+message HostBody {
+  string label = 1;
+  repeated string tags = 2;
+  string address = 3;
+  int64 port = 4;
+  string charset = 5;
+  string username = 6;
+  string password = 7;
+  string key_id = 8; // inner_id
+  string identity_id = 9;
+}
+
+message PortForwardBody {
+  string label = 1;
+  PortForwardType type = 2;
+  string bind_address = 3;
+  int32 bind_port = 4;
+  string target_host = 5;
+  int32 target_port = 6;
+  repeated string chain_host_ids = 7; // Host inner_id 有序列表
+  bool auto_start = 8;
+}

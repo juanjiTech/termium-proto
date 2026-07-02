@@ -5,67 +5,44 @@
 */
 
 import * as fm from "../../fetch.pb"
-import * as GoogleProtobufTimestamp from "../../google/protobuf/timestamp.pb"
 import * as TeamV1Team from "../../team/v1/team.pb"
 import * as UserV1Key_wallet from "../../user/v1/key_wallet.pb"
-import * as SyncV1Host from "./host.pb"
-import * as SyncV1Keychain from "./keychain.pb"
-import * as SyncV1Known_hosts from "./known_hosts.pb"
-import * as SyncV1Port_forward from "./port_forward.pb"
-
-type Absent<T, K extends keyof T> = { [k in Exclude<keyof T, K>]?: undefined };
-type OneOf<T> =
-  | { [k in keyof T]?: undefined }
-  | (
-    keyof T extends infer K ?
-      (K extends string & keyof T ? { [k in K]: T[K] } & Absent<T, K>
-        : never)
-    : never);
+import * as SyncV1Team_config from "./team_config.pb"
 export type SyncConfigRequest = {
-  after?: GoogleProtobufTimestamp.Timestamp
+  after?: Date
   teamId?: string
 }
 
 export type SyncConfigResponse = {
-  serverTime?: GoogleProtobufTimestamp.Timestamp
-  hostSet?: SyncV1Host.Host[]
-  knownHostSet?: SyncV1Known_hosts.KnownHost[]
-  sshKeySet?: SyncV1Keychain.SshKey[]
-  identitySet?: SyncV1Keychain.Identity[]
-  portForwardSet?: SyncV1Port_forward.PortForward[]
+  serverTime?: Date
+  records?: SyncV1Team_config.TeamConfigRecord[]
 }
 
-
-type BaseUpdateConfigRequest = {
+export type UpdateConfigRequest = {
   teamId?: string
+  record?: SyncV1Team_config.TeamConfigRecord
 }
 
-export type UpdateConfigRequest = BaseUpdateConfigRequest
-  & OneOf<{ host: SyncV1Host.Host; knownHost: SyncV1Known_hosts.KnownHost; sshKey: SyncV1Keychain.SshKey; identity: SyncV1Keychain.Identity; portForward: SyncV1Port_forward.PortForward }>
-
-
-type BaseUpdateConfigResponse = {
-  serverTime?: GoogleProtobufTimestamp.Timestamp
+export type UpdateConfigResponse = {
+  serverTime?: Date
+  record?: SyncV1Team_config.TeamConfigRecord
 }
-
-export type UpdateConfigResponse = BaseUpdateConfigResponse
-  & OneOf<{ host: SyncV1Host.Host; knownHost: SyncV1Known_hosts.KnownHost; sshKey: SyncV1Keychain.SshKey; identity: SyncV1Keychain.Identity; portForward: SyncV1Port_forward.PortForward }>
 
 export type SyncTeamRequest = {
-  after?: GoogleProtobufTimestamp.Timestamp
+  after?: Date
 }
 
 export type SyncTeamResponse = {
-  serverTime?: GoogleProtobufTimestamp.Timestamp
+  serverTime?: Date
   teams?: TeamV1Team.Team[]
 }
 
 export type SyncUserKeyWalletRequest = {
-  after?: GoogleProtobufTimestamp.Timestamp
+  after?: Date
 }
 
 export type SyncUserKeyWalletResponse = {
-  serverTime?: GoogleProtobufTimestamp.Timestamp
+  serverTime?: Date
   publicKey?: string
   encryptedPrivateKey?: string
   userKeyWalletSet?: UserV1Key_wallet.UserKeyWallet[]
@@ -81,7 +58,7 @@ export type UpdateUserKeyWalletResponse = {
   publicKey?: string
   encryptedPrivateKey?: string
   userKeyWalletSet?: UserV1Key_wallet.UserKeyWallet[]
-  serverTime?: GoogleProtobufTimestamp.Timestamp
+  serverTime?: Date
 }
 
 export class SyncService {

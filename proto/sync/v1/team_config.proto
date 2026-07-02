@@ -1,0 +1,24 @@
+syntax = "proto3";
+package sync.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1";
+
+enum TeamConfigKind {
+  TEAM_CONFIG_KIND_UNSPECIFIED = 0;
+  TEAM_CONFIG_KIND_SSH_KEY = 1;
+  TEAM_CONFIG_KIND_IDENTITY = 2;
+  TEAM_CONFIG_KIND_KNOWN_HOST = 3;
+  TEAM_CONFIG_KIND_HOST = 4;
+  TEAM_CONFIG_KIND_PORT_FORWARD = 5;
+}
+
+// 同步 envelope：opaque payload + 元数据。不含 client_id。
+message TeamConfigRecord {
+  string inner_id = 1;
+  TeamConfigKind kind = 2;
+  google.protobuf.Timestamp updated_at = 3;
+  google.protobuf.Timestamp deleted_at = 4;
+  bytes payload_ciphertext = 5;
+}

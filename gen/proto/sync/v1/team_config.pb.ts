@@ -1,0 +1,23 @@
+/* eslint-disable */
+// @ts-nocheck
+/*
+* This file is a generated Typescript file for GRPC Gateway, DO NOT MODIFY
+*/
+
+
+export enum TeamConfigKind {
+  TEAM_CONFIG_KIND_UNSPECIFIED = "TEAM_CONFIG_KIND_UNSPECIFIED",
+  TEAM_CONFIG_KIND_SSH_KEY = "TEAM_CONFIG_KIND_SSH_KEY",
+  TEAM_CONFIG_KIND_IDENTITY = "TEAM_CONFIG_KIND_IDENTITY",
+  TEAM_CONFIG_KIND_KNOWN_HOST = "TEAM_CONFIG_KIND_KNOWN_HOST",
+  TEAM_CONFIG_KIND_HOST = "TEAM_CONFIG_KIND_HOST",
+  TEAM_CONFIG_KIND_PORT_FORWARD = "TEAM_CONFIG_KIND_PORT_FORWARD",
+}
+
+export type TeamConfigRecord = {
+  innerId?: string
+  kind?: TeamConfigKind
+  updatedAt?: Date
+  deletedAt?: Date
+  payloadCiphertext?: Uint8Array
+}
