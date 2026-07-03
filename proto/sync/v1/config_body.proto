@@ -56,3 +56,11 @@ message SnippetBody {
   repeated string package = 3;
   int64 sort_order = 4;
 }
+
+message ClusterBody {
+  string label = 1;
+  repeated string tags = 2;
+  string kubeconfig = 3;              // 加密 payload
+  string context = 4;
+  repeated string proxy_host_ids = 5; // Host inner_id 有序列表
+}

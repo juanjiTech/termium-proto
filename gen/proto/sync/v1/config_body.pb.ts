@@ -54,3 +54,11 @@ export type SnippetBody = {
   package?: string[]
   sortOrder?: string
 }
+
+export type ClusterBody = {
+  label?: string
+  tags?: string[]
+  kubeconfig?: string
+  context?: string
+  proxyHostIds?: string[]
+}
