@@ -60,7 +60,7 @@ message SnippetBody {
 message ClusterBody {
   string label = 1;
   repeated string tags = 2;
-  string kubeconfig = 3;              // 加密 payload
+  string kubeconfig = 3;              // kubeconfig 文件内容（随外层整包加密）
   string context = 4;
   repeated string proxy_host_ids = 5; // Host inner_id 有序列表
 }
