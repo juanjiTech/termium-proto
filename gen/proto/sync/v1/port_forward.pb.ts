@@ -4,6 +4,7 @@
 * This file is a generated Typescript file for GRPC Gateway, DO NOT MODIFY
 */
 
+import * as GoogleProtobufTimestamp from "../../google/protobuf/timestamp.pb"
 
 export enum PortForwardType {
   PORT_FORWARD_TYPE_UNSPECIFIED = "PORT_FORWARD_TYPE_UNSPECIFIED",
@@ -14,9 +15,9 @@ export enum PortForwardType {
 
 export type PortForward = {
   id?: string
-  createdAt?: Date
-  updatedAt?: Date
-  deletedAt?: Date
+  createdAt?: GoogleProtobufTimestamp.Timestamp
+  updatedAt?: GoogleProtobufTimestamp.Timestamp
+  deletedAt?: GoogleProtobufTimestamp.Timestamp
   clientId?: string
   label?: string
   type?: PortForwardType

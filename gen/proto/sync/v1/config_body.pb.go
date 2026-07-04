@@ -497,7 +497,7 @@ type ClusterBody struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Label         string                 `protobuf:"bytes,1,opt,name=label,proto3" json:"label,omitempty"`
 	Tags          []string               `protobuf:"bytes,2,rep,name=tags,proto3" json:"tags,omitempty"`
-	Kubeconfig    string                 `protobuf:"bytes,3,opt,name=kubeconfig,proto3" json:"kubeconfig,omitempty"` // 加密 payload
+	Kubeconfig    string                 `protobuf:"bytes,3,opt,name=kubeconfig,proto3" json:"kubeconfig,omitempty"` // kubeconfig 文件内容（随外层整包加密）
 	Context       string                 `protobuf:"bytes,4,opt,name=context,proto3" json:"context,omitempty"`
 	ProxyHostIds  []string               `protobuf:"bytes,5,rep,name=proxy_host_ids,json=proxyHostIds,proto3" json:"proxy_host_ids,omitempty"` // Host inner_id 有序列表
 	unknownFields protoimpl.UnknownFields
