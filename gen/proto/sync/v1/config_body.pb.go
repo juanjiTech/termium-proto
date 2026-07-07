@@ -494,14 +494,15 @@ func (x *SnippetBody) GetSortOrder() int64 {
 }
 
 type ClusterBody struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Label         string                 `protobuf:"bytes,1,opt,name=label,proto3" json:"label,omitempty"`
-	Tags          []string               `protobuf:"bytes,2,rep,name=tags,proto3" json:"tags,omitempty"`
-	Kubeconfig    string                 `protobuf:"bytes,3,opt,name=kubeconfig,proto3" json:"kubeconfig,omitempty"` // kubeconfig 文件内容（随外层整包加密）
-	Context       string                 `protobuf:"bytes,4,opt,name=context,proto3" json:"context,omitempty"`
-	ProxyHostIds  []string               `protobuf:"bytes,5,rep,name=proxy_host_ids,json=proxyHostIds,proto3" json:"proxy_host_ids,omitempty"` // Host inner_id 有序列表
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	Label               string                 `protobuf:"bytes,1,opt,name=label,proto3" json:"label,omitempty"`
+	Tags                []string               `protobuf:"bytes,2,rep,name=tags,proto3" json:"tags,omitempty"`
+	Kubeconfig          string                 `protobuf:"bytes,3,opt,name=kubeconfig,proto3" json:"kubeconfig,omitempty"` // kubeconfig 文件内容（随外层整包加密）
+	Context             string                 `protobuf:"bytes,4,opt,name=context,proto3" json:"context,omitempty"`
+	ProxyHostIds        []string               `protobuf:"bytes,5,rep,name=proxy_host_ids,json=proxyHostIds,proto3" json:"proxy_host_ids,omitempty"` // Host inner_id 有序列表
+	AuditPolicyOverride *AuditPolicyOverride   `protobuf:"bytes,6,opt,name=auditPolicyOverride,proto3" json:"auditPolicyOverride,omitempty"`         // Cluster-level audit policy override (field-level merge with team default)
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *ClusterBody) Reset() {
@@ -569,11 +570,62 @@ func (x *ClusterBody) GetProxyHostIds() []string {
 	return nil
 }
 
+func (x *ClusterBody) GetAuditPolicyOverride() *AuditPolicyOverride {
+	if x != nil {
+		return x.AuditPolicyOverride
+	}
+	return nil
+}
+
+type TeamAuditPolicyBody struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Policy        *AuditPolicy           `protobuf:"bytes,1,opt,name=policy,proto3" json:"policy,omitempty"` // Team-wide default audit policy for K8s API access
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TeamAuditPolicyBody) Reset() {
+	*x = TeamAuditPolicyBody{}
+	mi := &file_sync_v1_config_body_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TeamAuditPolicyBody) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TeamAuditPolicyBody) ProtoMessage() {}
+
+func (x *TeamAuditPolicyBody) ProtoReflect() protoreflect.Message {
+	mi := &file_sync_v1_config_body_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TeamAuditPolicyBody.ProtoReflect.Descriptor instead.
+func (*TeamAuditPolicyBody) Descriptor() ([]byte, []int) {
+	return file_sync_v1_config_body_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *TeamAuditPolicyBody) GetPolicy() *AuditPolicy {
+	if x != nil {
+		return x.Policy
+	}
+	return nil
+}
+
 var File_sync_v1_config_body_proto protoreflect.FileDescriptor
 
 const file_sync_v1_config_body_proto_rawDesc = "" +
 	"\n" +
-	"\x19sync/v1/config_body.proto\x12\async.v1\x1a\x1async/v1/port_forward.proto\"\x84\x01\n" +
+	"\x19sync/v1/config_body.proto\x12\async.v1\x1a\x1async/v1/port_forward.proto\x1a\x13sync/v1/audit.proto\"\x84\x01\n" +
 	"\n" +
 	"SshKeyBody\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12\x1f\n" +
@@ -621,7 +673,7 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"\x06script\x18\x02 \x01(\tR\x06script\x12\x18\n" +
 	"\apackage\x18\x03 \x03(\tR\apackage\x12\x1d\n" +
 	"\n" +
-	"sort_order\x18\x04 \x01(\x03R\tsortOrder\"\x97\x01\n" +
+	"sort_order\x18\x04 \x01(\x03R\tsortOrder\"\xe7\x01\n" +
 	"\vClusterBody\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12\x12\n" +
 	"\x04tags\x18\x02 \x03(\tR\x04tags\x12\x1e\n" +
@@ -629,7 +681,10 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"kubeconfig\x18\x03 \x01(\tR\n" +
 	"kubeconfig\x12\x18\n" +
 	"\acontext\x18\x04 \x01(\tR\acontext\x12$\n" +
-	"\x0eproxy_host_ids\x18\x05 \x03(\tR\fproxyHostIdsB>Z<github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1b\x06proto3"
+	"\x0eproxy_host_ids\x18\x05 \x03(\tR\fproxyHostIds\x12N\n" +
+	"\x13auditPolicyOverride\x18\x06 \x01(\v2\x1c.sync.v1.AuditPolicyOverrideR\x13auditPolicyOverride\"C\n" +
+	"\x13TeamAuditPolicyBody\x12,\n" +
+	"\x06policy\x18\x01 \x01(\v2\x14.sync.v1.AuditPolicyR\x06policyB>Z<github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1b\x06proto3"
 
 var (
 	file_sync_v1_config_body_proto_rawDescOnce sync.Once
@@ -643,24 +698,29 @@ func file_sync_v1_config_body_proto_rawDescGZIP() []byte {
 	return file_sync_v1_config_body_proto_rawDescData
 }
 
-var file_sync_v1_config_body_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_sync_v1_config_body_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_sync_v1_config_body_proto_goTypes = []any{
-	(*SshKeyBody)(nil),      // 0: sync.v1.SshKeyBody
-	(*IdentityBody)(nil),    // 1: sync.v1.IdentityBody
-	(*KnownHostBody)(nil),   // 2: sync.v1.KnownHostBody
-	(*HostBody)(nil),        // 3: sync.v1.HostBody
-	(*PortForwardBody)(nil), // 4: sync.v1.PortForwardBody
-	(*SnippetBody)(nil),     // 5: sync.v1.SnippetBody
-	(*ClusterBody)(nil),     // 6: sync.v1.ClusterBody
-	(PortForwardType)(0),    // 7: sync.v1.PortForwardType
+	(*SshKeyBody)(nil),          // 0: sync.v1.SshKeyBody
+	(*IdentityBody)(nil),        // 1: sync.v1.IdentityBody
+	(*KnownHostBody)(nil),       // 2: sync.v1.KnownHostBody
+	(*HostBody)(nil),            // 3: sync.v1.HostBody
+	(*PortForwardBody)(nil),     // 4: sync.v1.PortForwardBody
+	(*SnippetBody)(nil),         // 5: sync.v1.SnippetBody
+	(*ClusterBody)(nil),         // 6: sync.v1.ClusterBody
+	(*TeamAuditPolicyBody)(nil), // 7: sync.v1.TeamAuditPolicyBody
+	(PortForwardType)(0),        // 8: sync.v1.PortForwardType
+	(*AuditPolicyOverride)(nil), // 9: sync.v1.AuditPolicyOverride
+	(*AuditPolicy)(nil),         // 10: sync.v1.AuditPolicy
 }
 var file_sync_v1_config_body_proto_depIdxs = []int32{
-	7, // 0: sync.v1.PortForwardBody.type:type_name -> sync.v1.PortForwardType
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	8,  // 0: sync.v1.PortForwardBody.type:type_name -> sync.v1.PortForwardType
+	9,  // 1: sync.v1.ClusterBody.auditPolicyOverride:type_name -> sync.v1.AuditPolicyOverride
+	10, // 2: sync.v1.TeamAuditPolicyBody.policy:type_name -> sync.v1.AuditPolicy
+	3,  // [3:3] is the sub-list for method output_type
+	3,  // [3:3] is the sub-list for method input_type
+	3,  // [3:3] is the sub-list for extension type_name
+	3,  // [3:3] is the sub-list for extension extendee
+	0,  // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_sync_v1_config_body_proto_init() }
@@ -669,13 +729,14 @@ func file_sync_v1_config_body_proto_init() {
 		return
 	}
 	file_sync_v1_port_forward_proto_init()
+	file_sync_v1_audit_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_sync_v1_config_body_proto_rawDesc), len(file_sync_v1_config_body_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

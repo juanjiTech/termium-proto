@@ -2,6 +2,7 @@ syntax = "proto3";
 package sync.v1;
 
 import "sync/v1/port_forward.proto";
+import "sync/v1/audit.proto";
 
 option go_package = "github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1";
 
@@ -63,4 +64,9 @@ message ClusterBody {
   string kubeconfig = 3;              // kubeconfig 文件内容（随外层整包加密）
   string context = 4;
   repeated string proxy_host_ids = 5; // Host inner_id 有序列表
+  AuditPolicyOverride auditPolicyOverride = 6; // Cluster-level audit policy override (field-level merge with team default)
+}
+
+message TeamAuditPolicyBody {
+  AuditPolicy policy = 1; // Team-wide default audit policy for K8s API access
 }

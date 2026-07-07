@@ -1,0 +1,55 @@
+syntax = "proto3";
+package sync.v1;
+
+option go_package = "github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1";
+
+// AuditEffect defines the action to take when a rule matches or as default.
+enum AuditEffect {
+  AUDIT_EFFECT_UNSPECIFIED = 0;
+  AUDIT_EFFECT_ALLOW = 1;
+  AUDIT_EFFECT_DENY = 2;
+  AUDIT_EFFECT_ASK = 3;  // Only valid for defaultEffect; ask user approval
+}
+
+// AuditLoggingMode defines how audit logs are recorded.
+enum AuditLoggingMode {
+  AUDIT_LOGGING_MODE_UNSPECIFIED = 0;
+  AUDIT_LOGGING_MODE_FULL = 1;
+  AUDIT_LOGGING_MODE_SAMPLE = 2;
+}
+
+// AuditLogging configures audit log recording behavior.
+message AuditLogging {
+  AuditLoggingMode mode = 1;
+  optional float sampleRate = 2;          // 0.0–1.0, used when mode=SAMPLE
+  optional bool alwaysLogDenied = 3;      // Default: true; always log denied requests even in SAMPLE mode
+}
+
+// AuditRule defines a single audit policy rule.
+message AuditRule {
+  string name = 1;
+  AuditEffect effect = 2;                 // Only ALLOW or DENY; ASK not allowed at rule level
+  repeated string verbs = 3;              // Empty = any verb; e.g., get, list, watch, create, update, patch, delete, deletecollection, *
+  repeated string apiGroups = 4;          // Empty = any group; "" or "core" = core group; "*" = all groups
+  repeated string resources = 5;          // Empty = any resource; supports bare name, group/resource, regex:pattern, *
+  repeated string resourceNames = 6;      // Empty = any resource name; specific object names (RBAC resourceNames)
+  repeated string namespaces = 7;         // Empty = any namespace (including cluster-scoped); exact match, regex:pattern, or "*" (namespaced only)
+  repeated string nonResourceUrls = 8;    // For non-resource URLs like /api, /healthz, /version
+}
+
+// AuditPolicy defines the complete audit policy for a team (default) or cluster override.
+message AuditPolicy {
+  AuditEffect defaultEffect = 1;          // Action when no rule matches; recommended: ASK
+  repeated AuditRule rules = 2;           // Evaluated in order (first-match-wins)
+  AuditLogging logging = 3;
+  optional int32 askTimeoutSeconds = 4;   // Timeout for ASK approval; default: 300
+}
+
+// AuditPolicyOverride allows cluster-level field-by-field overrides of team default policy.
+// All fields are optional; unset fields inherit from team policy.
+message AuditPolicyOverride {
+  optional AuditEffect defaultEffect = 1;
+  repeated AuditRule rules = 2;           // Rules are merged: same name replaces, new names prepend
+  optional AuditLogging logging = 3;      // Logging sub-fields also support field-level merge
+  optional int32 askTimeoutSeconds = 4;
+}

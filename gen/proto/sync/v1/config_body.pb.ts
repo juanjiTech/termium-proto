@@ -4,6 +4,7 @@
 * This file is a generated Typescript file for GRPC Gateway, DO NOT MODIFY
 */
 
+import * as SyncV1Audit from "./audit.pb"
 import * as SyncV1Port_forward from "./port_forward.pb"
 export type SshKeyBody = {
   label?: string
@@ -61,4 +62,9 @@ export type ClusterBody = {
   kubeconfig?: string
   context?: string
   proxyHostIds?: string[]
+  auditPolicyOverride?: SyncV1Audit.AuditPolicyOverride
+}
+
+export type TeamAuditPolicyBody = {
+  policy?: SyncV1Audit.AuditPolicy
 }
