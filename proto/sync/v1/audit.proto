@@ -39,7 +39,7 @@ message AuditRule {
 
 // AuditPolicy defines the complete audit policy for a team (default) or cluster override.
 message AuditPolicy {
-  AuditEffect defaultEffect = 1;          // Action when no rule matches; recommended: ASK
+  AuditEffect defaultEffect = 1;          // Action when no rule matches; recommended: ALLOW
   repeated AuditRule rules = 2;           // Evaluated in order (first-match-wins)
   AuditLogging logging = 3;
   optional int32 askTimeoutSeconds = 4;   // Timeout for ASK approval; default: 300
