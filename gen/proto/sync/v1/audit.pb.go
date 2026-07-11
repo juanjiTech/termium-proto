@@ -289,7 +289,7 @@ func (x *AuditRule) GetNonResourceUrls() []string {
 // AuditPolicy defines the complete audit policy for a team (default) or cluster override.
 type AuditPolicy struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
-	DefaultEffect     AuditEffect            `protobuf:"varint,1,opt,name=defaultEffect,proto3,enum=sync.v1.AuditEffect" json:"defaultEffect,omitempty"` // Action when no rule matches; recommended: ASK
+	DefaultEffect     AuditEffect            `protobuf:"varint,1,opt,name=defaultEffect,proto3,enum=sync.v1.AuditEffect" json:"defaultEffect,omitempty"` // Action when no rule matches; recommended: ALLOW
 	Rules             []*AuditRule           `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`                                           // Evaluated in order (first-match-wins)
 	Logging           *AuditLogging          `protobuf:"bytes,3,opt,name=logging,proto3" json:"logging,omitempty"`
 	AskTimeoutSeconds *int32                 `protobuf:"varint,4,opt,name=askTimeoutSeconds,proto3,oneof" json:"askTimeoutSeconds,omitempty"` // Timeout for ASK approval; default: 300
