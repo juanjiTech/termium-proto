@@ -221,6 +221,7 @@ type HostBody struct {
 	KeyId         string                 `protobuf:"bytes,8,opt,name=key_id,json=keyId,proto3" json:"key_id,omitempty"` // inner_id
 	IdentityId    string                 `protobuf:"bytes,9,opt,name=identity_id,json=identityId,proto3" json:"identity_id,omitempty"`
 	ProxyHostIds  []string               `protobuf:"bytes,10,rep,name=proxy_host_ids,json=proxyHostIds,proto3" json:"proxy_host_ids,omitempty"` // Host inner_id 有序列表
+	ForwardAgent  bool                   `protobuf:"varint,11,opt,name=forward_agent,json=forwardAgent,proto3" json:"forward_agent,omitempty"`  // OpenSSH ForwardAgent
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -323,6 +324,13 @@ func (x *HostBody) GetProxyHostIds() []string {
 		return x.ProxyHostIds
 	}
 	return nil
+}
+
+func (x *HostBody) GetForwardAgent() bool {
+	if x != nil {
+		return x.ForwardAgent
+	}
+	return false
 }
 
 type PortForwardBody struct {
@@ -642,7 +650,7 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"\rKnownHostBody\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x1d\n" +
 	"\n" +
-	"public_key\x18\x02 \x01(\tR\tpublicKey\"\x92\x02\n" +
+	"public_key\x18\x02 \x01(\tR\tpublicKey\"\xb7\x02\n" +
 	"\bHostBody\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12\x12\n" +
 	"\x04tags\x18\x02 \x03(\tR\x04tags\x12\x18\n" +
@@ -655,7 +663,8 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"\videntity_id\x18\t \x01(\tR\n" +
 	"identityId\x12$\n" +
 	"\x0eproxy_host_ids\x18\n" +
-	" \x03(\tR\fproxyHostIds\"\x9c\x02\n" +
+	" \x03(\tR\fproxyHostIds\x12#\n" +
+	"\rforward_agent\x18\v \x01(\bR\fforwardAgent\"\x9c\x02\n" +
 	"\x0fPortForwardBody\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12,\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x18.sync.v1.PortForwardTypeR\x04type\x12!\n" +
