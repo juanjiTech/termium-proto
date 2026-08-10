@@ -234,7 +234,7 @@
         "USER_STATUS_WAIT_EMAIL_CHECK"
       ],
       "default": "USER_STATUS_UNSPECIFIED",
-      "title": "- USER_STATUS_DISABLED: 封禁\n - USER_STATUS_NORMAL: 正常\n - USER_STATUS_WAIT_EMAIL_CHECK: 等待验证邮箱"
+      "description": "- USER_STATUS_DISABLED: 封禁\n - USER_STATUS_NORMAL: 正常\n - USER_STATUS_WAIT_EMAIL_CHECK: 等待验证邮箱"
     }
   }
 }

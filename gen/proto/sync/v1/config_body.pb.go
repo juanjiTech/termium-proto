@@ -21,6 +21,55 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type HostProtocol int32
+
+const (
+	HostProtocol_HOST_PROTOCOL_UNSPECIFIED HostProtocol = 0 // 视为 SSH
+	HostProtocol_HOST_PROTOCOL_SSH         HostProtocol = 1
+	HostProtocol_HOST_PROTOCOL_TELNET      HostProtocol = 2
+)
+
+// Enum value maps for HostProtocol.
+var (
+	HostProtocol_name = map[int32]string{
+		0: "HOST_PROTOCOL_UNSPECIFIED",
+		1: "HOST_PROTOCOL_SSH",
+		2: "HOST_PROTOCOL_TELNET",
+	}
+	HostProtocol_value = map[string]int32{
+		"HOST_PROTOCOL_UNSPECIFIED": 0,
+		"HOST_PROTOCOL_SSH":         1,
+		"HOST_PROTOCOL_TELNET":      2,
+	}
+)
+
+func (x HostProtocol) Enum() *HostProtocol {
+	p := new(HostProtocol)
+	*p = x
+	return p
+}
+
+func (x HostProtocol) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (HostProtocol) Descriptor() protoreflect.EnumDescriptor {
+	return file_sync_v1_config_body_proto_enumTypes[0].Descriptor()
+}
+
+func (HostProtocol) Type() protoreflect.EnumType {
+	return &file_sync_v1_config_body_proto_enumTypes[0]
+}
+
+func (x HostProtocol) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use HostProtocol.Descriptor instead.
+func (HostProtocol) EnumDescriptor() ([]byte, []int) {
+	return file_sync_v1_config_body_proto_rawDescGZIP(), []int{0}
+}
+
 type SshKeyBody struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Label         string                 `protobuf:"bytes,1,opt,name=label,proto3" json:"label,omitempty"`
@@ -222,6 +271,7 @@ type HostBody struct {
 	IdentityId    string                 `protobuf:"bytes,9,opt,name=identity_id,json=identityId,proto3" json:"identity_id,omitempty"`
 	ProxyHostIds  []string               `protobuf:"bytes,10,rep,name=proxy_host_ids,json=proxyHostIds,proto3" json:"proxy_host_ids,omitempty"` // Host inner_id 有序列表
 	ForwardAgent  bool                   `protobuf:"varint,11,opt,name=forward_agent,json=forwardAgent,proto3" json:"forward_agent,omitempty"`  // OpenSSH ForwardAgent
+	Protocol      HostProtocol           `protobuf:"varint,12,opt,name=protocol,proto3,enum=sync.v1.HostProtocol" json:"protocol,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -331,6 +381,13 @@ func (x *HostBody) GetForwardAgent() bool {
 		return x.ForwardAgent
 	}
 	return false
+}
+
+func (x *HostBody) GetProtocol() HostProtocol {
+	if x != nil {
+		return x.Protocol
+	}
+	return HostProtocol_HOST_PROTOCOL_UNSPECIFIED
 }
 
 type PortForwardBody struct {
@@ -650,7 +707,7 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"\rKnownHostBody\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x1d\n" +
 	"\n" +
-	"public_key\x18\x02 \x01(\tR\tpublicKey\"\xb7\x02\n" +
+	"public_key\x18\x02 \x01(\tR\tpublicKey\"\xea\x02\n" +
 	"\bHostBody\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12\x12\n" +
 	"\x04tags\x18\x02 \x03(\tR\x04tags\x12\x18\n" +
@@ -664,7 +721,8 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"identityId\x12$\n" +
 	"\x0eproxy_host_ids\x18\n" +
 	" \x03(\tR\fproxyHostIds\x12#\n" +
-	"\rforward_agent\x18\v \x01(\bR\fforwardAgent\"\x9c\x02\n" +
+	"\rforward_agent\x18\v \x01(\bR\fforwardAgent\x121\n" +
+	"\bprotocol\x18\f \x01(\x0e2\x15.sync.v1.HostProtocolR\bprotocol\"\x9c\x02\n" +
 	"\x0fPortForwardBody\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12,\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x18.sync.v1.PortForwardTypeR\x04type\x12!\n" +
@@ -693,7 +751,11 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"\x0eproxy_host_ids\x18\x05 \x03(\tR\fproxyHostIds\x12N\n" +
 	"\x13auditPolicyOverride\x18\x06 \x01(\v2\x1c.sync.v1.AuditPolicyOverrideR\x13auditPolicyOverride\"C\n" +
 	"\x13TeamAuditPolicyBody\x12,\n" +
-	"\x06policy\x18\x01 \x01(\v2\x14.sync.v1.AuditPolicyR\x06policyB>Z<github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1b\x06proto3"
+	"\x06policy\x18\x01 \x01(\v2\x14.sync.v1.AuditPolicyR\x06policy*^\n" +
+	"\fHostProtocol\x12\x1d\n" +
+	"\x19HOST_PROTOCOL_UNSPECIFIED\x10\x00\x12\x15\n" +
+	"\x11HOST_PROTOCOL_SSH\x10\x01\x12\x18\n" +
+	"\x14HOST_PROTOCOL_TELNET\x10\x02B>Z<github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1b\x06proto3"
 
 var (
 	file_sync_v1_config_body_proto_rawDescOnce sync.Once
@@ -707,29 +769,32 @@ func file_sync_v1_config_body_proto_rawDescGZIP() []byte {
 	return file_sync_v1_config_body_proto_rawDescData
 }
 
+var file_sync_v1_config_body_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_sync_v1_config_body_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_sync_v1_config_body_proto_goTypes = []any{
-	(*SshKeyBody)(nil),          // 0: sync.v1.SshKeyBody
-	(*IdentityBody)(nil),        // 1: sync.v1.IdentityBody
-	(*KnownHostBody)(nil),       // 2: sync.v1.KnownHostBody
-	(*HostBody)(nil),            // 3: sync.v1.HostBody
-	(*PortForwardBody)(nil),     // 4: sync.v1.PortForwardBody
-	(*SnippetBody)(nil),         // 5: sync.v1.SnippetBody
-	(*ClusterBody)(nil),         // 6: sync.v1.ClusterBody
-	(*TeamAuditPolicyBody)(nil), // 7: sync.v1.TeamAuditPolicyBody
-	(PortForwardType)(0),        // 8: sync.v1.PortForwardType
-	(*AuditPolicyOverride)(nil), // 9: sync.v1.AuditPolicyOverride
-	(*AuditPolicy)(nil),         // 10: sync.v1.AuditPolicy
+	(HostProtocol)(0),           // 0: sync.v1.HostProtocol
+	(*SshKeyBody)(nil),          // 1: sync.v1.SshKeyBody
+	(*IdentityBody)(nil),        // 2: sync.v1.IdentityBody
+	(*KnownHostBody)(nil),       // 3: sync.v1.KnownHostBody
+	(*HostBody)(nil),            // 4: sync.v1.HostBody
+	(*PortForwardBody)(nil),     // 5: sync.v1.PortForwardBody
+	(*SnippetBody)(nil),         // 6: sync.v1.SnippetBody
+	(*ClusterBody)(nil),         // 7: sync.v1.ClusterBody
+	(*TeamAuditPolicyBody)(nil), // 8: sync.v1.TeamAuditPolicyBody
+	(PortForwardType)(0),        // 9: sync.v1.PortForwardType
+	(*AuditPolicyOverride)(nil), // 10: sync.v1.AuditPolicyOverride
+	(*AuditPolicy)(nil),         // 11: sync.v1.AuditPolicy
 }
 var file_sync_v1_config_body_proto_depIdxs = []int32{
-	8,  // 0: sync.v1.PortForwardBody.type:type_name -> sync.v1.PortForwardType
-	9,  // 1: sync.v1.ClusterBody.auditPolicyOverride:type_name -> sync.v1.AuditPolicyOverride
-	10, // 2: sync.v1.TeamAuditPolicyBody.policy:type_name -> sync.v1.AuditPolicy
-	3,  // [3:3] is the sub-list for method output_type
-	3,  // [3:3] is the sub-list for method input_type
-	3,  // [3:3] is the sub-list for extension type_name
-	3,  // [3:3] is the sub-list for extension extendee
-	0,  // [0:3] is the sub-list for field type_name
+	0,  // 0: sync.v1.HostBody.protocol:type_name -> sync.v1.HostProtocol
+	9,  // 1: sync.v1.PortForwardBody.type:type_name -> sync.v1.PortForwardType
+	10, // 2: sync.v1.ClusterBody.auditPolicyOverride:type_name -> sync.v1.AuditPolicyOverride
+	11, // 3: sync.v1.TeamAuditPolicyBody.policy:type_name -> sync.v1.AuditPolicy
+	4,  // [4:4] is the sub-list for method output_type
+	4,  // [4:4] is the sub-list for method input_type
+	4,  // [4:4] is the sub-list for extension type_name
+	4,  // [4:4] is the sub-list for extension extendee
+	0,  // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_sync_v1_config_body_proto_init() }
@@ -744,13 +809,14 @@ func file_sync_v1_config_body_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_sync_v1_config_body_proto_rawDesc), len(file_sync_v1_config_body_proto_rawDesc)),
-			NumEnums:      0,
+			NumEnums:      1,
 			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_sync_v1_config_body_proto_goTypes,
 		DependencyIndexes: file_sync_v1_config_body_proto_depIdxs,
+		EnumInfos:         file_sync_v1_config_body_proto_enumTypes,
 		MessageInfos:      file_sync_v1_config_body_proto_msgTypes,
 	}.Build()
 	File_sync_v1_config_body_proto = out.File

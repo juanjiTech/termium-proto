@@ -6,6 +6,13 @@
 
 import * as SyncV1Audit from "./audit.pb"
 import * as SyncV1Port_forward from "./port_forward.pb"
+
+export enum HostProtocol {
+  HOST_PROTOCOL_UNSPECIFIED = "HOST_PROTOCOL_UNSPECIFIED",
+  HOST_PROTOCOL_SSH = "HOST_PROTOCOL_SSH",
+  HOST_PROTOCOL_TELNET = "HOST_PROTOCOL_TELNET",
+}
+
 export type SshKeyBody = {
   label?: string
   privateKey?: string
@@ -37,6 +44,7 @@ export type HostBody = {
   identityId?: string
   proxyHostIds?: string[]
   forwardAgent?: boolean
+  protocol?: HostProtocol
 }
 
 export type PortForwardBody = {

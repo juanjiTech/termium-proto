@@ -8,6 +8,12 @@ option go_package = "github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV
 
 // 以下 Body 仅用于本地编解码（marshal 后整包加密进 payload_ciphertext），不含 id / 时间戳。
 
+enum HostProtocol {
+  HOST_PROTOCOL_UNSPECIFIED = 0; // 视为 SSH
+  HOST_PROTOCOL_SSH = 1;
+  HOST_PROTOCOL_TELNET = 2;
+}
+
 message SshKeyBody {
   string label = 1;
   string private_key = 2;
@@ -39,6 +45,7 @@ message HostBody {
   string identity_id = 9;
   repeated string proxy_host_ids = 10; // Host inner_id 有序列表
   bool forward_agent = 11; // OpenSSH ForwardAgent
+  HostProtocol protocol = 12;
 }
 
 message PortForwardBody {
