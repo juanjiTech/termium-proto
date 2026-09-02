@@ -45,6 +45,8 @@ export type HostBody = {
   proxyHostIds?: string[]
   forwardAgent?: boolean
   protocol?: HostProtocol
+  osType?: string
+  icon?: string
 }
 
 export type PortForwardBody = {

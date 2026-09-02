@@ -46,6 +46,8 @@ message HostBody {
   repeated string proxy_host_ids = 10; // Host inner_id 有序列表
   bool forward_agent = 11; // OpenSSH ForwardAgent
   HostProtocol protocol = 12;
+  string os_type = 13; // 自动探测的系统类型 key；可空
+  string icon = 14; // 用户手动图标 key；可空 = 跟随 os_type
 }
 
 message PortForwardBody {
