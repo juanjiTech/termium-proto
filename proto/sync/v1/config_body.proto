@@ -12,6 +12,8 @@ enum HostProtocol {
   HOST_PROTOCOL_UNSPECIFIED = 0; // 视为 SSH
   HOST_PROTOCOL_SSH = 1;
   HOST_PROTOCOL_TELNET = 2;
+  HOST_PROTOCOL_VNC = 3;
+  HOST_PROTOCOL_RDP = 4;
 }
 
 message SshKeyBody {

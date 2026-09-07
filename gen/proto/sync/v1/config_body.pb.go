@@ -27,6 +27,8 @@ const (
 	HostProtocol_HOST_PROTOCOL_UNSPECIFIED HostProtocol = 0 // 视为 SSH
 	HostProtocol_HOST_PROTOCOL_SSH         HostProtocol = 1
 	HostProtocol_HOST_PROTOCOL_TELNET      HostProtocol = 2
+	HostProtocol_HOST_PROTOCOL_VNC         HostProtocol = 3
+	HostProtocol_HOST_PROTOCOL_RDP         HostProtocol = 4
 )
 
 // Enum value maps for HostProtocol.
@@ -35,11 +37,15 @@ var (
 		0: "HOST_PROTOCOL_UNSPECIFIED",
 		1: "HOST_PROTOCOL_SSH",
 		2: "HOST_PROTOCOL_TELNET",
+		3: "HOST_PROTOCOL_VNC",
+		4: "HOST_PROTOCOL_RDP",
 	}
 	HostProtocol_value = map[string]int32{
 		"HOST_PROTOCOL_UNSPECIFIED": 0,
 		"HOST_PROTOCOL_SSH":         1,
 		"HOST_PROTOCOL_TELNET":      2,
+		"HOST_PROTOCOL_VNC":         3,
+		"HOST_PROTOCOL_RDP":         4,
 	}
 )
 
@@ -769,11 +775,13 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"\x0eproxy_host_ids\x18\x05 \x03(\tR\fproxyHostIds\x12N\n" +
 	"\x13auditPolicyOverride\x18\x06 \x01(\v2\x1c.sync.v1.AuditPolicyOverrideR\x13auditPolicyOverride\"C\n" +
 	"\x13TeamAuditPolicyBody\x12,\n" +
-	"\x06policy\x18\x01 \x01(\v2\x14.sync.v1.AuditPolicyR\x06policy*^\n" +
+	"\x06policy\x18\x01 \x01(\v2\x14.sync.v1.AuditPolicyR\x06policy*\x8c\x01\n" +
 	"\fHostProtocol\x12\x1d\n" +
 	"\x19HOST_PROTOCOL_UNSPECIFIED\x10\x00\x12\x15\n" +
 	"\x11HOST_PROTOCOL_SSH\x10\x01\x12\x18\n" +
-	"\x14HOST_PROTOCOL_TELNET\x10\x02B>Z<github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1b\x06proto3"
+	"\x14HOST_PROTOCOL_TELNET\x10\x02\x12\x15\n" +
+	"\x11HOST_PROTOCOL_VNC\x10\x03\x12\x15\n" +
+	"\x11HOST_PROTOCOL_RDP\x10\x04B>Z<github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1b\x06proto3"
 
 var (
 	file_sync_v1_config_body_proto_rawDescOnce sync.Once
