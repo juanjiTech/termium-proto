@@ -294,89 +294,6 @@ func local_request_TeamService_AcceptInvite_0(ctx context.Context, marshaler run
 	return msg, metadata, err
 }
 
-var filter_TeamService_LookupInviteeByEmail_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
-
-func request_TeamService_LookupInviteeByEmail_0(ctx context.Context, marshaler runtime.Marshaler, client TeamServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var (
-		protoReq LookupInviteeByEmailRequest
-		metadata runtime.ServerMetadata
-	)
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_TeamService_LookupInviteeByEmail_0); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	if req.Body != nil {
-		_, _ = io.Copy(io.Discard, req.Body)
-	}
-	msg, err := client.LookupInviteeByEmail(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
-	return msg, metadata, err
-}
-
-func local_request_TeamService_LookupInviteeByEmail_0(ctx context.Context, marshaler runtime.Marshaler, server TeamServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var (
-		protoReq LookupInviteeByEmailRequest
-		metadata runtime.ServerMetadata
-	)
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_TeamService_LookupInviteeByEmail_0); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	msg, err := server.LookupInviteeByEmail(ctx, &protoReq)
-	return msg, metadata, err
-}
-
-func request_TeamService_ListReceivedInvites_0(ctx context.Context, marshaler runtime.Marshaler, client TeamServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var (
-		protoReq ListReceivedInvitesRequest
-		metadata runtime.ServerMetadata
-	)
-	if req.Body != nil {
-		_, _ = io.Copy(io.Discard, req.Body)
-	}
-	msg, err := client.ListReceivedInvites(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
-	return msg, metadata, err
-}
-
-func local_request_TeamService_ListReceivedInvites_0(ctx context.Context, marshaler runtime.Marshaler, server TeamServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var (
-		protoReq ListReceivedInvitesRequest
-		metadata runtime.ServerMetadata
-	)
-	msg, err := server.ListReceivedInvites(ctx, &protoReq)
-	return msg, metadata, err
-}
-
-func request_TeamService_IgnoreInvite_0(ctx context.Context, marshaler runtime.Marshaler, client TeamServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var (
-		protoReq IgnoreInviteRequest
-		metadata runtime.ServerMetadata
-	)
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	if req.Body != nil {
-		_, _ = io.Copy(io.Discard, req.Body)
-	}
-	msg, err := client.IgnoreInvite(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
-	return msg, metadata, err
-}
-
-func local_request_TeamService_IgnoreInvite_0(ctx context.Context, marshaler runtime.Marshaler, server TeamServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var (
-		protoReq IgnoreInviteRequest
-		metadata runtime.ServerMetadata
-	)
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	msg, err := server.IgnoreInvite(ctx, &protoReq)
-	return msg, metadata, err
-}
-
 // RegisterTeamServiceHandlerServer registers the http handlers for service TeamService to "mux".
 // UnaryRPC     :call TeamServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
@@ -562,66 +479,6 @@ func RegisterTeamServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 			return
 		}
 		forward_TeamService_AcceptInvite_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-	})
-	mux.Handle(http.MethodGet, pattern_TeamService_LookupInviteeByEmail_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
-		ctx, cancel := context.WithCancel(req.Context())
-		defer cancel()
-		var stream runtime.ServerTransportStream
-		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
-		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/team.v1.TeamService/LookupInviteeByEmail", runtime.WithHTTPPathPattern("/gapi/team/v1/team/member/invite/lookup"))
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		resp, md, err := local_request_TeamService_LookupInviteeByEmail_0(annotatedContext, inboundMarshaler, server, req, pathParams)
-		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
-		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
-		if err != nil {
-			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		forward_TeamService_LookupInviteeByEmail_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-	})
-	mux.Handle(http.MethodGet, pattern_TeamService_ListReceivedInvites_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
-		ctx, cancel := context.WithCancel(req.Context())
-		defer cancel()
-		var stream runtime.ServerTransportStream
-		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
-		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/team.v1.TeamService/ListReceivedInvites", runtime.WithHTTPPathPattern("/gapi/team/v1/team/member/invite/received"))
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		resp, md, err := local_request_TeamService_ListReceivedInvites_0(annotatedContext, inboundMarshaler, server, req, pathParams)
-		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
-		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
-		if err != nil {
-			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		forward_TeamService_ListReceivedInvites_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-	})
-	mux.Handle(http.MethodPost, pattern_TeamService_IgnoreInvite_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
-		ctx, cancel := context.WithCancel(req.Context())
-		defer cancel()
-		var stream runtime.ServerTransportStream
-		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
-		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/team.v1.TeamService/IgnoreInvite", runtime.WithHTTPPathPattern("/gapi/team/v1/team/member/invite/ignore"))
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		resp, md, err := local_request_TeamService_IgnoreInvite_0(annotatedContext, inboundMarshaler, server, req, pathParams)
-		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
-		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
-		if err != nil {
-			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		forward_TeamService_IgnoreInvite_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 
 	return nil
@@ -816,86 +673,29 @@ func RegisterTeamServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		}
 		forward_TeamService_AcceptInvite_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodGet, pattern_TeamService_LookupInviteeByEmail_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
-		ctx, cancel := context.WithCancel(req.Context())
-		defer cancel()
-		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/team.v1.TeamService/LookupInviteeByEmail", runtime.WithHTTPPathPattern("/gapi/team/v1/team/member/invite/lookup"))
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		resp, md, err := request_TeamService_LookupInviteeByEmail_0(annotatedContext, inboundMarshaler, client, req, pathParams)
-		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
-		if err != nil {
-			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		forward_TeamService_LookupInviteeByEmail_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-	})
-	mux.Handle(http.MethodGet, pattern_TeamService_ListReceivedInvites_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
-		ctx, cancel := context.WithCancel(req.Context())
-		defer cancel()
-		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/team.v1.TeamService/ListReceivedInvites", runtime.WithHTTPPathPattern("/gapi/team/v1/team/member/invite/received"))
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		resp, md, err := request_TeamService_ListReceivedInvites_0(annotatedContext, inboundMarshaler, client, req, pathParams)
-		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
-		if err != nil {
-			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		forward_TeamService_ListReceivedInvites_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-	})
-	mux.Handle(http.MethodPost, pattern_TeamService_IgnoreInvite_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
-		ctx, cancel := context.WithCancel(req.Context())
-		defer cancel()
-		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/team.v1.TeamService/IgnoreInvite", runtime.WithHTTPPathPattern("/gapi/team/v1/team/member/invite/ignore"))
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		resp, md, err := request_TeamService_IgnoreInvite_0(annotatedContext, inboundMarshaler, client, req, pathParams)
-		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
-		if err != nil {
-			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		forward_TeamService_IgnoreInvite_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-	})
 	return nil
 }
 
 var (
-	pattern_TeamService_GetTeam_0              = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1}, []string{"gapi", "team", "v1"}, ""))
-	pattern_TeamService_CreateTeam_0           = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1}, []string{"gapi", "team", "v1"}, ""))
-	pattern_TeamService_UpdateTeam_0           = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1}, []string{"gapi", "team", "v1"}, ""))
-	pattern_TeamService_DeleteTeam_0           = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 2, 3}, []string{"gapi", "team", "v1", "remove"}, ""))
-	pattern_TeamService_InviteMember_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 2, 3, 2, 4}, []string{"gapi", "team", "v1", "member", "invite"}, ""))
-	pattern_TeamService_ListInvitingMember_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 2, 3, 2, 4, 2, 5}, []string{"gapi", "team", "v1", "member", "invite", "list"}, ""))
-	pattern_TeamService_RevokeInviteMember_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 2, 3, 2, 4, 2, 5}, []string{"gapi", "team", "v1", "member", "invite", "revoke"}, ""))
-	pattern_TeamService_RemoveMember_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 2, 3, 2, 4}, []string{"gapi", "team", "v1", "member", "remove"}, ""))
-	pattern_TeamService_AcceptInvite_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 2, 3, 2, 4}, []string{"gapi", "team", "v1", "member", "accept"}, ""))
-	pattern_TeamService_LookupInviteeByEmail_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 2, 3, 2, 4, 2, 5}, []string{"gapi", "team", "v1", "member", "invite", "lookup"}, ""))
-	pattern_TeamService_ListReceivedInvites_0  = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 2, 3, 2, 4, 2, 5}, []string{"gapi", "team", "v1", "member", "invite", "received"}, ""))
-	pattern_TeamService_IgnoreInvite_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 2, 3, 2, 4, 2, 5}, []string{"gapi", "team", "v1", "member", "invite", "ignore"}, ""))
+	pattern_TeamService_GetTeam_0            = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1}, []string{"gapi", "team", "v1"}, ""))
+	pattern_TeamService_CreateTeam_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1}, []string{"gapi", "team", "v1"}, ""))
+	pattern_TeamService_UpdateTeam_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1}, []string{"gapi", "team", "v1"}, ""))
+	pattern_TeamService_DeleteTeam_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 2, 3}, []string{"gapi", "team", "v1", "remove"}, ""))
+	pattern_TeamService_InviteMember_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 2, 3, 2, 4}, []string{"gapi", "team", "v1", "member", "invite"}, ""))
+	pattern_TeamService_ListInvitingMember_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 2, 3, 2, 4, 2, 5}, []string{"gapi", "team", "v1", "member", "invite", "list"}, ""))
+	pattern_TeamService_RevokeInviteMember_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 2, 3, 2, 4, 2, 5}, []string{"gapi", "team", "v1", "member", "invite", "revoke"}, ""))
+	pattern_TeamService_RemoveMember_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 2, 3, 2, 4}, []string{"gapi", "team", "v1", "member", "remove"}, ""))
+	pattern_TeamService_AcceptInvite_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 2, 3, 2, 4}, []string{"gapi", "team", "v1", "member", "accept"}, ""))
 )
 
 var (
-	forward_TeamService_GetTeam_0              = runtime.ForwardResponseMessage
-	forward_TeamService_CreateTeam_0           = runtime.ForwardResponseMessage
-	forward_TeamService_UpdateTeam_0           = runtime.ForwardResponseMessage
-	forward_TeamService_DeleteTeam_0           = runtime.ForwardResponseMessage
-	forward_TeamService_InviteMember_0         = runtime.ForwardResponseMessage
-	forward_TeamService_ListInvitingMember_0   = runtime.ForwardResponseMessage
-	forward_TeamService_RevokeInviteMember_0   = runtime.ForwardResponseMessage
-	forward_TeamService_RemoveMember_0         = runtime.ForwardResponseMessage
-	forward_TeamService_AcceptInvite_0         = runtime.ForwardResponseMessage
-	forward_TeamService_LookupInviteeByEmail_0 = runtime.ForwardResponseMessage
-	forward_TeamService_ListReceivedInvites_0  = runtime.ForwardResponseMessage
-	forward_TeamService_IgnoreInvite_0         = runtime.ForwardResponseMessage
+	forward_TeamService_GetTeam_0            = runtime.ForwardResponseMessage
+	forward_TeamService_CreateTeam_0         = runtime.ForwardResponseMessage
+	forward_TeamService_UpdateTeam_0         = runtime.ForwardResponseMessage
+	forward_TeamService_DeleteTeam_0         = runtime.ForwardResponseMessage
+	forward_TeamService_InviteMember_0       = runtime.ForwardResponseMessage
+	forward_TeamService_ListInvitingMember_0 = runtime.ForwardResponseMessage
+	forward_TeamService_RevokeInviteMember_0 = runtime.ForwardResponseMessage
+	forward_TeamService_RemoveMember_0       = runtime.ForwardResponseMessage
+	forward_TeamService_AcceptInvite_0       = runtime.ForwardResponseMessage
 )

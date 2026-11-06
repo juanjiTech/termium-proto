@@ -139,8 +139,6 @@ type InviteInfo struct {
 	TeamId        string                 `protobuf:"bytes,5,opt,name=teamId,proto3" json:"teamId,omitempty"`
 	Uid           string                 `protobuf:"bytes,6,opt,name=uid,proto3" json:"uid,omitempty"`
 	Username      string                 `protobuf:"bytes,7,opt,name=username,proto3" json:"username,omitempty"`
-	Email         string                 `protobuf:"bytes,8,opt,name=email,proto3" json:"email,omitempty"`
-	TeamName      string                 `protobuf:"bytes,9,opt,name=teamName,proto3" json:"teamName,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -224,20 +222,6 @@ func (x *InviteInfo) GetUsername() string {
 	return ""
 }
 
-func (x *InviteInfo) GetEmail() string {
-	if x != nil {
-		return x.Email
-	}
-	return ""
-}
-
-func (x *InviteInfo) GetTeamName() string {
-	if x != nil {
-		return x.TeamName
-	}
-	return ""
-}
-
 var File_team_v1_team_proto protoreflect.FileDescriptor
 
 const file_team_v1_team_proto_rawDesc = "" +
@@ -252,7 +236,7 @@ const file_team_v1_team_proto_rawDesc = "" +
 	"\vdescription\x18\x06 \x01(\tR\vdescription\x12\x16\n" +
 	"\x06avatar\x18\a \x01(\tR\x06avatar\x12\x10\n" +
 	"\x03uid\x18\b \x01(\tR\x03uid\x12\x1c\n" +
-	"\tpublicKey\x18\t \x01(\tR\tpublicKey\"\xc2\x02\n" +
+	"\tpublicKey\x18\t \x01(\tR\tpublicKey\"\x90\x02\n" +
 	"\n" +
 	"InviteInfo\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x128\n" +
@@ -261,9 +245,7 @@ const file_team_v1_team_proto_rawDesc = "" +
 	"\tdeletedAt\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12\x16\n" +
 	"\x06teamId\x18\x05 \x01(\tR\x06teamId\x12\x10\n" +
 	"\x03uid\x18\x06 \x01(\tR\x03uid\x12\x1a\n" +
-	"\busername\x18\a \x01(\tR\busername\x12\x14\n" +
-	"\x05email\x18\b \x01(\tR\x05email\x12\x1a\n" +
-	"\bteamName\x18\t \x01(\tR\bteamNameB>Z<github.com/juanjiTech/termium-proto/gen/proto/team/v1;teamV1b\x06proto3"
+	"\busername\x18\a \x01(\tR\busernameB>Z<github.com/juanjiTech/termium-proto/gen/proto/team/v1;teamV1b\x06proto3"
 
 var (
 	file_team_v1_team_proto_rawDescOnce sync.Once

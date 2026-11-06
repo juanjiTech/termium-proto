@@ -846,278 +846,6 @@ func (*AcceptInviteResponse) Descriptor() ([]byte, []int) {
 	return file_team_v1_team_service_proto_rawDescGZIP(), []int{17}
 }
 
-type LookupInviteeByEmailRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	TeamId        string                 `protobuf:"bytes,1,opt,name=teamId,proto3" json:"teamId,omitempty"`
-	Email         string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *LookupInviteeByEmailRequest) Reset() {
-	*x = LookupInviteeByEmailRequest{}
-	mi := &file_team_v1_team_service_proto_msgTypes[18]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *LookupInviteeByEmailRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*LookupInviteeByEmailRequest) ProtoMessage() {}
-
-func (x *LookupInviteeByEmailRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_team_v1_team_service_proto_msgTypes[18]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use LookupInviteeByEmailRequest.ProtoReflect.Descriptor instead.
-func (*LookupInviteeByEmailRequest) Descriptor() ([]byte, []int) {
-	return file_team_v1_team_service_proto_rawDescGZIP(), []int{18}
-}
-
-func (x *LookupInviteeByEmailRequest) GetTeamId() string {
-	if x != nil {
-		return x.TeamId
-	}
-	return ""
-}
-
-func (x *LookupInviteeByEmailRequest) GetEmail() string {
-	if x != nil {
-		return x.Email
-	}
-	return ""
-}
-
-type LookupInviteeByEmailResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=userId,proto3" json:"userId,omitempty"`
-	PublicKey     string                 `protobuf:"bytes,2,opt,name=publicKey,proto3" json:"publicKey,omitempty"`
-	Username      string                 `protobuf:"bytes,3,opt,name=username,proto3" json:"username,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *LookupInviteeByEmailResponse) Reset() {
-	*x = LookupInviteeByEmailResponse{}
-	mi := &file_team_v1_team_service_proto_msgTypes[19]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *LookupInviteeByEmailResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*LookupInviteeByEmailResponse) ProtoMessage() {}
-
-func (x *LookupInviteeByEmailResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_team_v1_team_service_proto_msgTypes[19]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use LookupInviteeByEmailResponse.ProtoReflect.Descriptor instead.
-func (*LookupInviteeByEmailResponse) Descriptor() ([]byte, []int) {
-	return file_team_v1_team_service_proto_rawDescGZIP(), []int{19}
-}
-
-func (x *LookupInviteeByEmailResponse) GetUserId() string {
-	if x != nil {
-		return x.UserId
-	}
-	return ""
-}
-
-func (x *LookupInviteeByEmailResponse) GetPublicKey() string {
-	if x != nil {
-		return x.PublicKey
-	}
-	return ""
-}
-
-func (x *LookupInviteeByEmailResponse) GetUsername() string {
-	if x != nil {
-		return x.Username
-	}
-	return ""
-}
-
-type ListReceivedInvitesRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ListReceivedInvitesRequest) Reset() {
-	*x = ListReceivedInvitesRequest{}
-	mi := &file_team_v1_team_service_proto_msgTypes[20]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListReceivedInvitesRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListReceivedInvitesRequest) ProtoMessage() {}
-
-func (x *ListReceivedInvitesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_team_v1_team_service_proto_msgTypes[20]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListReceivedInvitesRequest.ProtoReflect.Descriptor instead.
-func (*ListReceivedInvitesRequest) Descriptor() ([]byte, []int) {
-	return file_team_v1_team_service_proto_rawDescGZIP(), []int{20}
-}
-
-type ListReceivedInvitesResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Invites       []*InviteInfo          `protobuf:"bytes,1,rep,name=invites,proto3" json:"invites,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ListReceivedInvitesResponse) Reset() {
-	*x = ListReceivedInvitesResponse{}
-	mi := &file_team_v1_team_service_proto_msgTypes[21]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListReceivedInvitesResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListReceivedInvitesResponse) ProtoMessage() {}
-
-func (x *ListReceivedInvitesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_team_v1_team_service_proto_msgTypes[21]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListReceivedInvitesResponse.ProtoReflect.Descriptor instead.
-func (*ListReceivedInvitesResponse) Descriptor() ([]byte, []int) {
-	return file_team_v1_team_service_proto_rawDescGZIP(), []int{21}
-}
-
-func (x *ListReceivedInvitesResponse) GetInvites() []*InviteInfo {
-	if x != nil {
-		return x.Invites
-	}
-	return nil
-}
-
-type IgnoreInviteRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	InviteId      string                 `protobuf:"bytes,1,opt,name=inviteId,proto3" json:"inviteId,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *IgnoreInviteRequest) Reset() {
-	*x = IgnoreInviteRequest{}
-	mi := &file_team_v1_team_service_proto_msgTypes[22]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *IgnoreInviteRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*IgnoreInviteRequest) ProtoMessage() {}
-
-func (x *IgnoreInviteRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_team_v1_team_service_proto_msgTypes[22]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use IgnoreInviteRequest.ProtoReflect.Descriptor instead.
-func (*IgnoreInviteRequest) Descriptor() ([]byte, []int) {
-	return file_team_v1_team_service_proto_rawDescGZIP(), []int{22}
-}
-
-func (x *IgnoreInviteRequest) GetInviteId() string {
-	if x != nil {
-		return x.InviteId
-	}
-	return ""
-}
-
-type IgnoreInviteResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *IgnoreInviteResponse) Reset() {
-	*x = IgnoreInviteResponse{}
-	mi := &file_team_v1_team_service_proto_msgTypes[23]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *IgnoreInviteResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*IgnoreInviteResponse) ProtoMessage() {}
-
-func (x *IgnoreInviteResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_team_v1_team_service_proto_msgTypes[23]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use IgnoreInviteResponse.ProtoReflect.Descriptor instead.
-func (*IgnoreInviteResponse) Descriptor() ([]byte, []int) {
-	return file_team_v1_team_service_proto_rawDescGZIP(), []int{23}
-}
-
 var File_team_v1_team_service_proto protoreflect.FileDescriptor
 
 const file_team_v1_team_service_proto_rawDesc = "" +
@@ -1162,20 +890,7 @@ const file_team_v1_team_service_proto_rawDesc = "" +
 	"\x14RemoveMemberResponse\"1\n" +
 	"\x13AcceptInviteRequest\x12\x1a\n" +
 	"\binviteId\x18\x01 \x01(\tR\binviteId\"\x16\n" +
-	"\x14AcceptInviteResponse\"K\n" +
-	"\x1bLookupInviteeByEmailRequest\x12\x16\n" +
-	"\x06teamId\x18\x01 \x01(\tR\x06teamId\x12\x14\n" +
-	"\x05email\x18\x02 \x01(\tR\x05email\"p\n" +
-	"\x1cLookupInviteeByEmailResponse\x12\x16\n" +
-	"\x06userId\x18\x01 \x01(\tR\x06userId\x12\x1c\n" +
-	"\tpublicKey\x18\x02 \x01(\tR\tpublicKey\x12\x1a\n" +
-	"\busername\x18\x03 \x01(\tR\busername\"\x1c\n" +
-	"\x1aListReceivedInvitesRequest\"L\n" +
-	"\x1bListReceivedInvitesResponse\x12-\n" +
-	"\ainvites\x18\x01 \x03(\v2\x13.team.v1.InviteInfoR\ainvites\"1\n" +
-	"\x13IgnoreInviteRequest\x12\x1a\n" +
-	"\binviteId\x18\x01 \x01(\tR\binviteId\"\x16\n" +
-	"\x14IgnoreInviteResponse2\xdf\v\n" +
+	"\x14AcceptInviteResponse2\xb1\b\n" +
 	"\vTeamService\x12X\n" +
 	"\aGetTeam\x12\x17.team.v1.GetTeamRequest\x1a\x18.team.v1.GetTeamResponse\"\x1a\x82\xd3\xe4\x93\x02\x14\x12\x12/gapi/team/v1/team\x12d\n" +
 	"\n" +
@@ -1188,10 +903,7 @@ const file_team_v1_team_service_proto_rawDesc = "" +
 	"\x12ListInvitingMember\x12\".team.v1.ListInvitingMemberRequest\x1a#.team.v1.ListInvitingMemberResponse\"-\x82\xd3\xe4\x93\x02'\x12%/gapi/team/v1/team/member/invite/list\x12\x91\x01\n" +
 	"\x12RevokeInviteMember\x12\".team.v1.RevokeInviteMemberRequest\x1a#.team.v1.RevokeInviteMemberResponse\"2\x82\xd3\xe4\x93\x02,:\x01*\"'/gapi/team/v1/team/member/invite/revoke\x12x\n" +
 	"\fRemoveMember\x12\x1c.team.v1.RemoveMemberRequest\x1a\x1d.team.v1.RemoveMemberResponse\"+\x82\xd3\xe4\x93\x02%:\x01*\" /gapi/team/v1/team/member/remove\x12x\n" +
-	"\fAcceptInvite\x12\x1c.team.v1.AcceptInviteRequest\x1a\x1d.team.v1.AcceptInviteResponse\"+\x82\xd3\xe4\x93\x02%:\x01*\" /gapi/team/v1/team/member/accept\x12\x94\x01\n" +
-	"\x14LookupInviteeByEmail\x12$.team.v1.LookupInviteeByEmailRequest\x1a%.team.v1.LookupInviteeByEmailResponse\"/\x82\xd3\xe4\x93\x02)\x12'/gapi/team/v1/team/member/invite/lookup\x12\x93\x01\n" +
-	"\x13ListReceivedInvites\x12#.team.v1.ListReceivedInvitesRequest\x1a$.team.v1.ListReceivedInvitesResponse\"1\x82\xd3\xe4\x93\x02+\x12)/gapi/team/v1/team/member/invite/received\x12\x7f\n" +
-	"\fIgnoreInvite\x12\x1c.team.v1.IgnoreInviteRequest\x1a\x1d.team.v1.IgnoreInviteResponse\"2\x82\xd3\xe4\x93\x02,:\x01*\"'/gapi/team/v1/team/member/invite/ignoreB>Z<github.com/juanjiTech/termium-proto/gen/proto/team/v1;teamV1b\x06proto3"
+	"\fAcceptInvite\x12\x1c.team.v1.AcceptInviteRequest\x1a\x1d.team.v1.AcceptInviteResponse\"+\x82\xd3\xe4\x93\x02%:\x01*\" /gapi/team/v1/team/member/acceptB>Z<github.com/juanjiTech/termium-proto/gen/proto/team/v1;teamV1b\x06proto3"
 
 var (
 	file_team_v1_team_service_proto_rawDescOnce sync.Once
@@ -1205,71 +917,58 @@ func file_team_v1_team_service_proto_rawDescGZIP() []byte {
 	return file_team_v1_team_service_proto_rawDescData
 }
 
-var file_team_v1_team_service_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
+var file_team_v1_team_service_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_team_v1_team_service_proto_goTypes = []any{
-	(*GetTeamRequest)(nil),               // 0: team.v1.GetTeamRequest
-	(*GetTeamResponse)(nil),              // 1: team.v1.GetTeamResponse
-	(*CreateTeamRequest)(nil),            // 2: team.v1.CreateTeamRequest
-	(*CreateTeamResponse)(nil),           // 3: team.v1.CreateTeamResponse
-	(*UpdateTeamRequest)(nil),            // 4: team.v1.UpdateTeamRequest
-	(*UpdateTeamResponse)(nil),           // 5: team.v1.UpdateTeamResponse
-	(*DeleteTeamRequest)(nil),            // 6: team.v1.DeleteTeamRequest
-	(*DeleteTeamResponse)(nil),           // 7: team.v1.DeleteTeamResponse
-	(*InviteMemberRequest)(nil),          // 8: team.v1.InviteMemberRequest
-	(*InviteMemberResponse)(nil),         // 9: team.v1.InviteMemberResponse
-	(*ListInvitingMemberRequest)(nil),    // 10: team.v1.ListInvitingMemberRequest
-	(*ListInvitingMemberResponse)(nil),   // 11: team.v1.ListInvitingMemberResponse
-	(*RevokeInviteMemberRequest)(nil),    // 12: team.v1.RevokeInviteMemberRequest
-	(*RevokeInviteMemberResponse)(nil),   // 13: team.v1.RevokeInviteMemberResponse
-	(*RemoveMemberRequest)(nil),          // 14: team.v1.RemoveMemberRequest
-	(*RemoveMemberResponse)(nil),         // 15: team.v1.RemoveMemberResponse
-	(*AcceptInviteRequest)(nil),          // 16: team.v1.AcceptInviteRequest
-	(*AcceptInviteResponse)(nil),         // 17: team.v1.AcceptInviteResponse
-	(*LookupInviteeByEmailRequest)(nil),  // 18: team.v1.LookupInviteeByEmailRequest
-	(*LookupInviteeByEmailResponse)(nil), // 19: team.v1.LookupInviteeByEmailResponse
-	(*ListReceivedInvitesRequest)(nil),   // 20: team.v1.ListReceivedInvitesRequest
-	(*ListReceivedInvitesResponse)(nil),  // 21: team.v1.ListReceivedInvitesResponse
-	(*IgnoreInviteRequest)(nil),          // 22: team.v1.IgnoreInviteRequest
-	(*IgnoreInviteResponse)(nil),         // 23: team.v1.IgnoreInviteResponse
-	(*Team)(nil),                         // 24: team.v1.Team
-	(*InviteInfo)(nil),                   // 25: team.v1.InviteInfo
+	(*GetTeamRequest)(nil),             // 0: team.v1.GetTeamRequest
+	(*GetTeamResponse)(nil),            // 1: team.v1.GetTeamResponse
+	(*CreateTeamRequest)(nil),          // 2: team.v1.CreateTeamRequest
+	(*CreateTeamResponse)(nil),         // 3: team.v1.CreateTeamResponse
+	(*UpdateTeamRequest)(nil),          // 4: team.v1.UpdateTeamRequest
+	(*UpdateTeamResponse)(nil),         // 5: team.v1.UpdateTeamResponse
+	(*DeleteTeamRequest)(nil),          // 6: team.v1.DeleteTeamRequest
+	(*DeleteTeamResponse)(nil),         // 7: team.v1.DeleteTeamResponse
+	(*InviteMemberRequest)(nil),        // 8: team.v1.InviteMemberRequest
+	(*InviteMemberResponse)(nil),       // 9: team.v1.InviteMemberResponse
+	(*ListInvitingMemberRequest)(nil),  // 10: team.v1.ListInvitingMemberRequest
+	(*ListInvitingMemberResponse)(nil), // 11: team.v1.ListInvitingMemberResponse
+	(*RevokeInviteMemberRequest)(nil),  // 12: team.v1.RevokeInviteMemberRequest
+	(*RevokeInviteMemberResponse)(nil), // 13: team.v1.RevokeInviteMemberResponse
+	(*RemoveMemberRequest)(nil),        // 14: team.v1.RemoveMemberRequest
+	(*RemoveMemberResponse)(nil),       // 15: team.v1.RemoveMemberResponse
+	(*AcceptInviteRequest)(nil),        // 16: team.v1.AcceptInviteRequest
+	(*AcceptInviteResponse)(nil),       // 17: team.v1.AcceptInviteResponse
+	(*Team)(nil),                       // 18: team.v1.Team
+	(*InviteInfo)(nil),                 // 19: team.v1.InviteInfo
 }
 var file_team_v1_team_service_proto_depIdxs = []int32{
-	24, // 0: team.v1.GetTeamResponse.team:type_name -> team.v1.Team
-	24, // 1: team.v1.CreateTeamResponse.team:type_name -> team.v1.Team
-	24, // 2: team.v1.UpdateTeamRequest.team:type_name -> team.v1.Team
-	24, // 3: team.v1.UpdateTeamResponse.team:type_name -> team.v1.Team
-	25, // 4: team.v1.ListInvitingMemberResponse.inviteMembers:type_name -> team.v1.InviteInfo
-	25, // 5: team.v1.ListReceivedInvitesResponse.invites:type_name -> team.v1.InviteInfo
-	0,  // 6: team.v1.TeamService.GetTeam:input_type -> team.v1.GetTeamRequest
-	2,  // 7: team.v1.TeamService.CreateTeam:input_type -> team.v1.CreateTeamRequest
-	4,  // 8: team.v1.TeamService.UpdateTeam:input_type -> team.v1.UpdateTeamRequest
-	6,  // 9: team.v1.TeamService.DeleteTeam:input_type -> team.v1.DeleteTeamRequest
-	8,  // 10: team.v1.TeamService.InviteMember:input_type -> team.v1.InviteMemberRequest
-	10, // 11: team.v1.TeamService.ListInvitingMember:input_type -> team.v1.ListInvitingMemberRequest
-	12, // 12: team.v1.TeamService.RevokeInviteMember:input_type -> team.v1.RevokeInviteMemberRequest
-	14, // 13: team.v1.TeamService.RemoveMember:input_type -> team.v1.RemoveMemberRequest
-	16, // 14: team.v1.TeamService.AcceptInvite:input_type -> team.v1.AcceptInviteRequest
-	18, // 15: team.v1.TeamService.LookupInviteeByEmail:input_type -> team.v1.LookupInviteeByEmailRequest
-	20, // 16: team.v1.TeamService.ListReceivedInvites:input_type -> team.v1.ListReceivedInvitesRequest
-	22, // 17: team.v1.TeamService.IgnoreInvite:input_type -> team.v1.IgnoreInviteRequest
-	1,  // 18: team.v1.TeamService.GetTeam:output_type -> team.v1.GetTeamResponse
-	3,  // 19: team.v1.TeamService.CreateTeam:output_type -> team.v1.CreateTeamResponse
-	5,  // 20: team.v1.TeamService.UpdateTeam:output_type -> team.v1.UpdateTeamResponse
-	7,  // 21: team.v1.TeamService.DeleteTeam:output_type -> team.v1.DeleteTeamResponse
-	9,  // 22: team.v1.TeamService.InviteMember:output_type -> team.v1.InviteMemberResponse
-	11, // 23: team.v1.TeamService.ListInvitingMember:output_type -> team.v1.ListInvitingMemberResponse
-	13, // 24: team.v1.TeamService.RevokeInviteMember:output_type -> team.v1.RevokeInviteMemberResponse
-	15, // 25: team.v1.TeamService.RemoveMember:output_type -> team.v1.RemoveMemberResponse
-	17, // 26: team.v1.TeamService.AcceptInvite:output_type -> team.v1.AcceptInviteResponse
-	19, // 27: team.v1.TeamService.LookupInviteeByEmail:output_type -> team.v1.LookupInviteeByEmailResponse
-	21, // 28: team.v1.TeamService.ListReceivedInvites:output_type -> team.v1.ListReceivedInvitesResponse
-	23, // 29: team.v1.TeamService.IgnoreInvite:output_type -> team.v1.IgnoreInviteResponse
-	18, // [18:30] is the sub-list for method output_type
-	6,  // [6:18] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	18, // 0: team.v1.GetTeamResponse.team:type_name -> team.v1.Team
+	18, // 1: team.v1.CreateTeamResponse.team:type_name -> team.v1.Team
+	18, // 2: team.v1.UpdateTeamRequest.team:type_name -> team.v1.Team
+	18, // 3: team.v1.UpdateTeamResponse.team:type_name -> team.v1.Team
+	19, // 4: team.v1.ListInvitingMemberResponse.inviteMembers:type_name -> team.v1.InviteInfo
+	0,  // 5: team.v1.TeamService.GetTeam:input_type -> team.v1.GetTeamRequest
+	2,  // 6: team.v1.TeamService.CreateTeam:input_type -> team.v1.CreateTeamRequest
+	4,  // 7: team.v1.TeamService.UpdateTeam:input_type -> team.v1.UpdateTeamRequest
+	6,  // 8: team.v1.TeamService.DeleteTeam:input_type -> team.v1.DeleteTeamRequest
+	8,  // 9: team.v1.TeamService.InviteMember:input_type -> team.v1.InviteMemberRequest
+	10, // 10: team.v1.TeamService.ListInvitingMember:input_type -> team.v1.ListInvitingMemberRequest
+	12, // 11: team.v1.TeamService.RevokeInviteMember:input_type -> team.v1.RevokeInviteMemberRequest
+	14, // 12: team.v1.TeamService.RemoveMember:input_type -> team.v1.RemoveMemberRequest
+	16, // 13: team.v1.TeamService.AcceptInvite:input_type -> team.v1.AcceptInviteRequest
+	1,  // 14: team.v1.TeamService.GetTeam:output_type -> team.v1.GetTeamResponse
+	3,  // 15: team.v1.TeamService.CreateTeam:output_type -> team.v1.CreateTeamResponse
+	5,  // 16: team.v1.TeamService.UpdateTeam:output_type -> team.v1.UpdateTeamResponse
+	7,  // 17: team.v1.TeamService.DeleteTeam:output_type -> team.v1.DeleteTeamResponse
+	9,  // 18: team.v1.TeamService.InviteMember:output_type -> team.v1.InviteMemberResponse
+	11, // 19: team.v1.TeamService.ListInvitingMember:output_type -> team.v1.ListInvitingMemberResponse
+	13, // 20: team.v1.TeamService.RevokeInviteMember:output_type -> team.v1.RevokeInviteMemberResponse
+	15, // 21: team.v1.TeamService.RemoveMember:output_type -> team.v1.RemoveMemberResponse
+	17, // 22: team.v1.TeamService.AcceptInvite:output_type -> team.v1.AcceptInviteResponse
+	14, // [14:23] is the sub-list for method output_type
+	5,  // [5:14] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_team_v1_team_service_proto_init() }
@@ -1284,7 +983,7 @@ func file_team_v1_team_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_team_v1_team_service_proto_rawDesc), len(file_team_v1_team_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   24,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

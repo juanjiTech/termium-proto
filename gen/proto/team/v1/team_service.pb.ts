@@ -82,31 +82,6 @@ export type AcceptInviteRequest = {
 export type AcceptInviteResponse = {
 }
 
-export type LookupInviteeByEmailRequest = {
-  teamId?: string
-  email?: string
-}
-
-export type LookupInviteeByEmailResponse = {
-  userId?: string
-  publicKey?: string
-  username?: string
-}
-
-export type ListReceivedInvitesRequest = {
-}
-
-export type ListReceivedInvitesResponse = {
-  invites?: TeamV1Team.InviteInfo[]
-}
-
-export type IgnoreInviteRequest = {
-  inviteId?: string
-}
-
-export type IgnoreInviteResponse = {
-}
-
 export class TeamService {
   static GetTeam(req: GetTeamRequest, initReq?: fm.InitReq): Promise<GetTeamResponse> {
     return fm.fetchReq<GetTeamRequest, GetTeamResponse>(`/gapi/team/v1/team?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
@@ -134,14 +109,5 @@ export class TeamService {
   }
   static AcceptInvite(req: AcceptInviteRequest, initReq?: fm.InitReq): Promise<AcceptInviteResponse> {
     return fm.fetchReq<AcceptInviteRequest, AcceptInviteResponse>(`/gapi/team/v1/team/member/accept`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
-  }
-  static LookupInviteeByEmail(req: LookupInviteeByEmailRequest, initReq?: fm.InitReq): Promise<LookupInviteeByEmailResponse> {
-    return fm.fetchReq<LookupInviteeByEmailRequest, LookupInviteeByEmailResponse>(`/gapi/team/v1/team/member/invite/lookup?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
-  }
-  static ListReceivedInvites(req: ListReceivedInvitesRequest, initReq?: fm.InitReq): Promise<ListReceivedInvitesResponse> {
-    return fm.fetchReq<ListReceivedInvitesRequest, ListReceivedInvitesResponse>(`/gapi/team/v1/team/member/invite/received?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
-  }
-  static IgnoreInvite(req: IgnoreInviteRequest, initReq?: fm.InitReq): Promise<IgnoreInviteResponse> {
-    return fm.fetchReq<IgnoreInviteRequest, IgnoreInviteResponse>(`/gapi/team/v1/team/member/invite/ignore`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
 }
