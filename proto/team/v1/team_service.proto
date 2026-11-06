@@ -68,6 +68,21 @@ service TeamService {
       body: "*"
     };
   }
+  // 按邮箱精确查找已注册用户。仅当前团队创建者可调用，找不到时返回明确错误。
+  rpc LookupInviteeByEmail(LookupInviteeByEmailRequest) returns (LookupInviteeByEmailResponse) {
+    option (google.api.http) = {get: "/gapi/team/v1/team/member/invite/lookup"};
+  }
+  // 列出当前用户收到的待接受邀请
+  rpc ListReceivedInvites(ListReceivedInvitesRequest) returns (ListReceivedInvitesResponse) {
+    option (google.api.http) = {get: "/gapi/team/v1/team/member/invite/received"};
+  }
+  // 忽略收到的邀请。仅被邀请人可调用。
+  rpc IgnoreInvite(IgnoreInviteRequest) returns (IgnoreInviteResponse) {
+    option (google.api.http) = {
+      post: "/gapi/team/v1/team/member/invite/ignore"
+      body: "*"
+    };
+  }
 }
 
 message GetTeamRequest {
@@ -141,3 +156,26 @@ message AcceptInviteRequest {
 }
 
 message AcceptInviteResponse {}
+
+message LookupInviteeByEmailRequest {
+  string teamId = 1;
+  string email = 2;
+}
+
+message LookupInviteeByEmailResponse {
+  string userId = 1;
+  string publicKey = 2;
+  string username = 3;
+}
+
+message ListReceivedInvitesRequest {}
+
+message ListReceivedInvitesResponse {
+  repeated InviteInfo invites = 1;
+}
+
+message IgnoreInviteRequest {
+  string inviteId = 1;
+}
+
+message IgnoreInviteResponse {}

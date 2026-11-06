@@ -24,4 +24,6 @@ export type InviteInfo = {
   teamId?: string
   uid?: string
   username?: string
+  email?: string
+  teamName?: string
 }

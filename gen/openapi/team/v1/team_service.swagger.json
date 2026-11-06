@@ -175,6 +175,39 @@
         ]
       }
     },
+    "/gapi/team/v1/team/member/invite/ignore": {
+      "post": {
+        "summary": "忽略收到的邀请。仅被邀请人可调用。",
+        "operationId": "TeamService_IgnoreInvite",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IgnoreInviteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1IgnoreInviteRequest"
+            }
+          }
+        ],
+        "tags": [
+          "TeamService"
+        ]
+      }
+    },
     "/gapi/team/v1/team/member/invite/list": {
       "get": {
         "summary": "列出邀请中列表",
@@ -208,6 +241,66 @@
             "type": "string"
           }
         ],
+        "tags": [
+          "TeamService"
+        ]
+      }
+    },
+    "/gapi/team/v1/team/member/invite/lookup": {
+      "get": {
+        "summary": "按邮箱精确查找已注册用户。仅当前团队创建者可调用，找不到时返回明确错误。",
+        "operationId": "TeamService_LookupInviteeByEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LookupInviteeByEmailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "TeamService"
+        ]
+      }
+    },
+    "/gapi/team/v1/team/member/invite/received": {
+      "get": {
+        "summary": "列出当前用户收到的待接受邀请",
+        "operationId": "TeamService_ListReceivedInvites",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListReceivedInvitesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
         "tags": [
           "TeamService"
         ]
@@ -321,7 +414,7 @@
           "type": "string"
         }
       },
-      "additionalProperties": {}
+      "additionalProperties": true
     },
     "rpcStatus": {
       "type": "object",
@@ -402,6 +495,17 @@
         }
       }
     },
+    "v1IgnoreInviteRequest": {
+      "type": "object",
+      "properties": {
+        "inviteId": {
+          "type": "string"
+        }
+      }
+    },
+    "v1IgnoreInviteResponse": {
+      "type": "object"
+    },
     "v1InviteInfo": {
       "type": "object",
       "properties": {
@@ -427,6 +531,12 @@
           "type": "string"
         },
         "username": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "teamName": {
           "type": "string"
         }
       }
@@ -463,6 +573,32 @@
             "type": "object",
             "$ref": "#/definitions/v1InviteInfo"
           }
+        }
+      }
+    },
+    "v1ListReceivedInvitesResponse": {
+      "type": "object",
+      "properties": {
+        "invites": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1InviteInfo"
+          }
+        }
+      }
+    },
+    "v1LookupInviteeByEmailResponse": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "publicKey": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
         }
       }
     },

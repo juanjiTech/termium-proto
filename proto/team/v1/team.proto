@@ -25,4 +25,6 @@ message InviteInfo {
   string teamId = 5;
   string uid = 6;
   string username = 7;
+  string email = 8;
+  string teamName = 9;
 }

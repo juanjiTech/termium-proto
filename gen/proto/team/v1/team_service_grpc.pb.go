@@ -19,15 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TeamService_GetTeam_FullMethodName            = "/team.v1.TeamService/GetTeam"
-	TeamService_CreateTeam_FullMethodName         = "/team.v1.TeamService/CreateTeam"
-	TeamService_UpdateTeam_FullMethodName         = "/team.v1.TeamService/UpdateTeam"
-	TeamService_DeleteTeam_FullMethodName         = "/team.v1.TeamService/DeleteTeam"
-	TeamService_InviteMember_FullMethodName       = "/team.v1.TeamService/InviteMember"
-	TeamService_ListInvitingMember_FullMethodName = "/team.v1.TeamService/ListInvitingMember"
-	TeamService_RevokeInviteMember_FullMethodName = "/team.v1.TeamService/RevokeInviteMember"
-	TeamService_RemoveMember_FullMethodName       = "/team.v1.TeamService/RemoveMember"
-	TeamService_AcceptInvite_FullMethodName       = "/team.v1.TeamService/AcceptInvite"
+	TeamService_GetTeam_FullMethodName              = "/team.v1.TeamService/GetTeam"
+	TeamService_CreateTeam_FullMethodName           = "/team.v1.TeamService/CreateTeam"
+	TeamService_UpdateTeam_FullMethodName           = "/team.v1.TeamService/UpdateTeam"
+	TeamService_DeleteTeam_FullMethodName           = "/team.v1.TeamService/DeleteTeam"
+	TeamService_InviteMember_FullMethodName         = "/team.v1.TeamService/InviteMember"
+	TeamService_ListInvitingMember_FullMethodName   = "/team.v1.TeamService/ListInvitingMember"
+	TeamService_RevokeInviteMember_FullMethodName   = "/team.v1.TeamService/RevokeInviteMember"
+	TeamService_RemoveMember_FullMethodName         = "/team.v1.TeamService/RemoveMember"
+	TeamService_AcceptInvite_FullMethodName         = "/team.v1.TeamService/AcceptInvite"
+	TeamService_LookupInviteeByEmail_FullMethodName = "/team.v1.TeamService/LookupInviteeByEmail"
+	TeamService_ListReceivedInvites_FullMethodName  = "/team.v1.TeamService/ListReceivedInvites"
+	TeamService_IgnoreInvite_FullMethodName         = "/team.v1.TeamService/IgnoreInvite"
 )
 
 // TeamServiceClient is the client API for TeamService service.
@@ -52,6 +55,12 @@ type TeamServiceClient interface {
 	RemoveMember(ctx context.Context, in *RemoveMemberRequest, opts ...grpc.CallOption) (*RemoveMemberResponse, error)
 	// 接受邀请加入团队
 	AcceptInvite(ctx context.Context, in *AcceptInviteRequest, opts ...grpc.CallOption) (*AcceptInviteResponse, error)
+	// 按邮箱精确查找已注册用户。仅当前团队创建者可调用，找不到时返回明确错误。
+	LookupInviteeByEmail(ctx context.Context, in *LookupInviteeByEmailRequest, opts ...grpc.CallOption) (*LookupInviteeByEmailResponse, error)
+	// 列出当前用户收到的待接受邀请
+	ListReceivedInvites(ctx context.Context, in *ListReceivedInvitesRequest, opts ...grpc.CallOption) (*ListReceivedInvitesResponse, error)
+	// 忽略收到的邀请。仅被邀请人可调用。
+	IgnoreInvite(ctx context.Context, in *IgnoreInviteRequest, opts ...grpc.CallOption) (*IgnoreInviteResponse, error)
 }
 
 type teamServiceClient struct {
@@ -152,6 +161,36 @@ func (c *teamServiceClient) AcceptInvite(ctx context.Context, in *AcceptInviteRe
 	return out, nil
 }
 
+func (c *teamServiceClient) LookupInviteeByEmail(ctx context.Context, in *LookupInviteeByEmailRequest, opts ...grpc.CallOption) (*LookupInviteeByEmailResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LookupInviteeByEmailResponse)
+	err := c.cc.Invoke(ctx, TeamService_LookupInviteeByEmail_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *teamServiceClient) ListReceivedInvites(ctx context.Context, in *ListReceivedInvitesRequest, opts ...grpc.CallOption) (*ListReceivedInvitesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListReceivedInvitesResponse)
+	err := c.cc.Invoke(ctx, TeamService_ListReceivedInvites_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *teamServiceClient) IgnoreInvite(ctx context.Context, in *IgnoreInviteRequest, opts ...grpc.CallOption) (*IgnoreInviteResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(IgnoreInviteResponse)
+	err := c.cc.Invoke(ctx, TeamService_IgnoreInvite_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TeamServiceServer is the server API for TeamService service.
 // All implementations must embed UnimplementedTeamServiceServer
 // for forward compatibility.
@@ -174,6 +213,12 @@ type TeamServiceServer interface {
 	RemoveMember(context.Context, *RemoveMemberRequest) (*RemoveMemberResponse, error)
 	// 接受邀请加入团队
 	AcceptInvite(context.Context, *AcceptInviteRequest) (*AcceptInviteResponse, error)
+	// 按邮箱精确查找已注册用户。仅当前团队创建者可调用，找不到时返回明确错误。
+	LookupInviteeByEmail(context.Context, *LookupInviteeByEmailRequest) (*LookupInviteeByEmailResponse, error)
+	// 列出当前用户收到的待接受邀请
+	ListReceivedInvites(context.Context, *ListReceivedInvitesRequest) (*ListReceivedInvitesResponse, error)
+	// 忽略收到的邀请。仅被邀请人可调用。
+	IgnoreInvite(context.Context, *IgnoreInviteRequest) (*IgnoreInviteResponse, error)
 	mustEmbedUnimplementedTeamServiceServer()
 }
 
@@ -210,6 +255,15 @@ func (UnimplementedTeamServiceServer) RemoveMember(context.Context, *RemoveMembe
 }
 func (UnimplementedTeamServiceServer) AcceptInvite(context.Context, *AcceptInviteRequest) (*AcceptInviteResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method AcceptInvite not implemented")
+}
+func (UnimplementedTeamServiceServer) LookupInviteeByEmail(context.Context, *LookupInviteeByEmailRequest) (*LookupInviteeByEmailResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method LookupInviteeByEmail not implemented")
+}
+func (UnimplementedTeamServiceServer) ListReceivedInvites(context.Context, *ListReceivedInvitesRequest) (*ListReceivedInvitesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListReceivedInvites not implemented")
+}
+func (UnimplementedTeamServiceServer) IgnoreInvite(context.Context, *IgnoreInviteRequest) (*IgnoreInviteResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method IgnoreInvite not implemented")
 }
 func (UnimplementedTeamServiceServer) mustEmbedUnimplementedTeamServiceServer() {}
 func (UnimplementedTeamServiceServer) testEmbeddedByValue()                     {}
@@ -394,6 +448,60 @@ func _TeamService_AcceptInvite_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TeamService_LookupInviteeByEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LookupInviteeByEmailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TeamServiceServer).LookupInviteeByEmail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TeamService_LookupInviteeByEmail_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TeamServiceServer).LookupInviteeByEmail(ctx, req.(*LookupInviteeByEmailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TeamService_ListReceivedInvites_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListReceivedInvitesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TeamServiceServer).ListReceivedInvites(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TeamService_ListReceivedInvites_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TeamServiceServer).ListReceivedInvites(ctx, req.(*ListReceivedInvitesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TeamService_IgnoreInvite_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IgnoreInviteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TeamServiceServer).IgnoreInvite(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TeamService_IgnoreInvite_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TeamServiceServer).IgnoreInvite(ctx, req.(*IgnoreInviteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TeamService_ServiceDesc is the grpc.ServiceDesc for TeamService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -436,6 +544,18 @@ var TeamService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AcceptInvite",
 			Handler:    _TeamService_AcceptInvite_Handler,
+		},
+		{
+			MethodName: "LookupInviteeByEmail",
+			Handler:    _TeamService_LookupInviteeByEmail_Handler,
+		},
+		{
+			MethodName: "ListReceivedInvites",
+			Handler:    _TeamService_ListReceivedInvites_Handler,
+		},
+		{
+			MethodName: "IgnoreInvite",
+			Handler:    _TeamService_IgnoreInvite_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
