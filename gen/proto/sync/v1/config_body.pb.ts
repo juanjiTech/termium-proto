@@ -81,3 +81,9 @@ export type ClusterBody = {
 export type TeamAuditPolicyBody = {
   policy?: SyncV1Audit.AuditPolicy
 }
+
+export type GroupBody = {
+  label?: string
+  memberInnerIds?: string[]
+  sortOrder?: string
+}

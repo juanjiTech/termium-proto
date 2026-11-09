@@ -708,6 +708,68 @@ func (x *TeamAuditPolicyBody) GetPolicy() *AuditPolicy {
 	return nil
 }
 
+// 成员引用只存同步 inner_id（与 HostBody.key_id / proxy_host_ids 一致）。
+// 同团队 (tid, inner_id) 唯一；类型从 TeamConfigRecord.kind 解析。
+type GroupBody struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Label          string                 `protobuf:"bytes,1,opt,name=label,proto3" json:"label,omitempty"`                                           // 显示名
+	MemberInnerIds []string               `protobuf:"bytes,2,rep,name=member_inner_ids,json=memberInnerIds,proto3" json:"member_inner_ids,omitempty"` // 组内顺序 = 数组顺序
+	SortOrder      int64                  `protobuf:"varint,3,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`                 // 组与组之间排序
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *GroupBody) Reset() {
+	*x = GroupBody{}
+	mi := &file_sync_v1_config_body_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GroupBody) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GroupBody) ProtoMessage() {}
+
+func (x *GroupBody) ProtoReflect() protoreflect.Message {
+	mi := &file_sync_v1_config_body_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GroupBody.ProtoReflect.Descriptor instead.
+func (*GroupBody) Descriptor() ([]byte, []int) {
+	return file_sync_v1_config_body_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *GroupBody) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
+}
+
+func (x *GroupBody) GetMemberInnerIds() []string {
+	if x != nil {
+		return x.MemberInnerIds
+	}
+	return nil
+}
+
+func (x *GroupBody) GetSortOrder() int64 {
+	if x != nil {
+		return x.SortOrder
+	}
+	return 0
+}
+
 var File_sync_v1_config_body_proto protoreflect.FileDescriptor
 
 const file_sync_v1_config_body_proto_rawDesc = "" +
@@ -775,7 +837,12 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"\x0eproxy_host_ids\x18\x05 \x03(\tR\fproxyHostIds\x12N\n" +
 	"\x13auditPolicyOverride\x18\x06 \x01(\v2\x1c.sync.v1.AuditPolicyOverrideR\x13auditPolicyOverride\"C\n" +
 	"\x13TeamAuditPolicyBody\x12,\n" +
-	"\x06policy\x18\x01 \x01(\v2\x14.sync.v1.AuditPolicyR\x06policy*\x8c\x01\n" +
+	"\x06policy\x18\x01 \x01(\v2\x14.sync.v1.AuditPolicyR\x06policy\"j\n" +
+	"\tGroupBody\x12\x14\n" +
+	"\x05label\x18\x01 \x01(\tR\x05label\x12(\n" +
+	"\x10member_inner_ids\x18\x02 \x03(\tR\x0ememberInnerIds\x12\x1d\n" +
+	"\n" +
+	"sort_order\x18\x03 \x01(\x03R\tsortOrder*\x8c\x01\n" +
 	"\fHostProtocol\x12\x1d\n" +
 	"\x19HOST_PROTOCOL_UNSPECIFIED\x10\x00\x12\x15\n" +
 	"\x11HOST_PROTOCOL_SSH\x10\x01\x12\x18\n" +
@@ -796,7 +863,7 @@ func file_sync_v1_config_body_proto_rawDescGZIP() []byte {
 }
 
 var file_sync_v1_config_body_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_sync_v1_config_body_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_sync_v1_config_body_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_sync_v1_config_body_proto_goTypes = []any{
 	(HostProtocol)(0),           // 0: sync.v1.HostProtocol
 	(*SshKeyBody)(nil),          // 1: sync.v1.SshKeyBody
@@ -807,15 +874,16 @@ var file_sync_v1_config_body_proto_goTypes = []any{
 	(*SnippetBody)(nil),         // 6: sync.v1.SnippetBody
 	(*ClusterBody)(nil),         // 7: sync.v1.ClusterBody
 	(*TeamAuditPolicyBody)(nil), // 8: sync.v1.TeamAuditPolicyBody
-	(PortForwardType)(0),        // 9: sync.v1.PortForwardType
-	(*AuditPolicyOverride)(nil), // 10: sync.v1.AuditPolicyOverride
-	(*AuditPolicy)(nil),         // 11: sync.v1.AuditPolicy
+	(*GroupBody)(nil),           // 9: sync.v1.GroupBody
+	(PortForwardType)(0),        // 10: sync.v1.PortForwardType
+	(*AuditPolicyOverride)(nil), // 11: sync.v1.AuditPolicyOverride
+	(*AuditPolicy)(nil),         // 12: sync.v1.AuditPolicy
 }
 var file_sync_v1_config_body_proto_depIdxs = []int32{
 	0,  // 0: sync.v1.HostBody.protocol:type_name -> sync.v1.HostProtocol
-	9,  // 1: sync.v1.PortForwardBody.type:type_name -> sync.v1.PortForwardType
-	10, // 2: sync.v1.ClusterBody.auditPolicyOverride:type_name -> sync.v1.AuditPolicyOverride
-	11, // 3: sync.v1.TeamAuditPolicyBody.policy:type_name -> sync.v1.AuditPolicy
+	10, // 1: sync.v1.PortForwardBody.type:type_name -> sync.v1.PortForwardType
+	11, // 2: sync.v1.ClusterBody.auditPolicyOverride:type_name -> sync.v1.AuditPolicyOverride
+	12, // 3: sync.v1.TeamAuditPolicyBody.policy:type_name -> sync.v1.AuditPolicy
 	4,  // [4:4] is the sub-list for method output_type
 	4,  // [4:4] is the sub-list for method input_type
 	4,  // [4:4] is the sub-list for extension type_name
@@ -836,7 +904,7 @@ func file_sync_v1_config_body_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_sync_v1_config_body_proto_rawDesc), len(file_sync_v1_config_body_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   8,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

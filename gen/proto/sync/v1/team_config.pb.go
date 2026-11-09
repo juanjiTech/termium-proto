@@ -34,6 +34,7 @@ const (
 	TeamConfigKind_TEAM_CONFIG_KIND_SNIPPET      TeamConfigKind = 6
 	TeamConfigKind_TEAM_CONFIG_KIND_CLUSTER      TeamConfigKind = 7
 	TeamConfigKind_TEAM_CONFIG_KIND_AUDIT_POLICY TeamConfigKind = 8
+	TeamConfigKind_TEAM_CONFIG_KIND_GROUP        TeamConfigKind = 9
 )
 
 // Enum value maps for TeamConfigKind.
@@ -48,6 +49,7 @@ var (
 		6: "TEAM_CONFIG_KIND_SNIPPET",
 		7: "TEAM_CONFIG_KIND_CLUSTER",
 		8: "TEAM_CONFIG_KIND_AUDIT_POLICY",
+		9: "TEAM_CONFIG_KIND_GROUP",
 	}
 	TeamConfigKind_value = map[string]int32{
 		"TEAM_CONFIG_KIND_UNSPECIFIED":  0,
@@ -59,6 +61,7 @@ var (
 		"TEAM_CONFIG_KIND_SNIPPET":      6,
 		"TEAM_CONFIG_KIND_CLUSTER":      7,
 		"TEAM_CONFIG_KIND_AUDIT_POLICY": 8,
+		"TEAM_CONFIG_KIND_GROUP":        9,
 	}
 )
 
@@ -178,7 +181,7 @@ const file_sync_v1_team_config_proto_rawDesc = "" +
 	"updated_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
 	"deleted_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12-\n" +
-	"\x12payload_ciphertext\x18\x05 \x01(\fR\x11payloadCiphertext*\xad\x02\n" +
+	"\x12payload_ciphertext\x18\x05 \x01(\fR\x11payloadCiphertext*\xc9\x02\n" +
 	"\x0eTeamConfigKind\x12 \n" +
 	"\x1cTEAM_CONFIG_KIND_UNSPECIFIED\x10\x00\x12\x1c\n" +
 	"\x18TEAM_CONFIG_KIND_SSH_KEY\x10\x01\x12\x1d\n" +
@@ -188,7 +191,8 @@ const file_sync_v1_team_config_proto_rawDesc = "" +
 	"\x1dTEAM_CONFIG_KIND_PORT_FORWARD\x10\x05\x12\x1c\n" +
 	"\x18TEAM_CONFIG_KIND_SNIPPET\x10\x06\x12\x1c\n" +
 	"\x18TEAM_CONFIG_KIND_CLUSTER\x10\a\x12!\n" +
-	"\x1dTEAM_CONFIG_KIND_AUDIT_POLICY\x10\bB>Z<github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1b\x06proto3"
+	"\x1dTEAM_CONFIG_KIND_AUDIT_POLICY\x10\b\x12\x1a\n" +
+	"\x16TEAM_CONFIG_KIND_GROUP\x10\tB>Z<github.com/juanjiTech/termium-proto/gen/proto/sync/v1;syncV1b\x06proto3"
 
 var (
 	file_sync_v1_team_config_proto_rawDescOnce sync.Once

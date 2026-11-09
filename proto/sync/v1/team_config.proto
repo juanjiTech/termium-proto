@@ -15,6 +15,7 @@ enum TeamConfigKind {
   TEAM_CONFIG_KIND_SNIPPET = 6;
   TEAM_CONFIG_KIND_CLUSTER = 7;
   TEAM_CONFIG_KIND_AUDIT_POLICY = 8;
+  TEAM_CONFIG_KIND_GROUP = 9;
 }
 
 // 同步 envelope：opaque payload + 元数据。不含 client_id。
