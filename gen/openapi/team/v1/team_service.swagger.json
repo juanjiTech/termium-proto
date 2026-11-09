@@ -246,6 +246,37 @@
         ]
       }
     },
+    "/gapi/team/v1/team/member/list": {
+      "get": {
+        "summary": "列出已加入成员",
+        "operationId": "TeamService_ListMember",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListMemberResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "TeamService"
+        ]
+      }
+    },
     "/gapi/team/v1/team/member/remove": {
       "post": {
         "summary": "从团队中移除成员",
@@ -321,7 +352,7 @@
           "type": "string"
         }
       },
-      "additionalProperties": {}
+      "additionalProperties": true
     },
     "rpcStatus": {
       "type": "object",
@@ -466,6 +497,18 @@
         }
       }
     },
+    "v1ListMemberResponse": {
+      "type": "object",
+      "properties": {
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1TeamMember"
+          }
+        }
+      }
+    },
     "v1RemoveMemberRequest": {
       "type": "object",
       "properties": {
@@ -525,6 +568,31 @@
         "publicKey": {
           "type": "string",
           "title": "公钥，公钥存在服务器上，加密的私钥与相关用户关联存储"
+        }
+      }
+    },
+    "v1TeamMember": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "teamId": {
+          "type": "string"
+        },
+        "uid": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
         }
       }
     },

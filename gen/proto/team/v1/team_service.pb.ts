@@ -51,6 +51,14 @@ export type InviteMemberResponse = {
   inviteId?: string
 }
 
+export type ListMemberRequest = {
+  teamId?: string
+}
+
+export type ListMemberResponse = {
+  members?: TeamV1Team.TeamMember[]
+}
+
 export type ListInvitingMemberRequest = {
   teamId?: string
   cursor?: string
@@ -97,6 +105,9 @@ export class TeamService {
   }
   static InviteMember(req: InviteMemberRequest, initReq?: fm.InitReq): Promise<InviteMemberResponse> {
     return fm.fetchReq<InviteMemberRequest, InviteMemberResponse>(`/gapi/team/v1/team/member/invite`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  }
+  static ListMember(req: ListMemberRequest, initReq?: fm.InitReq): Promise<ListMemberResponse> {
+    return fm.fetchReq<ListMemberRequest, ListMemberResponse>(`/gapi/team/v1/team/member/list?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})
   }
   static ListInvitingMember(req: ListInvitingMemberRequest, initReq?: fm.InitReq): Promise<ListInvitingMemberResponse> {
     return fm.fetchReq<ListInvitingMemberRequest, ListInvitingMemberResponse>(`/gapi/team/v1/team/member/invite/list?${fm.renderURLSearchParams(req, [])}`, {...initReq, method: "GET"})

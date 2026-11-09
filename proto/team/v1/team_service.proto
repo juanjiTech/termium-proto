@@ -41,6 +41,12 @@ service TeamService {
       body: "*"
     };
   }
+  // 列出已加入成员
+  rpc ListMember(ListMemberRequest) returns (ListMemberResponse) {
+    option (google.api.http) = {
+      get: "/gapi/team/v1/team/member/list"
+    };
+  }
   // 列出邀请中列表
   rpc ListInvitingMember(ListInvitingMemberRequest) returns (ListInvitingMemberResponse) {
     option (google.api.http) = {
@@ -112,6 +118,14 @@ message InviteMemberRequest {
 
 message InviteMemberResponse {
   string inviteId = 1;
+}
+
+message ListMemberRequest {
+  string teamId = 1;
+}
+
+message ListMemberResponse {
+  repeated TeamMember members = 1;
 }
 
 message ListInvitingMemberRequest {

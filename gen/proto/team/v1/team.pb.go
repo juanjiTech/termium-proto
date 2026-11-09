@@ -222,6 +222,90 @@ func (x *InviteInfo) GetUsername() string {
 	return ""
 }
 
+type TeamMember struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=createdAt,proto3" json:"createdAt,omitempty"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`
+	TeamId        string                 `protobuf:"bytes,4,opt,name=teamId,proto3" json:"teamId,omitempty"`
+	Uid           string                 `protobuf:"bytes,5,opt,name=uid,proto3" json:"uid,omitempty"`
+	Username      string                 `protobuf:"bytes,6,opt,name=username,proto3" json:"username,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TeamMember) Reset() {
+	*x = TeamMember{}
+	mi := &file_team_v1_team_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TeamMember) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TeamMember) ProtoMessage() {}
+
+func (x *TeamMember) ProtoReflect() protoreflect.Message {
+	mi := &file_team_v1_team_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TeamMember.ProtoReflect.Descriptor instead.
+func (*TeamMember) Descriptor() ([]byte, []int) {
+	return file_team_v1_team_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *TeamMember) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *TeamMember) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *TeamMember) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
+func (x *TeamMember) GetTeamId() string {
+	if x != nil {
+		return x.TeamId
+	}
+	return ""
+}
+
+func (x *TeamMember) GetUid() string {
+	if x != nil {
+		return x.Uid
+	}
+	return ""
+}
+
+func (x *TeamMember) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
 var File_team_v1_team_proto protoreflect.FileDescriptor
 
 const file_team_v1_team_proto_rawDesc = "" +
@@ -245,7 +329,15 @@ const file_team_v1_team_proto_rawDesc = "" +
 	"\tdeletedAt\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12\x16\n" +
 	"\x06teamId\x18\x05 \x01(\tR\x06teamId\x12\x10\n" +
 	"\x03uid\x18\x06 \x01(\tR\x03uid\x12\x1a\n" +
-	"\busername\x18\a \x01(\tR\busernameB>Z<github.com/juanjiTech/termium-proto/gen/proto/team/v1;teamV1b\x06proto3"
+	"\busername\x18\a \x01(\tR\busername\"\xd6\x01\n" +
+	"\n" +
+	"TeamMember\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x128\n" +
+	"\tcreatedAt\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x128\n" +
+	"\tupdatedAt\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x16\n" +
+	"\x06teamId\x18\x04 \x01(\tR\x06teamId\x12\x10\n" +
+	"\x03uid\x18\x05 \x01(\tR\x03uid\x12\x1a\n" +
+	"\busername\x18\x06 \x01(\tR\busernameB>Z<github.com/juanjiTech/termium-proto/gen/proto/team/v1;teamV1b\x06proto3"
 
 var (
 	file_team_v1_team_proto_rawDescOnce sync.Once
@@ -259,24 +351,27 @@ func file_team_v1_team_proto_rawDescGZIP() []byte {
 	return file_team_v1_team_proto_rawDescData
 }
 
-var file_team_v1_team_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_team_v1_team_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_team_v1_team_proto_goTypes = []any{
 	(*Team)(nil),                  // 0: team.v1.Team
 	(*InviteInfo)(nil),            // 1: team.v1.InviteInfo
-	(*timestamppb.Timestamp)(nil), // 2: google.protobuf.Timestamp
+	(*TeamMember)(nil),            // 2: team.v1.TeamMember
+	(*timestamppb.Timestamp)(nil), // 3: google.protobuf.Timestamp
 }
 var file_team_v1_team_proto_depIdxs = []int32{
-	2, // 0: team.v1.Team.createdAt:type_name -> google.protobuf.Timestamp
-	2, // 1: team.v1.Team.updatedAt:type_name -> google.protobuf.Timestamp
-	2, // 2: team.v1.Team.deletedAt:type_name -> google.protobuf.Timestamp
-	2, // 3: team.v1.InviteInfo.createdAt:type_name -> google.protobuf.Timestamp
-	2, // 4: team.v1.InviteInfo.updatedAt:type_name -> google.protobuf.Timestamp
-	2, // 5: team.v1.InviteInfo.deletedAt:type_name -> google.protobuf.Timestamp
-	6, // [6:6] is the sub-list for method output_type
-	6, // [6:6] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	3, // 0: team.v1.Team.createdAt:type_name -> google.protobuf.Timestamp
+	3, // 1: team.v1.Team.updatedAt:type_name -> google.protobuf.Timestamp
+	3, // 2: team.v1.Team.deletedAt:type_name -> google.protobuf.Timestamp
+	3, // 3: team.v1.InviteInfo.createdAt:type_name -> google.protobuf.Timestamp
+	3, // 4: team.v1.InviteInfo.updatedAt:type_name -> google.protobuf.Timestamp
+	3, // 5: team.v1.InviteInfo.deletedAt:type_name -> google.protobuf.Timestamp
+	3, // 6: team.v1.TeamMember.createdAt:type_name -> google.protobuf.Timestamp
+	3, // 7: team.v1.TeamMember.updatedAt:type_name -> google.protobuf.Timestamp
+	8, // [8:8] is the sub-list for method output_type
+	8, // [8:8] is the sub-list for method input_type
+	8, // [8:8] is the sub-list for extension type_name
+	8, // [8:8] is the sub-list for extension extendee
+	0, // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_team_v1_team_proto_init() }
@@ -290,7 +385,7 @@ func file_team_v1_team_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_team_v1_team_proto_rawDesc), len(file_team_v1_team_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
