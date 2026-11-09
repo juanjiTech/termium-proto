@@ -1,7 +1,7 @@
 # 通用 `group` 配置 Kind 协议
 
-> 状态：**设计草案，Open Questions 待产品确认后才能拆实现**  
-> 日期：2026-11-08（2026-11-09 修订：成员引用去掉冗余 kind）  
+> 状态：**产品 Open 已确认，可拆实现**（协议仍为设计文档，未改业务代码）  
+> 日期：2026-11-08（2026-11-09 修订：成员引用去掉冗余 kind；同日回写 Q1–Q4）  
 > 任务：ATOM-17（父需求 ATOM-14）  
 > 范围：`termium-proto`（`TeamConfigKind` / `GroupBody`）、`termium-client-proto`（client 消息与 RPC 面）、`termium-svc`（syncable 注册与落库挂接说明）  
 > **本文件只定协议与数据模型；不写实现、不改业务代码。**
@@ -22,8 +22,12 @@
 | 2 | `group` 是**通用资源组**：至少容纳 Host，也要能容纳 Cluster 等已有 config kind |
 | 3 | 复用现有 `TeamConfigRecord` envelope + 整包加密 `payload_ciphertext`；不另起同步模型 |
 | 4 | `tags` 与 `group` **并存、互不替代**；不得把「按 tag 分块 UI」写成 `group` 的替代方案 |
-| 5 | 产品未决项标为 **Open Questions**，确认前不拆实现任务 |
+| 5 | 产品 Open Q1–Q4 **已确认**（见 §9）；确认后可拆实现任务 |
 | 6 | 成员引用**只存** `inner_id`（与 `key_id` / `proxy_host_ids` 一致）；**不**在 ref 里再存 `kind`。同团队 `(tid, inner_id)` 已唯一（`idx_tid_innerid` / `GetByInnerID`） |
+| 7 | **允许嵌套 group**；写路径**禁止成环**（含自引用）；**不设硬深度上限**（未另定） |
+| 8 | **一资源可属于多个 group**；Body 不加跨组唯一约束 |
+| 9 | **空 group、未分组资源均正常出现在列表**（不隐藏、不强制「未分组」伪组，除非 UI 另做可选折叠） |
+| 10 | group **权限与其它 team config 完全一致**（同一 team 密文仓）；不做只读组 / 子集 ACL |
 
 对齐现有接口（设计引用，实现时改这些文件，本文不写补丁）：
 
@@ -90,7 +94,7 @@ message GroupBody {
 | `member_inner_ids` | **成员关系只挂在 group 上**（单向）；成员 Body **不**增加 `parent_group_id` / `group_ids` |
 | 组内排序 | `member_inner_ids` 数组下标；不另加 per-member `sort_order`，避免双源 |
 | `sort_order` | 仅组列表相对顺序；与成员顺序无关 |
-| 嵌套 | **是否允许**成员解析为 `GROUP` → Open Q1；产品未确认前实现应拒绝或忽略 |
+| 嵌套 | **允许**成员解析为 `GROUP`（决策 #7）；写路径禁环；`DependsOn` 仍不自指 GROUP |
 
 **刻意不放进 Body 的：**
 
@@ -115,20 +119,19 @@ message GroupBody {
 
 ### 5.2 可成为成员的 kind
 
-**第一期建议允许（实现默认白名单）：**
+**第一期允许（实现默认白名单）：**
 
 - `HOST`
 - `CLUSTER`
+- `GROUP`（嵌套；决策 #7）
 
-**可扩展但本设计不强制第一期：** `PORT_FORWARD`、`SNIPPET`、`SSH_KEY`、`IDENTITY`、`KNOWN_HOST`、`AUDIT_POLICY`。Body 只存 id；白名单在 Create/Update 时对每个 id `GetByInnerID` 后按 `record.kind` 校验即可，不必改 Body。
-
-成员解析为 `GROUP` → Open Q1。
+**可扩展但本设计不强制第一期：** `PORT_FORWARD`、`SNIPPET`、`SSH_KEY`、`IDENTITY`、`KNOWN_HOST`、`AUDIT_POLICY`。Body 只存 id；白名单在 Create/Update 时对每个 id `GetByInnerID` 后按 `record.kind` 校验即可，不必改 Body。成员为 `GROUP` 时另做禁环校验。
 
 ### 5.3 多重归属
 
-一个资源能否出现在多个 group 的 `member_inner_ids` 里 → Open Q2。
+**允许**同一资源出现在多个 group 的 `member_inner_ids` 里（决策 #8）。
 
-协议侧：**不阻止**同一 `inner_id` 出现在多个 group；也不在 Body 层加唯一约束。产品若选「单归属」，实现期在 Create/Update 校验，或 UI 层保证。
+协议侧：不阻止同一 `inner_id` 出现在多个 group；Body 层不加跨组唯一约束。实现**不要**加「单归属」校验。
 
 同一 group 内重复 `inner_id`：实现应去重（保留首次出现以稳定顺序）。
 
@@ -148,11 +151,11 @@ message GroupBody {
 推荐：
 
 ```text
-Group.DependsOn() = { Host, Cluster }  // 与第一期白名单一致；白名单扩展时同步扩展
+Group.DependsOn() = { Host, Cluster }  // 非 GROUP 成员；嵌套 group 不进 DependsOn
 ```
 
-- Pull / Push 拓扑：Group 排在 Host、Cluster **之后**，便于把 `inner_id` 解析为本地 id。  
-- 若 Open Q1 允许嵌套 group：`DependsOn` **不能**包含 `GROUP`（自依赖破坏拓扑）；嵌套引用一律当软引用，深度/环在写路径校验。  
+- Pull / Push 拓扑：Group 排在 Host、Cluster **之后**，便于把非 GROUP 成员的 `inner_id` 解析为本地 id。  
+- **嵌套已确认允许**：`DependsOn` **仍不能**包含 `GROUP`（自依赖破坏拓扑）；嵌套引用一律当软引用；**成环在写路径拒绝**；不设硬深度上限。  
 - 若某成员尚未拉取到本地：该 id 显示为 unresolved，不失败整组 Sync。
 
 ## 6. Client API 面
@@ -190,8 +193,8 @@ message Group {
 
 ### 6.3 留给 UI / 后续实现任务
 
-- Dashboard / 侧栏按 group 分块、折叠、拖拽排序与拖入/拖出  
-- 空 group、未分组资源的默认展示（依赖 Open Q3）  
+- Dashboard / 侧栏按 group 分块、折叠、拖拽排序与拖入/拖出（支持嵌套树；一资源可出现在多组）  
+- **空 group、未分组资源均正常展示在列表**（决策 #9；不隐藏空组，不强制造「未分组」伪组）  
 - 是否弱化「分组标签」文案或入口（`tags` 仍保留字段）  
 - 多选批量「加入组」的交互  
 - i18n、空态、错误提示  
@@ -226,36 +229,36 @@ message Group {
 - 命名或模型限定为 Host 专用（`HostGroup`、仅 Host 可进组）  
 - 用 tag 分块 UI 替代 `group`  
 - 成员引用里重复存 `kind`（与现有 id-only 引用惯例冲突）  
-- 未确认产品行为的拍板（见 §9）  
+- 只读组 / 子集 ACL（超出当前 team config；见决策 #10）  
 - 本任务内的业务代码、实现 PR、UI 演示  
 - 独立 Outbox 表或新的同步 envelope  
 - 删除 group 时级联删除成员  
 
-## 9. Open Questions（停住等确认）
+## 9. 产品确认（原 Open Questions）
 
-确认前**不要**拆实现任务；确认结果应回写本节并更新「状态」行。
+> 来源：ATOM-17 负责人确认（2026-11-09）。确认后可拆实现。
 
-| ID | 问题 | 协议影响 |
+| ID | 结论 | 实现要点 |
 |----|------|----------|
-| Q1 | 是否允许嵌套 group（`member_inner_ids` 解析到的 record.kind = GROUP）？若允许，深度限制与是否禁环？ | 写路径校验；`DependsOn` 不能自指；Body 可不变 |
-| Q2 | 一个资源能否同时属于多个 group？ | 否 → Create/Update 唯一性校验；是 → 维持现状协议即可 |
-| Q3 | 空 group、未分组资源在列表里的默认展示？ | 纯 UI；不改 Body |
-| Q4 | 团队共享后，group 的权限是否与其它 team config 完全一致？ | 预期「完全一致」（同一 team 密文仓）；若要只读组 / 子集 ACL，需另开权限设计，**超出当前 team config 模型** |
+| Q1 | **允许嵌套 group** | 白名单含 `GROUP`；写路径**禁环**（自引用与间接环）；**不设硬深度上限**；`DependsOn` 不包含 `GROUP`；Body 不变 |
+| Q2 | **一资源可多组** | 不加跨组唯一校验；同一 group 内仍去重 |
+| Q3 | **空 group、未分组资源正常展示在列表** | 纯 UI；不隐藏空组；不强制「未分组」伪组 |
+| Q4 | **权限与其它 team config 完全一致** | 无特例 ACL；子集/只读组若以后要做，另开权限设计 |
 
-## 10. 实现任务拆分建议（确认 Open 后）
+## 10. 实现任务拆分建议
 
-仅作拆分提示，**本任务不创建实现 issue**：
+仅作拆分提示，**本任务不自动创建实现 issue**（由负责人或 Mika 开）：
 
 1. **proto**：`TEAM_CONFIG_KIND_GROUP` + `GroupBody`（`member_inner_ids`）（`termium-proto`）  
-2. **client-proto + svc model/sync/CRUD**：注册 Syncable、本地 CRUD、软引用剪枝、写路径 kind 白名单  
-3. **UI**：列表分块与成员管理（依赖 Q3）  
+2. **client-proto + svc model/sync/CRUD**：注册 Syncable、本地 CRUD、软引用剪枝、写路径 kind 白名单 + **嵌套禁环**  
+3. **UI**：列表分块 / 嵌套展示 / 空组与未分组资源正常展示 / 成员管理（含多组归属）  
 
 每条实现任务须引用本文路径；本文未写的行为不要补进实现范围。
 
 ## 11. 参考
 
 - 父需求讨论：ATOM-14（通用 `group` kind，不要 HostGroup；`tags` 仅现状备注）  
-- ATOM-17 评审：成员引用去掉 `GroupMemberRef.kind`，对齐 `idx_tid_innerid` / `GetByInnerID`  
+- ATOM-17 评审：成员引用去掉 `GroupMemberRef.kind`；Q1–Q4 产品确认见 §9  
 - `termium-proto/proto/sync/v1/team_config.proto`、`config_body.proto`  
 - `termium-svc/model/syncable.go`、`model/host.go`（RegisterSyncKind / EncodePayload 样板）  
 - `termium-wails/docs/sync-safety-design.md`（Registry、pending、purge；无 Outbox）  
