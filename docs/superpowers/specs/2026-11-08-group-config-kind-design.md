@@ -1,7 +1,7 @@
 # 通用 `group` 配置 Kind 协议
 
 > 状态：**设计草案，Open Questions 待产品确认后才能拆实现**  
-> 日期：2026-11-08  
+> 日期：2026-11-08（2026-11-09 修订：成员引用去掉冗余 kind）  
 > 任务：ATOM-17（父需求 ATOM-14）  
 > 范围：`termium-proto`（`TeamConfigKind` / `GroupBody`）、`termium-client-proto`（client 消息与 RPC 面）、`termium-svc`（syncable 注册与落库挂接说明）  
 > **本文件只定协议与数据模型；不写实现、不改业务代码。**
@@ -23,6 +23,7 @@
 | 3 | 复用现有 `TeamConfigRecord` envelope + 整包加密 `payload_ciphertext`；不另起同步模型 |
 | 4 | `tags` 与 `group` **并存、互不替代**；不得把「按 tag 分块 UI」写成 `group` 的替代方案 |
 | 5 | 产品未决项标为 **Open Questions**，确认前不拆实现任务 |
+| 6 | 成员引用**只存** `inner_id`（与 `key_id` / `proxy_host_ids` 一致）；**不**在 ref 里再存 `kind`。同团队 `(tid, inner_id)` 已唯一（`idx_tid_innerid` / `GetByInnerID`） |
 
 对齐现有接口（设计引用，实现时改这些文件，本文不写补丁）：
 
@@ -71,17 +72,13 @@ enum TeamConfigKind {
 建议落在 `config_body.proto`（与其它 `*Body` 并列）：
 
 ```protobuf
-// 成员引用：用「kind + 同步 inner_id」指向同团队其它 TeamConfigRecord。
-// inner_id 与 HostBody.key_id / proxy_host_ids 等现有引用约定一致（存同步侧 ID，非本地 SQLite id）。
-message GroupMemberRef {
-  TeamConfigKind kind = 1; // 禁止 UNSPECIFIED；允许的 kind 集合见 §5.2
-  string inner_id = 2;     // 被引用配置的 TeamConfigRecord.inner_id
-}
-
+// 成员引用：只存同步 inner_id，与 HostBody.key_id / proxy_host_ids、
+// PortForwardBody.chain_host_ids 等现有引用约定一致。
+// 同团队 (tid, inner_id) 唯一；类型从 TeamConfigRecord.kind 解析，不在列表里重复存 kind。
 message GroupBody {
-  string label = 1;                      // 显示名；空串是否允许 → 实现校验，建议非空
-  repeated GroupMemberRef members = 2;   // 组内顺序 = 数组顺序（UI 拖拽即重排数组）
-  int64 sort_order = 3;                  // 组与组之间排序（对齐 SnippetBody.sort_order）
+  string label = 1;                            // 显示名；空串是否允许 → 实现校验，建议非空
+  repeated string member_inner_ids = 2;        // 组内顺序 = 数组顺序（UI 拖拽即重排数组）
+  int64 sort_order = 3;                        // 组与组之间排序（对齐 SnippetBody.sort_order）
 }
 ```
 
@@ -90,29 +87,31 @@ message GroupBody {
 | 字段 | 约定 |
 |------|------|
 | `label` | 组名；不设独立 `name` 字段，与 Host `label` 用语一致 |
-| `members` | **成员关系只挂在 group 上**（单向）；成员 Body **不**增加 `parent_group_id` / `group_ids` |
-| 组内排序 | `members` 数组下标；不在 `GroupMemberRef` 再加 `sort_order`，避免双源 |
+| `member_inner_ids` | **成员关系只挂在 group 上**（单向）；成员 Body **不**增加 `parent_group_id` / `group_ids` |
+| 组内排序 | `member_inner_ids` 数组下标；不另加 per-member `sort_order`，避免双源 |
 | `sort_order` | 仅组列表相对顺序；与成员顺序无关 |
-| 嵌套 | **是否允许** `kind = GROUP` 的成员 → Open Q1；协议上 `GroupMemberRef.kind` 类型上可写 GROUP，产品未确认前实现应拒绝或忽略 |
+| 嵌套 | **是否允许**成员解析为 `GROUP` → Open Q1；产品未确认前实现应拒绝或忽略 |
 
 **刻意不放进 Body 的：**
 
 - 图标 / 颜色 / 折叠态 → 未确认；确认前不要塞字段  
-- 反向索引、物化路径 → 本地可派生，不进同步明文
+- 反向索引、物化路径 → 本地可派生，不进同步明文  
+- 每成员的 `kind` → 冗余；见决策 #6
 
 ## 5. 成员模型
 
 ### 5.1 引用方式（推荐，作为实现默认）
 
-**单向、挂在 group 上：`GroupMemberRef { kind, inner_id }`。**
+**单向、挂在 group 上：`repeated string member_inner_ids`。**
 
 | 方案 | 结论 |
 |------|------|
-| A. group → members（本文） | ✅ 与「组是一等配置」一致；Host/Cluster Body 无需为分组改 schema；天然支持「一资源多组」（若产品允许） |
+| A. group → member_inner_ids（本文） | ✅ 与「组是一等配置」一致；Host/Cluster Body 无需为分组改 schema；天然支持「一资源多组」（若产品允许）；对齐现有只存 id 的引用 |
 | B. 成员反指 `parent_group_id` | ❌ 单归属；改 Host/Cluster；多组要变 repeated，仍散落 |
 | C. 独立 join 表再同步 | ❌ 多一个 kind / 同步面，违背「复用 TeamConfigRecord」 |
+| D. `{ kind, inner_id }` 复合 ref | ❌ 相对 `(tid, inner_id)` 唯一约束冗余；与 `key_id` / `proxy_host_ids` 不一致 |
 
-本地 SQLite：`Group` 实体可把 `members` 存 JSON（类似 `Host.ProxyHostIDs`），或规范化子表；**同步权威仍是 `GroupBody.members`**。Client API 对外暴露本地 `id`；落库 / Encode 时把成员本地 id 解析为对应 kind 的 `inner_id`（与 Host 引用 Key/Identity 同一模式）。
+本地 SQLite：`Group` 实体可把 `member_inner_ids` 对应的本地 id 列表存 JSON（类似 `Host.ProxyHostIDs`），或规范化子表；**同步权威仍是 `GroupBody.member_inner_ids`**。Client API 对外暴露本地 `id`；落库 / Encode 时把成员本地 id 解析为 `inner_id`（与 Host 引用 Key/Identity 同一模式）。展示类型靠本地已加载的 Host/Cluster，或 `GetByInnerID` 得到的 `record.kind`。
 
 ### 5.2 可成为成员的 kind
 
@@ -121,26 +120,26 @@ message GroupBody {
 - `HOST`
 - `CLUSTER`
 
-**可扩展但本设计不强制第一期：** `PORT_FORWARD`、`SNIPPET`、`SSH_KEY`、`IDENTITY`、`KNOWN_HOST`、`AUDIT_POLICY`。协议上 `GroupMemberRef.kind` 已是完整枚举，白名单放在 svc 校验即可，不必改 Body。
+**可扩展但本设计不强制第一期：** `PORT_FORWARD`、`SNIPPET`、`SSH_KEY`、`IDENTITY`、`KNOWN_HOST`、`AUDIT_POLICY`。Body 只存 id；白名单在 Create/Update 时对每个 id `GetByInnerID` 后按 `record.kind` 校验即可，不必改 Body。
 
-`GROUP` 作成员 → Open Q1。
+成员解析为 `GROUP` → Open Q1。
 
 ### 5.3 多重归属
 
-一个资源能否出现在多个 group 的 `members` 里 → Open Q2。
+一个资源能否出现在多个 group 的 `member_inner_ids` 里 → Open Q2。
 
-协议侧：**不阻止**同一 `(kind, inner_id)` 出现在多个 group；也不在 Body 层加唯一约束。产品若选「单归属」，实现期在 Create/Update 校验，或 UI 层保证。
+协议侧：**不阻止**同一 `inner_id` 出现在多个 group；也不在 Body 层加唯一约束。产品若选「单归属」，实现期在 Create/Update 校验，或 UI 层保证。
 
-同一 group 内重复 `(kind, inner_id)`：实现应去重（保留首次出现以稳定顺序）。
+同一 group 内重复 `inner_id`：实现应去重（保留首次出现以稳定顺序）。
 
 ### 5.4 删除与一致性
 
 | 事件 | 行为 |
 |------|------|
 | 删除 group | soft-delete group + tombstone 上云；**成员配置保留**，仅失去该组归属 |
-| 删除成员配置（如删 Host） | Host 按现有路径 soft-delete；各 group 的 `members` 可能残留悬挂引用 |
-| 悬挂引用 | **软引用**：List/Get group 时过滤已删 / 本地解析失败的 ref；可选在下次 UpdateGroup 时写回剪枝后的列表。不因悬挂引用阻塞 Sync |
-| 成员移出组 | 从该 group 的 `members` 去掉对应 ref 并 Update；不删成员实体 |
+| 删除成员配置（如删 Host） | Host 按现有路径 soft-delete；各 group 的 `member_inner_ids` 可能残留悬挂引用 |
+| 悬挂引用 | **软引用**：List/Get group 时过滤已删 / 本地解析失败的 id；可选在下次 UpdateGroup 时写回剪枝后的列表。不因悬挂引用阻塞 Sync |
+| 成员移出组 | 从该 group 的 `member_inner_ids` 去掉对应 id 并 Update；不删成员实体 |
 
 不在 Host 删除路径强制改写所有 group（避免删 Host 时扫全表写放大）；以读时剪枝 + 自愿写回为主。若后续产品要求「删 Host 立刻净化所有组」，再在 `beforeTeamConfigDelete(HOST)` 加扫描（实现任务另述）。
 
@@ -154,7 +153,7 @@ Group.DependsOn() = { Host, Cluster }  // 与第一期白名单一致；白名�
 
 - Pull / Push 拓扑：Group 排在 Host、Cluster **之后**，便于把 `inner_id` 解析为本地 id。  
 - 若 Open Q1 允许嵌套 group：`DependsOn` **不能**包含 `GROUP`（自依赖破坏拓扑）；嵌套引用一律当软引用，深度/环在写路径校验。  
-- 若某成员 kind 尚未拉取到本地：该 ref 显示为 unresolved，不失败整组 Sync。
+- 若某成员尚未拉取到本地：该 id 显示为 unresolved，不失败整组 Sync。
 
 ## 6. Client API 面
 
@@ -170,30 +169,24 @@ message Group {
   google.protobuf.Timestamp deleted_at = 4;
 
   string label = 11;
-  repeated GroupMember members = 12; // client 侧用本地 id
+  repeated string member_ids = 12; // 本地 SQLite id（Host.id / Cluster.id / …）
   int64 sort_order = 13;
-}
-
-message GroupMember {
-  // 与 sync GroupMemberRef 对应；client 用本地资源 id
-  TeamConfigKind kind = 1; // 可复用 sync 枚举，或 client 侧平行枚举 + 映射
-  string id = 2;           // 本地 SQLite id（Host.id / Cluster.id / …）
 }
 ```
 
-`TeamConfigKind` 出现在 client 包：优先 `import` sync 枚举或在 client 定义平行枚举并在 svc 映射——实现时按现有 Key/Host 引用惯例二选一，**本设计不新造第三种 kind 体系**。
+与 sync 侧对称：只存 id，不带 kind。对齐 client Host 的 `keyId` / `identityId` / `proxyHostIds`。展示类型靠本地已加载资源，或查对应 `TeamConfigRecord.kind`。**不**为 Group 往 client 包引入 `TeamConfigKind`。
 
 ### 6.2 RPC（本设计必写）
 
 | RPC | 作用 |
 |-----|------|
-| `GetGroupList(team_id)` | 列出团队未删除 group（含 members） |
+| `GetGroupList(team_id)` | 列出团队未删除 group（含 member_ids） |
 | `GetGroup(group_id)` | 单条 |
 | `CreateGroup(team_id, group)` | 创建；生成本地 id / inner_id |
-| `UpdateGroup(group)` | 全量更新 label / members / sort_order |
+| `UpdateGroup(group)` | 全量更新 label / member_ids / sort_order |
 | `DeleteGroup(group_id)` | soft-delete |
 
-成员变更：**不强制**单独 `AddGroupMember` / `RemoveGroupMember`；第一期用 `UpdateGroup` 提交完整 `members` 即可（与多数现有 Update* 一致）。若 UI 需要局部补丁 RPC，留给实现/UI 任务，非协议 blocker。
+成员变更：**不强制**单独 `AddGroupMember` / `RemoveGroupMember`；第一期用 `UpdateGroup` 提交完整 `member_ids` 即可（与多数现有 Update* 一致）。若 UI 需要局部补丁 RPC，留给实现/UI 任务，非协议 blocker。
 
 ### 6.3 留给 UI / 后续实现任务
 
@@ -207,10 +200,10 @@ message GroupMember {
 
 实现时预期触点（对照现有 Host）：
 
-1. `termium-proto`：枚举 + `GroupBody` / `GroupMemberRef` → `buf generate`  
-2. `termium-client-proto`：`Group` 消息 + CRUD RPC → generate  
+1. `termium-proto`：枚举 + `GroupBody`（`member_inner_ids`）→ `buf generate`  
+2. `termium-client-proto`：`Group` 消息（`member_ids`）+ CRUD RPC → generate  
 3. `termium-svc/model`：`Group` struct，`init` 里 `RegisterSyncKind`，实现 `Syncable`（`ToConfigBody` / `FromConfigBody` / `EncodePayload` / `DecodePayload` / `ToClientProto`）  
-4. `dao` 团队配置访问；`service` 实现 ClientService 方法；`route` / gateway 随 proto 生成  
+4. `dao` 团队配置访问；`service` 实现 ClientService 方法；写路径对 `member_inner_ids` / `member_ids` 做白名单 kind 校验与去重  
 5. `pkg/syncx` 与 Registry 单测长度 / mutation 矩阵 fixture 为 Group 补一行  
 6. `termium-be`：确认 SyncConfig / UpdateConfig 对未知 kind 透传；若有 kind 白名单则加上 GROUP  
 
@@ -232,6 +225,7 @@ message GroupMember {
 - 单终端多地址 + 尝试优先级（ATOM-14 另一条线）  
 - 命名或模型限定为 Host 专用（`HostGroup`、仅 Host 可进组）  
 - 用 tag 分块 UI 替代 `group`  
+- 成员引用里重复存 `kind`（与现有 id-only 引用惯例冲突）  
 - 未确认产品行为的拍板（见 §9）  
 - 本任务内的业务代码、实现 PR、UI 演示  
 - 独立 Outbox 表或新的同步 envelope  
@@ -243,7 +237,7 @@ message GroupMember {
 
 | ID | 问题 | 协议影响 |
 |----|------|----------|
-| Q1 | 是否允许嵌套 group（group 的 member.kind = GROUP）？若允许，深度限制与是否禁环？ | 写路径校验；`DependsOn` 不能自指；Body 可不变 |
+| Q1 | 是否允许嵌套 group（`member_inner_ids` 解析到的 record.kind = GROUP）？若允许，深度限制与是否禁环？ | 写路径校验；`DependsOn` 不能自指；Body 可不变 |
 | Q2 | 一个资源能否同时属于多个 group？ | 否 → Create/Update 唯一性校验；是 → 维持现状协议即可 |
 | Q3 | 空 group、未分组资源在列表里的默认展示？ | 纯 UI；不改 Body |
 | Q4 | 团队共享后，group 的权限是否与其它 team config 完全一致？ | 预期「完全一致」（同一 team 密文仓）；若要只读组 / 子集 ACL，需另开权限设计，**超出当前 team config 模型** |
@@ -252,8 +246,8 @@ message GroupMember {
 
 仅作拆分提示，**本任务不创建实现 issue**：
 
-1. **proto**：`TEAM_CONFIG_KIND_GROUP` + `GroupBody` / `GroupMemberRef`（`termium-proto`）  
-2. **client-proto + svc model/sync/CRUD**：注册 Syncable、本地 CRUD、软引用剪枝  
+1. **proto**：`TEAM_CONFIG_KIND_GROUP` + `GroupBody`（`member_inner_ids`）（`termium-proto`）  
+2. **client-proto + svc model/sync/CRUD**：注册 Syncable、本地 CRUD、软引用剪枝、写路径 kind 白名单  
 3. **UI**：列表分块与成员管理（依赖 Q3）  
 
 每条实现任务须引用本文路径；本文未写的行为不要补进实现范围。
@@ -261,6 +255,7 @@ message GroupMember {
 ## 11. 参考
 
 - 父需求讨论：ATOM-14（通用 `group` kind，不要 HostGroup；`tags` 仅现状备注）  
+- ATOM-17 评审：成员引用去掉 `GroupMemberRef.kind`，对齐 `idx_tid_innerid` / `GetByInnerID`  
 - `termium-proto/proto/sync/v1/team_config.proto`、`config_body.proto`  
 - `termium-svc/model/syncable.go`、`model/host.go`（RegisterSyncKind / EncodePayload 样板）  
 - `termium-wails/docs/sync-safety-design.md`（Registry、pending、purge；无 Outbox）  
