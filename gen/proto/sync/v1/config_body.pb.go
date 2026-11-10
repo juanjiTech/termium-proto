@@ -596,6 +596,7 @@ type ClusterBody struct {
 	Context             string                 `protobuf:"bytes,4,opt,name=context,proto3" json:"context,omitempty"`
 	ProxyHostIds        []string               `protobuf:"bytes,5,rep,name=proxy_host_ids,json=proxyHostIds,proto3" json:"proxy_host_ids,omitempty"` // Host inner_id 有序列表
 	AuditPolicyOverride *AuditPolicyOverride   `protobuf:"bytes,6,opt,name=auditPolicyOverride,proto3" json:"auditPolicyOverride,omitempty"`         // Cluster-level audit policy override (field-level merge with team default)
+	SortOrder           int64                  `protobuf:"varint,7,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`           // Cluster 与 Cluster 之间排序（概览无分组主序）
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
 }
@@ -670,6 +671,13 @@ func (x *ClusterBody) GetAuditPolicyOverride() *AuditPolicyOverride {
 		return x.AuditPolicyOverride
 	}
 	return nil
+}
+
+func (x *ClusterBody) GetSortOrder() int64 {
+	if x != nil {
+		return x.SortOrder
+	}
+	return 0
 }
 
 type TeamAuditPolicyBody struct {
@@ -836,7 +844,7 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"\x06script\x18\x02 \x01(\tR\x06script\x12\x18\n" +
 	"\apackage\x18\x03 \x03(\tR\apackage\x12\x1d\n" +
 	"\n" +
-	"sort_order\x18\x04 \x01(\x03R\tsortOrder\"\xe7\x01\n" +
+	"sort_order\x18\x04 \x01(\x03R\tsortOrder\"\x86\x02\n" +
 	"\vClusterBody\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12\x12\n" +
 	"\x04tags\x18\x02 \x03(\tR\x04tags\x12\x1e\n" +
@@ -845,7 +853,9 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"kubeconfig\x12\x18\n" +
 	"\acontext\x18\x04 \x01(\tR\acontext\x12$\n" +
 	"\x0eproxy_host_ids\x18\x05 \x03(\tR\fproxyHostIds\x12N\n" +
-	"\x13auditPolicyOverride\x18\x06 \x01(\v2\x1c.sync.v1.AuditPolicyOverrideR\x13auditPolicyOverride\"C\n" +
+	"\x13auditPolicyOverride\x18\x06 \x01(\v2\x1c.sync.v1.AuditPolicyOverrideR\x13auditPolicyOverride\x12\x1d\n" +
+	"\n" +
+	"sort_order\x18\a \x01(\x03R\tsortOrder\"C\n" +
 	"\x13TeamAuditPolicyBody\x12,\n" +
 	"\x06policy\x18\x01 \x01(\v2\x14.sync.v1.AuditPolicyR\x06policy\"j\n" +
 	"\tGroupBody\x12\x14\n" +

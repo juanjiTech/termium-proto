@@ -78,6 +78,7 @@ message ClusterBody {
   string context = 4;
   repeated string proxy_host_ids = 5; // Host inner_id 有序列表
   AuditPolicyOverride auditPolicyOverride = 6; // Cluster-level audit policy override (field-level merge with team default)
+  int64 sort_order = 7; // Cluster 与 Cluster 之间排序（概览无分组主序）
 }
 
 message TeamAuditPolicyBody {

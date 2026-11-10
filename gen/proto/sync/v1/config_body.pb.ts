@@ -77,6 +77,7 @@ export type ClusterBody = {
   context?: string
   proxyHostIds?: string[]
   auditPolicyOverride?: SyncV1Audit.AuditPolicyOverride
+  sortOrder?: string
 }
 
 export type TeamAuditPolicyBody = {
