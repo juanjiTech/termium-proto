@@ -278,8 +278,9 @@ type HostBody struct {
 	ProxyHostIds  []string               `protobuf:"bytes,10,rep,name=proxy_host_ids,json=proxyHostIds,proto3" json:"proxy_host_ids,omitempty"` // Host inner_id 有序列表
 	ForwardAgent  bool                   `protobuf:"varint,11,opt,name=forward_agent,json=forwardAgent,proto3" json:"forward_agent,omitempty"`  // OpenSSH ForwardAgent
 	Protocol      HostProtocol           `protobuf:"varint,12,opt,name=protocol,proto3,enum=sync.v1.HostProtocol" json:"protocol,omitempty"`
-	OsType        string                 `protobuf:"bytes,13,opt,name=os_type,json=osType,proto3" json:"os_type,omitempty"` // 自动探测的系统类型 key；可空
-	Icon          string                 `protobuf:"bytes,14,opt,name=icon,proto3" json:"icon,omitempty"`                   // 用户手动图标 key；可空 = 跟随 os_type
+	OsType        string                 `protobuf:"bytes,13,opt,name=os_type,json=osType,proto3" json:"os_type,omitempty"`           // 自动探测的系统类型 key；可空
+	Icon          string                 `protobuf:"bytes,14,opt,name=icon,proto3" json:"icon,omitempty"`                             // 用户手动图标 key；可空 = 跟随 os_type
+	SortOrder     int64                  `protobuf:"varint,15,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"` // Host 与 Host 之间排序（概览无分组主序）
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -410,6 +411,13 @@ func (x *HostBody) GetIcon() string {
 		return x.Icon
 	}
 	return ""
+}
+
+func (x *HostBody) GetSortOrder() int64 {
+	if x != nil {
+		return x.SortOrder
+	}
+	return 0
 }
 
 type PortForwardBody struct {
@@ -791,7 +799,7 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"\rKnownHostBody\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x1d\n" +
 	"\n" +
-	"public_key\x18\x02 \x01(\tR\tpublicKey\"\x97\x03\n" +
+	"public_key\x18\x02 \x01(\tR\tpublicKey\"\xb6\x03\n" +
 	"\bHostBody\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12\x12\n" +
 	"\x04tags\x18\x02 \x03(\tR\x04tags\x12\x18\n" +
@@ -808,7 +816,9 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"\rforward_agent\x18\v \x01(\bR\fforwardAgent\x121\n" +
 	"\bprotocol\x18\f \x01(\x0e2\x15.sync.v1.HostProtocolR\bprotocol\x12\x17\n" +
 	"\aos_type\x18\r \x01(\tR\x06osType\x12\x12\n" +
-	"\x04icon\x18\x0e \x01(\tR\x04icon\"\x9c\x02\n" +
+	"\x04icon\x18\x0e \x01(\tR\x04icon\x12\x1d\n" +
+	"\n" +
+	"sort_order\x18\x0f \x01(\x03R\tsortOrder\"\x9c\x02\n" +
 	"\x0fPortForwardBody\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12,\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x18.sync.v1.PortForwardTypeR\x04type\x12!\n" +

@@ -49,6 +49,7 @@ export type HostBody = {
   protocol?: HostProtocol
   osType?: string
   icon?: string
+  sortOrder?: string
 }
 
 export type PortForwardBody = {

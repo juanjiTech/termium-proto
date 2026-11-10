@@ -50,6 +50,7 @@ message HostBody {
   HostProtocol protocol = 12;
   string os_type = 13; // 自动探测的系统类型 key；可空
   string icon = 14; // 用户手动图标 key；可空 = 跟随 os_type
+  int64 sort_order = 15; // Host 与 Host 之间排序（概览无分组主序）
 }
 
 message PortForwardBody {
