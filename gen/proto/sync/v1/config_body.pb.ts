@@ -20,6 +20,7 @@ export type SshKeyBody = {
   privateKey?: string
   publicKey?: string
   certificate?: string
+  passphrase?: string
 }
 
 export type IdentityBody = {

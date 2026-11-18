@@ -82,6 +82,7 @@ type SshKeyBody struct {
 	PrivateKey    string                 `protobuf:"bytes,2,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
 	PublicKey     string                 `protobuf:"bytes,3,opt,name=public_key,json=publicKey,proto3" json:"public_key,omitempty"`
 	Certificate   string                 `protobuf:"bytes,4,opt,name=certificate,proto3" json:"certificate,omitempty"`
+	Passphrase    string                 `protobuf:"bytes,5,opt,name=passphrase,proto3" json:"passphrase,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -140,6 +141,13 @@ func (x *SshKeyBody) GetPublicKey() string {
 func (x *SshKeyBody) GetCertificate() string {
 	if x != nil {
 		return x.Certificate
+	}
+	return ""
+}
+
+func (x *SshKeyBody) GetPassphrase() string {
+	if x != nil {
+		return x.Passphrase
 	}
 	return ""
 }
@@ -790,7 +798,7 @@ var File_sync_v1_config_body_proto protoreflect.FileDescriptor
 
 const file_sync_v1_config_body_proto_rawDesc = "" +
 	"\n" +
-	"\x19sync/v1/config_body.proto\x12\async.v1\x1a\x1async/v1/port_forward.proto\x1a\x13sync/v1/audit.proto\"\x84\x01\n" +
+	"\x19sync/v1/config_body.proto\x12\async.v1\x1a\x1async/v1/port_forward.proto\x1a\x13sync/v1/audit.proto\"\xa4\x01\n" +
 	"\n" +
 	"SshKeyBody\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12\x1f\n" +
@@ -798,7 +806,10 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"privateKey\x12\x1d\n" +
 	"\n" +
 	"public_key\x18\x03 \x01(\tR\tpublicKey\x12 \n" +
-	"\vcertificate\x18\x04 \x01(\tR\vcertificate\"s\n" +
+	"\vcertificate\x18\x04 \x01(\tR\vcertificate\x12\x1e\n" +
+	"\n" +
+	"passphrase\x18\x05 \x01(\tR\n" +
+	"passphrase\"s\n" +
 	"\fIdentityBody\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x1a\n" +
