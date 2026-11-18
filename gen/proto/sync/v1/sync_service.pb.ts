@@ -5,16 +5,17 @@
 */
 
 import * as fm from "../../fetch.pb"
+import * as GoogleProtobufTimestamp from "../../google/protobuf/timestamp.pb"
 import * as TeamV1Team from "../../team/v1/team.pb"
 import * as UserV1Key_wallet from "../../user/v1/key_wallet.pb"
 import * as SyncV1Team_config from "./team_config.pb"
 export type SyncConfigRequest = {
-  after?: Date
+  after?: GoogleProtobufTimestamp.Timestamp
   teamId?: string
 }
 
 export type SyncConfigResponse = {
-  serverTime?: Date
+  serverTime?: GoogleProtobufTimestamp.Timestamp
   records?: SyncV1Team_config.TeamConfigRecord[]
 }
 
@@ -24,25 +25,25 @@ export type UpdateConfigRequest = {
 }
 
 export type UpdateConfigResponse = {
-  serverTime?: Date
+  serverTime?: GoogleProtobufTimestamp.Timestamp
   record?: SyncV1Team_config.TeamConfigRecord
 }
 
 export type SyncTeamRequest = {
-  after?: Date
+  after?: GoogleProtobufTimestamp.Timestamp
 }
 
 export type SyncTeamResponse = {
-  serverTime?: Date
+  serverTime?: GoogleProtobufTimestamp.Timestamp
   teams?: TeamV1Team.Team[]
 }
 
 export type SyncUserKeyWalletRequest = {
-  after?: Date
+  after?: GoogleProtobufTimestamp.Timestamp
 }
 
 export type SyncUserKeyWalletResponse = {
-  serverTime?: Date
+  serverTime?: GoogleProtobufTimestamp.Timestamp
   publicKey?: string
   encryptedPrivateKey?: string
   userKeyWalletSet?: UserV1Key_wallet.UserKeyWallet[]
@@ -58,7 +59,7 @@ export type UpdateUserKeyWalletResponse = {
   publicKey?: string
   encryptedPrivateKey?: string
   userKeyWalletSet?: UserV1Key_wallet.UserKeyWallet[]
-  serverTime?: Date
+  serverTime?: GoogleProtobufTimestamp.Timestamp
 }
 
 export class SyncService {
