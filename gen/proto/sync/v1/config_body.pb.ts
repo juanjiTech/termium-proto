@@ -35,6 +35,11 @@ export type KnownHostBody = {
   publicKey?: string
 }
 
+export type HostAddress = {
+  address?: string
+  port?: string
+}
+
 export type HostBody = {
   label?: string
   tags?: string[]
@@ -51,6 +56,8 @@ export type HostBody = {
   osType?: string
   icon?: string
   sortOrder?: string
+  addrs?: HostAddress[]
+  connectTimeoutSec?: string
 }
 
 export type PortForwardBody = {

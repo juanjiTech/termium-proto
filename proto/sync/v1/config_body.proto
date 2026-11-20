@@ -36,9 +36,16 @@ message KnownHostBody {
   string public_key = 2;
 }
 
+// HostAddress 是 Host 的一个连接入口；port 为 0 时按协议默认端口。
+message HostAddress {
+  string address = 1;
+  int64 port = 2;
+}
+
 message HostBody {
   string label = 1;
   repeated string tags = 2;
+  // address/port 为主入口（addrs[0] 的冗余副本），供不认识 addrs 的旧客户端使用。
   string address = 3;
   int64 port = 4;
   string charset = 5;
@@ -52,6 +59,9 @@ message HostBody {
   string os_type = 13; // 自动探测的系统类型 key；可空
   string icon = 14; // 用户手动图标 key；可空 = 跟随 os_type
   int64 sort_order = 15; // Host 与 Host 之间排序（概览无分组主序）
+  // addrs 是有序连接入口，连接时按顺序逐个尝试；为空时退化为 [{address, port}]。
+  repeated HostAddress addrs = 16;
+  int64 connect_timeout_sec = 17; // 单入口连接超时（秒）；0 = 使用默认值
 }
 
 message PortForwardBody {

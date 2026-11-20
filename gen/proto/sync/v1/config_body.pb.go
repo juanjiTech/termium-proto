@@ -272,30 +272,87 @@ func (x *KnownHostBody) GetPublicKey() string {
 	return ""
 }
 
-type HostBody struct {
+// HostAddress 是 Host 的一个连接入口；port 为 0 时按协议默认端口。
+type HostAddress struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Label         string                 `protobuf:"bytes,1,opt,name=label,proto3" json:"label,omitempty"`
-	Tags          []string               `protobuf:"bytes,2,rep,name=tags,proto3" json:"tags,omitempty"`
-	Address       string                 `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
-	Port          int64                  `protobuf:"varint,4,opt,name=port,proto3" json:"port,omitempty"`
-	Charset       string                 `protobuf:"bytes,5,opt,name=charset,proto3" json:"charset,omitempty"`
-	Username      string                 `protobuf:"bytes,6,opt,name=username,proto3" json:"username,omitempty"`
-	Password      string                 `protobuf:"bytes,7,opt,name=password,proto3" json:"password,omitempty"`
-	KeyId         string                 `protobuf:"bytes,8,opt,name=key_id,json=keyId,proto3" json:"key_id,omitempty"` // inner_id
-	IdentityId    string                 `protobuf:"bytes,9,opt,name=identity_id,json=identityId,proto3" json:"identity_id,omitempty"`
-	ProxyHostIds  []string               `protobuf:"bytes,10,rep,name=proxy_host_ids,json=proxyHostIds,proto3" json:"proxy_host_ids,omitempty"` // Host inner_id 有序列表
-	ForwardAgent  bool                   `protobuf:"varint,11,opt,name=forward_agent,json=forwardAgent,proto3" json:"forward_agent,omitempty"`  // OpenSSH ForwardAgent
-	Protocol      HostProtocol           `protobuf:"varint,12,opt,name=protocol,proto3,enum=sync.v1.HostProtocol" json:"protocol,omitempty"`
-	OsType        string                 `protobuf:"bytes,13,opt,name=os_type,json=osType,proto3" json:"os_type,omitempty"`           // 自动探测的系统类型 key；可空
-	Icon          string                 `protobuf:"bytes,14,opt,name=icon,proto3" json:"icon,omitempty"`                             // 用户手动图标 key；可空 = 跟随 os_type
-	SortOrder     int64                  `protobuf:"varint,15,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"` // Host 与 Host 之间排序（概览无分组主序）
+	Address       string                 `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	Port          int64                  `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
+func (x *HostAddress) Reset() {
+	*x = HostAddress{}
+	mi := &file_sync_v1_config_body_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HostAddress) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HostAddress) ProtoMessage() {}
+
+func (x *HostAddress) ProtoReflect() protoreflect.Message {
+	mi := &file_sync_v1_config_body_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HostAddress.ProtoReflect.Descriptor instead.
+func (*HostAddress) Descriptor() ([]byte, []int) {
+	return file_sync_v1_config_body_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *HostAddress) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
+func (x *HostAddress) GetPort() int64 {
+	if x != nil {
+		return x.Port
+	}
+	return 0
+}
+
+type HostBody struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Label string                 `protobuf:"bytes,1,opt,name=label,proto3" json:"label,omitempty"`
+	Tags  []string               `protobuf:"bytes,2,rep,name=tags,proto3" json:"tags,omitempty"`
+	// address/port 为主入口（addrs[0] 的冗余副本），供不认识 addrs 的旧客户端使用。
+	Address      string       `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
+	Port         int64        `protobuf:"varint,4,opt,name=port,proto3" json:"port,omitempty"`
+	Charset      string       `protobuf:"bytes,5,opt,name=charset,proto3" json:"charset,omitempty"`
+	Username     string       `protobuf:"bytes,6,opt,name=username,proto3" json:"username,omitempty"`
+	Password     string       `protobuf:"bytes,7,opt,name=password,proto3" json:"password,omitempty"`
+	KeyId        string       `protobuf:"bytes,8,opt,name=key_id,json=keyId,proto3" json:"key_id,omitempty"` // inner_id
+	IdentityId   string       `protobuf:"bytes,9,opt,name=identity_id,json=identityId,proto3" json:"identity_id,omitempty"`
+	ProxyHostIds []string     `protobuf:"bytes,10,rep,name=proxy_host_ids,json=proxyHostIds,proto3" json:"proxy_host_ids,omitempty"` // Host inner_id 有序列表
+	ForwardAgent bool         `protobuf:"varint,11,opt,name=forward_agent,json=forwardAgent,proto3" json:"forward_agent,omitempty"`  // OpenSSH ForwardAgent
+	Protocol     HostProtocol `protobuf:"varint,12,opt,name=protocol,proto3,enum=sync.v1.HostProtocol" json:"protocol,omitempty"`
+	OsType       string       `protobuf:"bytes,13,opt,name=os_type,json=osType,proto3" json:"os_type,omitempty"`           // 自动探测的系统类型 key；可空
+	Icon         string       `protobuf:"bytes,14,opt,name=icon,proto3" json:"icon,omitempty"`                             // 用户手动图标 key；可空 = 跟随 os_type
+	SortOrder    int64        `protobuf:"varint,15,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"` // Host 与 Host 之间排序（概览无分组主序）
+	// addrs 是有序连接入口，连接时按顺序逐个尝试；为空时退化为 [{address, port}]。
+	Addrs             []*HostAddress `protobuf:"bytes,16,rep,name=addrs,proto3" json:"addrs,omitempty"`
+	ConnectTimeoutSec int64          `protobuf:"varint,17,opt,name=connect_timeout_sec,json=connectTimeoutSec,proto3" json:"connect_timeout_sec,omitempty"` // 单入口连接超时（秒）；0 = 使用默认值
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
 func (x *HostBody) Reset() {
 	*x = HostBody{}
-	mi := &file_sync_v1_config_body_proto_msgTypes[3]
+	mi := &file_sync_v1_config_body_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -307,7 +364,7 @@ func (x *HostBody) String() string {
 func (*HostBody) ProtoMessage() {}
 
 func (x *HostBody) ProtoReflect() protoreflect.Message {
-	mi := &file_sync_v1_config_body_proto_msgTypes[3]
+	mi := &file_sync_v1_config_body_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -320,7 +377,7 @@ func (x *HostBody) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HostBody.ProtoReflect.Descriptor instead.
 func (*HostBody) Descriptor() ([]byte, []int) {
-	return file_sync_v1_config_body_proto_rawDescGZIP(), []int{3}
+	return file_sync_v1_config_body_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *HostBody) GetLabel() string {
@@ -428,6 +485,20 @@ func (x *HostBody) GetSortOrder() int64 {
 	return 0
 }
 
+func (x *HostBody) GetAddrs() []*HostAddress {
+	if x != nil {
+		return x.Addrs
+	}
+	return nil
+}
+
+func (x *HostBody) GetConnectTimeoutSec() int64 {
+	if x != nil {
+		return x.ConnectTimeoutSec
+	}
+	return 0
+}
+
 type PortForwardBody struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Label         string                 `protobuf:"bytes,1,opt,name=label,proto3" json:"label,omitempty"`
@@ -444,7 +515,7 @@ type PortForwardBody struct {
 
 func (x *PortForwardBody) Reset() {
 	*x = PortForwardBody{}
-	mi := &file_sync_v1_config_body_proto_msgTypes[4]
+	mi := &file_sync_v1_config_body_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -456,7 +527,7 @@ func (x *PortForwardBody) String() string {
 func (*PortForwardBody) ProtoMessage() {}
 
 func (x *PortForwardBody) ProtoReflect() protoreflect.Message {
-	mi := &file_sync_v1_config_body_proto_msgTypes[4]
+	mi := &file_sync_v1_config_body_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -469,7 +540,7 @@ func (x *PortForwardBody) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PortForwardBody.ProtoReflect.Descriptor instead.
 func (*PortForwardBody) Descriptor() ([]byte, []int) {
-	return file_sync_v1_config_body_proto_rawDescGZIP(), []int{4}
+	return file_sync_v1_config_body_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *PortForwardBody) GetLabel() string {
@@ -540,7 +611,7 @@ type SnippetBody struct {
 
 func (x *SnippetBody) Reset() {
 	*x = SnippetBody{}
-	mi := &file_sync_v1_config_body_proto_msgTypes[5]
+	mi := &file_sync_v1_config_body_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -552,7 +623,7 @@ func (x *SnippetBody) String() string {
 func (*SnippetBody) ProtoMessage() {}
 
 func (x *SnippetBody) ProtoReflect() protoreflect.Message {
-	mi := &file_sync_v1_config_body_proto_msgTypes[5]
+	mi := &file_sync_v1_config_body_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -565,7 +636,7 @@ func (x *SnippetBody) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SnippetBody.ProtoReflect.Descriptor instead.
 func (*SnippetBody) Descriptor() ([]byte, []int) {
-	return file_sync_v1_config_body_proto_rawDescGZIP(), []int{5}
+	return file_sync_v1_config_body_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *SnippetBody) GetName() string {
@@ -611,7 +682,7 @@ type ClusterBody struct {
 
 func (x *ClusterBody) Reset() {
 	*x = ClusterBody{}
-	mi := &file_sync_v1_config_body_proto_msgTypes[6]
+	mi := &file_sync_v1_config_body_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -623,7 +694,7 @@ func (x *ClusterBody) String() string {
 func (*ClusterBody) ProtoMessage() {}
 
 func (x *ClusterBody) ProtoReflect() protoreflect.Message {
-	mi := &file_sync_v1_config_body_proto_msgTypes[6]
+	mi := &file_sync_v1_config_body_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -636,7 +707,7 @@ func (x *ClusterBody) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClusterBody.ProtoReflect.Descriptor instead.
 func (*ClusterBody) Descriptor() ([]byte, []int) {
-	return file_sync_v1_config_body_proto_rawDescGZIP(), []int{6}
+	return file_sync_v1_config_body_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *ClusterBody) GetLabel() string {
@@ -697,7 +768,7 @@ type TeamAuditPolicyBody struct {
 
 func (x *TeamAuditPolicyBody) Reset() {
 	*x = TeamAuditPolicyBody{}
-	mi := &file_sync_v1_config_body_proto_msgTypes[7]
+	mi := &file_sync_v1_config_body_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -709,7 +780,7 @@ func (x *TeamAuditPolicyBody) String() string {
 func (*TeamAuditPolicyBody) ProtoMessage() {}
 
 func (x *TeamAuditPolicyBody) ProtoReflect() protoreflect.Message {
-	mi := &file_sync_v1_config_body_proto_msgTypes[7]
+	mi := &file_sync_v1_config_body_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -722,7 +793,7 @@ func (x *TeamAuditPolicyBody) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TeamAuditPolicyBody.ProtoReflect.Descriptor instead.
 func (*TeamAuditPolicyBody) Descriptor() ([]byte, []int) {
-	return file_sync_v1_config_body_proto_rawDescGZIP(), []int{7}
+	return file_sync_v1_config_body_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *TeamAuditPolicyBody) GetPolicy() *AuditPolicy {
@@ -745,7 +816,7 @@ type GroupBody struct {
 
 func (x *GroupBody) Reset() {
 	*x = GroupBody{}
-	mi := &file_sync_v1_config_body_proto_msgTypes[8]
+	mi := &file_sync_v1_config_body_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -757,7 +828,7 @@ func (x *GroupBody) String() string {
 func (*GroupBody) ProtoMessage() {}
 
 func (x *GroupBody) ProtoReflect() protoreflect.Message {
-	mi := &file_sync_v1_config_body_proto_msgTypes[8]
+	mi := &file_sync_v1_config_body_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -770,7 +841,7 @@ func (x *GroupBody) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupBody.ProtoReflect.Descriptor instead.
 func (*GroupBody) Descriptor() ([]byte, []int) {
-	return file_sync_v1_config_body_proto_rawDescGZIP(), []int{8}
+	return file_sync_v1_config_body_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *GroupBody) GetLabel() string {
@@ -818,7 +889,10 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"\rKnownHostBody\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x1d\n" +
 	"\n" +
-	"public_key\x18\x02 \x01(\tR\tpublicKey\"\xb6\x03\n" +
+	"public_key\x18\x02 \x01(\tR\tpublicKey\";\n" +
+	"\vHostAddress\x12\x18\n" +
+	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x12\n" +
+	"\x04port\x18\x02 \x01(\x03R\x04port\"\x92\x04\n" +
 	"\bHostBody\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12\x12\n" +
 	"\x04tags\x18\x02 \x03(\tR\x04tags\x12\x18\n" +
@@ -837,7 +911,9 @@ const file_sync_v1_config_body_proto_rawDesc = "" +
 	"\aos_type\x18\r \x01(\tR\x06osType\x12\x12\n" +
 	"\x04icon\x18\x0e \x01(\tR\x04icon\x12\x1d\n" +
 	"\n" +
-	"sort_order\x18\x0f \x01(\x03R\tsortOrder\"\x9c\x02\n" +
+	"sort_order\x18\x0f \x01(\x03R\tsortOrder\x12*\n" +
+	"\x05addrs\x18\x10 \x03(\v2\x14.sync.v1.HostAddressR\x05addrs\x12.\n" +
+	"\x13connect_timeout_sec\x18\x11 \x01(\x03R\x11connectTimeoutSec\"\x9c\x02\n" +
 	"\x0fPortForwardBody\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12,\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x18.sync.v1.PortForwardTypeR\x04type\x12!\n" +
@@ -894,32 +970,34 @@ func file_sync_v1_config_body_proto_rawDescGZIP() []byte {
 }
 
 var file_sync_v1_config_body_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_sync_v1_config_body_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_sync_v1_config_body_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_sync_v1_config_body_proto_goTypes = []any{
 	(HostProtocol)(0),           // 0: sync.v1.HostProtocol
 	(*SshKeyBody)(nil),          // 1: sync.v1.SshKeyBody
 	(*IdentityBody)(nil),        // 2: sync.v1.IdentityBody
 	(*KnownHostBody)(nil),       // 3: sync.v1.KnownHostBody
-	(*HostBody)(nil),            // 4: sync.v1.HostBody
-	(*PortForwardBody)(nil),     // 5: sync.v1.PortForwardBody
-	(*SnippetBody)(nil),         // 6: sync.v1.SnippetBody
-	(*ClusterBody)(nil),         // 7: sync.v1.ClusterBody
-	(*TeamAuditPolicyBody)(nil), // 8: sync.v1.TeamAuditPolicyBody
-	(*GroupBody)(nil),           // 9: sync.v1.GroupBody
-	(PortForwardType)(0),        // 10: sync.v1.PortForwardType
-	(*AuditPolicyOverride)(nil), // 11: sync.v1.AuditPolicyOverride
-	(*AuditPolicy)(nil),         // 12: sync.v1.AuditPolicy
+	(*HostAddress)(nil),         // 4: sync.v1.HostAddress
+	(*HostBody)(nil),            // 5: sync.v1.HostBody
+	(*PortForwardBody)(nil),     // 6: sync.v1.PortForwardBody
+	(*SnippetBody)(nil),         // 7: sync.v1.SnippetBody
+	(*ClusterBody)(nil),         // 8: sync.v1.ClusterBody
+	(*TeamAuditPolicyBody)(nil), // 9: sync.v1.TeamAuditPolicyBody
+	(*GroupBody)(nil),           // 10: sync.v1.GroupBody
+	(PortForwardType)(0),        // 11: sync.v1.PortForwardType
+	(*AuditPolicyOverride)(nil), // 12: sync.v1.AuditPolicyOverride
+	(*AuditPolicy)(nil),         // 13: sync.v1.AuditPolicy
 }
 var file_sync_v1_config_body_proto_depIdxs = []int32{
 	0,  // 0: sync.v1.HostBody.protocol:type_name -> sync.v1.HostProtocol
-	10, // 1: sync.v1.PortForwardBody.type:type_name -> sync.v1.PortForwardType
-	11, // 2: sync.v1.ClusterBody.auditPolicyOverride:type_name -> sync.v1.AuditPolicyOverride
-	12, // 3: sync.v1.TeamAuditPolicyBody.policy:type_name -> sync.v1.AuditPolicy
-	4,  // [4:4] is the sub-list for method output_type
-	4,  // [4:4] is the sub-list for method input_type
-	4,  // [4:4] is the sub-list for extension type_name
-	4,  // [4:4] is the sub-list for extension extendee
-	0,  // [0:4] is the sub-list for field type_name
+	4,  // 1: sync.v1.HostBody.addrs:type_name -> sync.v1.HostAddress
+	11, // 2: sync.v1.PortForwardBody.type:type_name -> sync.v1.PortForwardType
+	12, // 3: sync.v1.ClusterBody.auditPolicyOverride:type_name -> sync.v1.AuditPolicyOverride
+	13, // 4: sync.v1.TeamAuditPolicyBody.policy:type_name -> sync.v1.AuditPolicy
+	5,  // [5:5] is the sub-list for method output_type
+	5,  // [5:5] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_sync_v1_config_body_proto_init() }
@@ -935,7 +1013,7 @@ func file_sync_v1_config_body_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_sync_v1_config_body_proto_rawDesc), len(file_sync_v1_config_body_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   9,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
